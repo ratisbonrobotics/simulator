@@ -1,2 +1,2 @@
 # simulator
-A 3D web simulator
+A drone simulator
