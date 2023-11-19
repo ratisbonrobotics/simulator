@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Ratisbon Robotics</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Description" content="Ratisbon Robotics Web Simulator">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<p>
+		Try out rulestrings: <input title="cellRuleInput3D" id="cellRuleInput3D" type="text" value="B4/S20,24"></input>
+		<button id="cellauto3dapply">Apply</button>
+		<button id="cellauto3drandomize">Randomize</button>
+		<button id="cellauto3dtoggle">Stop</button>
+	</p>
+
+	<!-- tabindex="1" needed for focus on object. So when I click on it, it focuses and the added eventListener for "keydown" triggers -->
+	<canvas tabindex="1" id="cellauto3dcanvas" width="1024" height="512" role="img"
+		aria-label="cellauto3dcanvas"></canvas>
+	<script src="r3webgl.js"></script>
+	<script src="cellauto3d.js"></script>
+	</div>
+	</div>
+	</div>
+</body>
+
+</html>
