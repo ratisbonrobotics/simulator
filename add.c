@@ -1,4 +1,8 @@
-int add(int first, int second)
+// Declare the JavaScript function as an external import
+extern void myJavaScriptFunction();
+
+int main()
 {
-    return first + second;
+    myJavaScriptFunction();
+    return 0;
 }

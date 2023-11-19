@@ -5,14 +5,24 @@
 <head></head>
 
 <body>
-    <script type="module">
+    <script>
+
+        const wasmImports = {
+            env: {
+                myJavaScriptFunction: function () {
+                    console.log("Called from WebAssembly!");
+                }
+            }
+        };
+
         (async () => {
             const response = await fetch('add.wasm');
-            const bytes = await response.arrayBuffer();
-            const { instance } = await WebAssembly.instantiate(bytes);
+            const buffer = await response.arrayBuffer();
+            const wasmModule = await WebAssembly.instantiate(buffer, wasmImports);
 
-            console.log('The answer is: ' + instance.exports.add(1, 2));
+            wasmModule.instance.exports.main();
         })();
+
     </script>
 </body>
 
