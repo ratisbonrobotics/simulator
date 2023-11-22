@@ -72,18 +72,15 @@
         </div>
     </nav>
 
-
-
-
-
     <div class="tile is-ancestor">
-        <div class="tile is-vertical is-8">
+
+        <div class="tile is-vertical">
+
             <div class="tile">
-                <div class="tile is-parent is-vertical">
-                    <article class="tile is-child notification is-primary">
-                        <p class="title">Vertical...</p>
-                        <p class="subtitle">Top tile</p>
-                        <aside class="menu">
+                <div class="tile is-parent is-vertical is-2">
+                    <article class="tile is-child notification has-background-light">
+                        <p class="title">Menu</p>
+                        <aside class="menu has-text-secondary">
                             <p class="menu-label">
                                 General
                             </p>
@@ -91,76 +88,42 @@
                                 <li><a>Dashboard</a></li>
                                 <li><a>Customers</a></li>
                             </ul>
-                            <p class="menu-label">
-                                Administration
-                            </p>
-                            <ul class="menu-list">
-                                <li><a>Team Settings</a></li>
-                                <li>
-                                    <a class="is-active">Manage Your Team</a>
-                                    <ul>
-                                        <li><a>Members</a></li>
-                                        <li><a>Plugins</a></li>
-                                        <li><a>Add a member</a></li>
-                                    </ul>
-                                </li>
-                                <li><a>Invitations</a></li>
-                                <li><a>Cloud Storage Environment Settings</a></li>
-                                <li><a>Authentication</a></li>
-                            </ul>
-                            <p class="menu-label">
-                                Transactions
-                            </p>
-                            <ul class="menu-list">
-                                <li><a>Payments</a></li>
-                                <li><a>Transfers</a></li>
-                                <li><a>Balance</a></li>
-                            </ul>
                         </aside>
                     </article>
                 </div>
                 <div class="tile is-parent">
-                    <article class="tile is-child notification is-info">
-                        <p class="title">Middle tile</p>
-                        <p class="subtitle">With an image</p>
-                        <figure class="image is-4by3">
-                            <img src="https://bulma.io/images/placeholders/640x480.png">
-                        </figure>
+                    <article class="tile is-child notification has-background-light">
+                        <canvas tabindex="1" id="canvas" width="1024" height="512" role="img" aria-label="canvas"
+                            style="border: 1px solid #000; box-shadow: 0px 0px 10px #aaa; border-radius: 7px;"></canvas>
                     </article>
                 </div>
             </div>
+
             <div class="tile is-parent">
-                <article class="tile is-child notification is-danger">
-                    <p class="title">Wide tile</p>
-                    <p class="subtitle">Aligned with the right tile</p>
+                <article class="tile is-child notification is-danger is-light">
                     <div class="content">
 
                         <div class="content has-text-centered">
                             <p>
-                                <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source
+                                <strong>Ratisbon Robotics</strong> by <a href="https://markusheimerl.com">Markus
+                                    Heimerl</a>. The source
                                 code is licensed
-                                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website
-                                content
-                                is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA
-                                    4.0</a>.
+                                <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version
+                                    2.0</a>.
+                                <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img decoding="async"
+                                        loading="lazy"
+                                        src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png"
+                                        width="116" height="41" align="right">
+                                </a>
                             </p>
                         </div>
 
                     </div>
                 </article>
             </div>
+
         </div>
-        <div class="tile is-parent">
-            <article class="tile is-child notification is-success">
-                <div class="content">
-                    <p class="title">Tall tile</p>
-                    <p class="subtitle">With even more content</p>
-                    <div class="content">
-                        <!-- Content -->
-                    </div>
-                </div>
-            </article>
-        </div>
+
     </div>
 
     <script>
