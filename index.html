@@ -2,30 +2,149 @@
 <html lang="en">
 
 <head>
-	<title>Ratisbon Robotics</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="Description" content="Ratisbon Robotics Web Simulator">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Ratisbon Robotics Web Simulator">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>WASM</title>
 </head>
 
-<body>
-	<p>
-		Try out rulestrings: <input title="cellRuleInput3D" id="cellRuleInput3D" type="text" value="B4/S20,24"></input>
-		<button id="cellauto3dapply">Apply</button>
-		<button id="cellauto3drandomize">Randomize</button>
-		<button id="cellauto3dtoggle">Stop</button>
-	</p>
 
-	<!-- tabindex="1" needed for focus on object. So when I click on it, it focuses and the added eventListener for "keydown" triggers -->
-	<canvas tabindex="1" id="cellauto3dcanvas" width="1024" height="512" role="img"
-		aria-label="cellauto3dcanvas"></canvas>
-	<script src="r3webgl.js"></script>
-	<script src="cellauto3d.js"></script>
-	</div>
-	</div>
-	</div>
+<body>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="http://ratisbonrobotics.com">
+                <img src="https://avatars.githubusercontent.com/u/151067388">
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasic" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item">
+                    Home
+                </a>
+
+                <a class="navbar-item">
+                    Documentation
+                </a>
+
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img decoding="async" loading="lazy"
+                            src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png"
+                            align="right">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="tile is-ancestor">
+
+        <div class="tile is-vertical">
+            <div class="tile">
+                <div class="tile is-parent is-vertical is-2">
+                    <article class="tile is-child notification has-background-light">
+                        <p class="title">Menu</p>
+                        <aside class="menu">
+                            <p class="menu-label">
+                                Try out rulestrings
+                            </p>
+                            <ul class="menu-list">
+                                <li><input title="cellRuleInput3D" id="cellRuleInput3D" type="text"
+                                        value="B4/S20,24"></input></li>
+                                <li><button id="cellauto3dapply">Apply</button></li>
+                                <li><button id="cellauto3drandomize">Randomize</button></li>
+                                <li><button id="cellauto3dtoggle">Stop</button></li>
+                            </ul>
+                        </aside>
+                    </article>
+                </div>
+                <div class="tile is-parent">
+                    <article class="tile is-child notification has-background-light">
+                        <canvas tabindex="1" id="cellauto3dcanvas" width="1024" height="512" role="img"
+                            aria-label="cellauto3dcanvas"
+                            style="border: 1px solid #000; box-shadow: 0px 0px 10px #aaa; border-radius: 7px;"></canvas>
+                    </article>
+                </div>
+            </div>
+
+            <div class="tile is-parent">
+                <article class="tile is-child notification has-background-light">
+                    <div class="content">
+
+                        <div class="content has-text-centered">
+                            <p>
+                                <strong>Ratisbon Robotics</strong> by <a href="https://markusheimerl.com">Markus
+                                    Heimerl</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </article>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+        const wasmImports = {
+            env: {
+                myJavaScriptFunction: function () {
+                    console.log("Called from WebAssembly!");
+                }
+            }
+        };
+
+        (async () => {
+            const response = await fetch('add.wasm');
+            const buffer = await response.arrayBuffer();
+            const wasmModule = await WebAssembly.instantiate(buffer, wasmImports);
+
+            wasmModule.instance.exports.main();
+        })();
+
+    </script>
+
+    <script src="r3webgl.js"></script>
+    <script src="cellauto3d.js"></script>
+
 </body>
 
 </html>
