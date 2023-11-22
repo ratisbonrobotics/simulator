@@ -12,7 +12,6 @@ optimization:
 - use gl.drawElements instead of gl.drawArrays and draw each cube using 8 instead of 36 verticies (4.5 times less!) - tried it. Its not faster at all and I dont know why. Can be found under /cellularautomata/cellauto3ddrawElements.js
 */
 
-cellularautomata3d();
 function cellularautomata3d() {
 
 	function parseRulestring3D(rulestring) {
