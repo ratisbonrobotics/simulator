@@ -41,9 +41,8 @@
 
             <div class="navbar-end">
                 <div class="navbar-item">
-                    <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img decoding="async" loading="lazy"
-                            src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png"
-                            align="right">
+                    <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img
+                            src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png">
                     </a>
                 </div>
             </div>
@@ -131,21 +130,16 @@
             env: {
                 myJavaScriptFunction: function () {
                     console.log("Called from WebAssembly!");
-                },
-                cellularautomata3d: function () {
-                    cellularautomata3d();
-                },
+                }
             }
         };
-
         (async () => {
-            const response = await fetch('add.wasm');
+            const response = await fetch('main.wasm');
             const buffer = await response.arrayBuffer();
             const wasmModule = await WebAssembly.instantiate(buffer, wasmImports);
-
             wasmModule.instance.exports.main();
+            cellularautomata3d();
         })();
-
     </script>
 
 </body>
