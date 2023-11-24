@@ -72,8 +72,7 @@
                 </div>
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light">
-                        <canvas tabindex="1" id="cellauto3dcanvas" width="1024" height="512" role="img"
-                            aria-label="cellauto3dcanvas"
+                        <canvas tabindex="1" id="canvas" width="1024" height="512" role="img" aria-label="canvas"
                             style="border: 1px solid #000; box-shadow: 0px 0px 10px #aaa; border-radius: 7px;"></canvas>
                     </article>
                 </div>
@@ -126,20 +125,64 @@
     <script src="cellauto3d.js"></script>
 
     <script>
+
+        var id_count = 0;
+        var objects = {};
+        var wasmModule;
+
+        function objectToId(object) {
+            objects[id_count] = object;
+            return id_count++;
+        }
+
+        function idToObject(id) {
+            return objects[id];
+        }
+
         const wasmImports = {
             env: {
-                myJavaScriptFunction: function () {
-                    console.log("Called from WebAssembly!");
-                }
+                printf: function (format, ...args) {
+                    let argIndex = 0;
+                    const formatRegExp = /%[sdif]/g;
+
+                    return format.replace(formatRegExp, (match) => {
+                        switch (match) {
+                            case '%s': return String(args[argIndex++]);
+                            case '%d':
+                            case '%i': return parseInt(args[argIndex++]);
+                            case '%f': return parseFloat(args[argIndex++]);
+                            default: return match;
+                        }
+                    });
+                },
+                gl_getContext: function () {
+                    return objectToId($("#canvas")[0].getContext("webgl").createProgram());
+                },
+                gl_createProgram: function (gl) {
+                    return objectToId(gl.createProgram());
+                },
+                gl_attachShader: function (gl, program, vertexshader) {
+                    return objectToId(gl).attachShader(objectToId(program), vertexshader);
+                },
+                printString: function (ptr) {
+                    assert(typeof (ptr) == 'number');
+                    const memoryBuffer = new Uint8Array(wasmModule.exports.memory.buffer);
+                    let str = '';
+                    for (let i = ptr; memoryBuffer[i] !== 0; i++) {
+                        str += String.fromCharCode(memoryBuffer[i]);
+                    }
+                    console.log(str);
+                },
+
             }
         };
-        (async () => {
-            const response = await fetch('main.wasm');
-            const buffer = await response.arrayBuffer();
-            const wasmModule = await WebAssembly.instantiate(buffer, wasmImports);
-            wasmModule.instance.exports.main();
+        WebAssembly.instantiateStreaming(fetch('main.wasm'), wasmImports).then(function (result) {
+            wasmModule = result.instance;
+            result.instance.exports.main();
             cellularautomata3d();
-        })();
+        }).catch(function (e) {
+            console.error(e);
+        });
     </script>
 
 </body>

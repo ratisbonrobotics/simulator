@@ -240,7 +240,7 @@ function cellularautomata3d() {
 	// --- GET CANVAS CONTEXT AND SETUP KEY LISTENERS ---
 	var running = true;
 
-	var fscanvas = $("#cellauto3dcanvas")[0];
+	var fscanvas = $("#canvas")[0];
 	fscanvas.width = Math.pow(2, Math.floor(getBaseLog(2, $(window).width() * 0.88)));
 	window.addEventListener("orientationchange", function () {
 		setTimeout(function () {
@@ -289,10 +289,10 @@ function cellularautomata3d() {
 	}
 
 	var keys = {};
-	$("#cellauto3dcanvas").keydown(function (event) {
+	$("#canvas").keydown(function (event) {
 		keys[event.key] = true;
 	});
-	$("#cellauto3dcanvas").keyup(function (event) {
+	$("#canvas").keyup(function (event) {
 		keys[event.key] = false;
 	});
 	// --- ---

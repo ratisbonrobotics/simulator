@@ -1,8 +1,8 @@
-// Declare the JavaScript function as an external import
-extern void myJavaScriptFunction();
+#include "webassembly.h"
 
 int main()
 {
-    myJavaScriptFunction();
+    printf("Hello World!\n");
+    printf("The answer is %d\n", 20 + 4);
     return 0;
 }
