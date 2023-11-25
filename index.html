@@ -153,7 +153,7 @@
 
         const wasmImports = {
             env: {
-                printf_js: function (format, argptr) {
+                print: function (format, argptr) {
                     str = getString(new Uint8Array(memoryBuffer, format));
 
                     let argIndex = 0;
@@ -187,7 +187,6 @@
         };
         WebAssembly.instantiateStreaming(fetch('main.wasm'), wasmImports).then(function (result) {
             memoryBuffer = result.instance.exports.memory.buffer;
-
             result.instance.exports.main();
             //cellularautomata3d();
         }).catch(function (e) {

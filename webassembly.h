@@ -1,6 +1,6 @@
 #include <stdarg.h>
 
-extern int printf_js(const char *format, void *args);
+extern int print(const char *format, void *args);
 int count_format_specifiers(const char *format)
 {
     int count = 0;
@@ -35,6 +35,6 @@ int printf(const char *format, ...)
 
     va_end(args_va);
 
-    printf_js(format, args_arr);
+    print(format, args_arr);
     return 0;
 }
