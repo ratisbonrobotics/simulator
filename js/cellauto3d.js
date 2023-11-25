@@ -317,7 +317,7 @@ function cellularautomata3d() {
 	var cubenormalbuffer;
 	main();
 	async function main() {
-		const response = await fetch('js/cube.obj');
+		const response = await fetch('data/cube.obj');
 		const text = await response.text();
 		var data = parseOBJ(text, true);
 		console.log(data);
@@ -328,7 +328,7 @@ function cellularautomata3d() {
 
 	// --- GET OBJ TEXTURE ---
 	var texturecube = r3webgl.createTexture();
-	r3webgl.attachTextureSourceAsync(texturecube, "js/cubetexturetest.png", true);
+	r3webgl.attachTextureSourceAsync(texturecube, "data/cubetexturetest.png", true);
 
 	// --- ENABLE TEXTURE0 ---
 	gl.uniform1i(uniformLocations.texture, 0);
