@@ -128,11 +128,7 @@
 
         let id_count = 0;
         let objects = {};
-        var wasmModule;
         let memoryBuffer;
-        let memoryBufferUint8;
-        let memoryBufferUint32;
-        let memoryBufferFloat32;
 
         function objectToId(object) {
             objects[id_count] = object;
@@ -143,10 +139,10 @@
             return objects[id];
         }
 
-        function getStringFromMemory(ptr) {
+        function parseString(bytearray) {
             let str = '';
-            for (let i = ptr; memoryBufferUint8[i] != 0; i++) {
-                str += String.fromCharCode(memoryBufferUint8[i]);
+            for (let i = 0; bytearray[i] != 0; i++) {
+                str += String.fromCharCode(bytearray[i]);
             }
             return str;
         }
@@ -154,26 +150,19 @@
         const wasmImports = {
             env: {
                 printf_js: function (format, argptr) {
-                    str = getStringFromMemory(format);
+                    str = parseString(new Uint8Array(memoryBuffer, format));
+
                     let argIndex = 0;
-                    console.log(str.replace(/%[sdif]/g, (match) => {
+
+                    console.log(str.replace(/%[sd]/g, (match) => {
                         switch (match) {
                             case '%s': {
-                                let ret = getStringFromMemory(argptr + argIndex);
+                                let ret = parseString(new Uint8Array(memoryBuffer, argptr + argIndex));
                                 argIndex += 4;
                                 return ret;
                             }
-                            case '%d':
-                            case '%i': {
-                                let ret = parseInt(memoryBufferUint32[argptr / 4 + argIndex / 4]);
-                                argIndex += 4;
-                                return ret;
-                            }
-                            case '%f': {
-                                console.log(argptr + argIndex);
-                                console.log(memoryBuffer);
-                                let floatMemory = new Float32Array(memoryBuffer, argptr + argIndex, 1);
-                                let ret = floatMemory[0];
+                            case '%d': {
+                                let ret = parseInt(new Uint32Array(memoryBuffer, argptr + argIndex));
                                 argIndex += 4;
                                 return ret;
                             }
@@ -193,14 +182,10 @@
             }
         };
         WebAssembly.instantiateStreaming(fetch('main.wasm'), wasmImports).then(function (result) {
-            wasmModule = result.instance;
-            memoryBuffer = new ArrayBuffer(result.instance.exports.memory.buffer);
-            memoryBufferUint8 = new Uint8Array(result.instance.exports.memory.buffer);
-            memoryBufferUint32 = new Uint32Array(result.instance.exports.memory.buffer);
-            memoryBufferFloat32 = new Float64Array(result.instance.exports.memory.buffer);
+            memoryBuffer = result.instance.exports.memory.buffer;
 
             result.instance.exports.main();
-            cellularautomata3d();
+            //cellularautomata3d();
         }).catch(function (e) {
             console.error(e);
         });
