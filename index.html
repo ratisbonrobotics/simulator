@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="http://ratisbonrobotics.com">
+            <a class="navbar-item" href="https://github.com/ratisbonrobotics">
                 <img src="https://avatars.githubusercontent.com/u/151067388">
             </a>
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
@@ -82,7 +82,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -106,79 +105,21 @@
 
         });
     </script>
-
     <script src="js/r3webgl.js"></script>
     <script src="js/cellauto3d.js"></script>
-
+    <script src="js/webassembly.js"></script>
     <script>
-        let id_count = 0;
-        let objects = {};
-        let memoryBuffer;
-
-        function objectToId(object) {
-            objects[id_count] = object;
-            return id_count++;
-        }
-
-        function idToObject(id) {
-            return objects[id];
-        }
-
-        function getInteger(ptr) {
-            return new DataView(memoryBuffer).getUint32(ptr, true);
-        }
-
-        function getString(bytearray) {
-            let str = '';
-            for (let i = 0; bytearray[i] != 0; i++) {
-                str += String.fromCharCode(bytearray[i]);
-            }
-            return str;
-        }
-
         const wasmImports = {
             env: {
-                print: function (format, argptr) {
-                    str = getString(new Uint8Array(memoryBuffer, format));
-
-                    let argIndex = 0;
-
-                    console.log(str.replace(/%[sd]/g, (match) => {
-                        switch (match) {
-                            case '%s': {
-                                let ret = getString(new Uint8Array(memoryBuffer, getInteger(argptr + argIndex)));
-                                argIndex += 4;
-                                return ret;
-                            }
-                            case '%d': {
-                                let ret = getInteger(argptr + argIndex);
-                                argIndex += 4;
-                                return ret;
-                            }
-                            default: return match;
-                        }
-                    }));
-                },
-                gl_getContext: function () {
-                    return objectToId($("#canvas")[0].getContext("webgl").createProgram());
-                },
-                gl_createProgram: function (gl) {
-                    return objectToId(idToObject(gl).createProgram());
-                },
-                gl_attachShader: function (gl, program, vertexshader) {
-                    return idToObject(gl).attachShader(objectToId(program), getString(new Uint8Array(memoryBuffer, vertexshader)));
-                },
-            }
+                print: print,
+            },
         };
         WebAssembly.instantiateStreaming(fetch('executable.wasm'), wasmImports).then(function (result) {
-            memoryBuffer = result.instance.exports.memory.buffer;
+            memorybuffer = result.instance.exports.memory.buffer;
             result.instance.exports.main();
             cellularautomata3d();
-        }).catch(function (e) {
-            console.error(e);
-        });
+        })
     </script>
-
 </body>
 
 </html>
