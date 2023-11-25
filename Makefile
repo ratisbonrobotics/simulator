@@ -1,20 +1,20 @@
-# https://surma.dev/things/c-to-webassembly/
-
 DUMMY := $(shell git submodule update --init --recursive)
 
 CC := clang
-CFLAGS := --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -MMD -MP $(shell find . -type d -not -path '*/\.*' | sed 's/^/-I/')
+CFLAGS := --target=wasm32 --no-standard-libraries -MMD -MP $(shell find . -type d -not -path '*/\.*' | sed 's/^/-I/')
+LFLAGS := --target=wasm32 --no-standard-libraries -fuse-ld=/usr/lib/llvm-10/bin/wasm-ld -Wl,--export-all,--no-entry,--allow-undefined
+
 REPO_NAME := $(shell basename `git rev-parse --show-toplevel`)
 SRC := $(shell find . -name "*.c")
 OBJS := $(SRC:.c=.o)
 DEPS := $(OBJS:.o=.d)
-TARGET := executable.out
+TARGET := executable.wasm
 
 all: $(TARGET)
 	@rm -f main.c main.o main.d
 
 $(TARGET): main.o $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(LFLAGS) -o $@ $^
 
 main.o: main.c
 	$(CC) $(CFLAGS) -c $< -o $@

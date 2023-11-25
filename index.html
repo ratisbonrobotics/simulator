@@ -11,34 +11,27 @@
     <title>Ratisbon Robotics</title>
 </head>
 
-
 <body>
-
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="http://ratisbonrobotics.com">
                 <img src="https://avatars.githubusercontent.com/u/151067388">
             </a>
-
             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
             </a>
         </div>
-
         <div id="navbarBasic" class="navbar-menu">
             <div class="navbar-start">
                 <a class="navbar-item">
                     Home
                 </a>
-
                 <a class="navbar-item">
                     Documentation
                 </a>
-
             </div>
-
             <div class="navbar-end">
                 <div class="navbar-item">
                     <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img
@@ -48,9 +41,7 @@
             </div>
         </div>
     </nav>
-
     <div class="tile is-ancestor">
-
         <div class="tile is-vertical">
             <div class="tile">
                 <div class="tile is-parent is-vertical is-2">
@@ -77,24 +68,19 @@
                     </article>
                 </div>
             </div>
-
             <div class="tile is-parent">
                 <article class="tile is-child notification has-background-light">
                     <div class="content">
-
                         <div class="content has-text-centered">
                             <p>
                                 <strong>Ratisbon Robotics</strong> by <a href="https://markusheimerl.com">Markus
                                     Heimerl</a>
                             </p>
                         </div>
-
                     </div>
                 </article>
             </div>
-
         </div>
-
     </div>
 
     <script>
@@ -125,7 +111,6 @@
     <script src="cellauto3d.js"></script>
 
     <script>
-
         let id_count = 0;
         let objects = {};
         let memoryBuffer;
@@ -178,17 +163,17 @@
                     return objectToId($("#canvas")[0].getContext("webgl").createProgram());
                 },
                 gl_createProgram: function (gl) {
-                    return objectToId(gl.createProgram());
+                    return objectToId(idToObject(gl).createProgram());
                 },
                 gl_attachShader: function (gl, program, vertexshader) {
-                    return objectToId(gl).attachShader(objectToId(program), vertexshader);
+                    return idToObject(gl).attachShader(objectToId(program), getString(new Uint8Array(memoryBuffer, vertexshader)));
                 },
             }
         };
-        WebAssembly.instantiateStreaming(fetch('main.wasm'), wasmImports).then(function (result) {
+        WebAssembly.instantiateStreaming(fetch('executable.wasm'), wasmImports).then(function (result) {
             memoryBuffer = result.instance.exports.memory.buffer;
             result.instance.exports.main();
-            //cellularautomata3d();
+            cellularautomata3d();
         }).catch(function (e) {
             console.error(e);
         });

@@ -1,6 +1,6 @@
 #include "webassembly.h"
 
-int main()
+int main_simulator()
 {
     const char *hello = "Hello World!";
     int drei = 3;
