@@ -1,10 +1,6 @@
 // Memory
 let memorybuffer;
 
-function getInteger(ptr) {
-    return new DataView(memorybuffer).getUint32(ptr, true);
-}
-
 function getString(ptr) {
     bytearray = new Uint8Array(memorybuffer, ptr);
     let str = '';
@@ -23,12 +19,12 @@ function print(format, argptr) {
     console.log(str.replace(/%[sd]/g, (match) => {
         switch (match) {
             case '%s': {
-                let ret = getString(getInteger(argptr + argIndex));
+                let ret = getString(new DataView(memorybuffer).getUint32(argptr + argIndex, true));
                 argIndex += 4;
                 return ret;
             }
             case '%d': {
-                let ret = getInteger(argptr + argIndex);
+                let ret = new DataView(memorybuffer).getUint32(argptr + argIndex, true);
                 argIndex += 4;
                 return ret;
             }
@@ -39,7 +35,6 @@ function print(format, argptr) {
 
 
 // WebGL
-/*
 let id = 0;
 let objects = {};
 
@@ -67,6 +62,3 @@ function gl_attachShader(gl, program, shader) {
 function gl_linkProgram(gl, program) {
     return idToObject(gl).linkProgram(idToObject(program));
 }
-
-gl.linkProgram(program);
-*/

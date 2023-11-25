@@ -112,6 +112,10 @@
         const wasmImports = {
             env: {
                 print: print,
+                gl_getContext: gl_getContext,
+                gl_createProgram: gl_createProgram,
+                gl_attachShader: gl_attachShader,
+                gl_linkProgram: gl_linkProgram,
             },
         };
         WebAssembly.instantiateStreaming(fetch('executable.wasm'), wasmImports).then(function (result) {
