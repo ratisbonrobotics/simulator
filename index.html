@@ -157,7 +157,8 @@
                     console.log(str.replace(/%[sd]/g, (match) => {
                         switch (match) {
                             case '%s': {
-                                let ret = parseString(new Uint8Array(memoryBuffer, argptr + argIndex));
+                                let strptr = new Uint32Array(memoryBuffer, argptr + argIndex, 1);
+                                let ret = parseString(new Uint8Array(memoryBuffer, strptr));
                                 argIndex += 4;
                                 return ret;
                             }
