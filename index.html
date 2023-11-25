@@ -139,7 +139,11 @@
             return objects[id];
         }
 
-        function parseString(bytearray) {
+        function getInteger(ptr) {
+            return new DataView(memoryBuffer).getUint32(ptr, true);
+        }
+
+        function getString(bytearray) {
             let str = '';
             for (let i = 0; bytearray[i] != 0; i++) {
                 str += String.fromCharCode(bytearray[i]);
@@ -150,20 +154,19 @@
         const wasmImports = {
             env: {
                 printf_js: function (format, argptr) {
-                    str = parseString(new Uint8Array(memoryBuffer, format));
+                    str = getString(new Uint8Array(memoryBuffer, format));
 
                     let argIndex = 0;
 
                     console.log(str.replace(/%[sd]/g, (match) => {
                         switch (match) {
                             case '%s': {
-                                let strptr = new Uint32Array(memoryBuffer, argptr + argIndex, 1);
-                                let ret = parseString(new Uint8Array(memoryBuffer, strptr));
+                                let ret = getString(new Uint8Array(memoryBuffer, getInteger(argptr + argIndex)));
                                 argIndex += 4;
                                 return ret;
                             }
                             case '%d': {
-                                let ret = parseInt(new Uint32Array(memoryBuffer, argptr + argIndex));
+                                let ret = getInteger(argptr + argIndex);
                                 argIndex += 4;
                                 return ret;
                             }
