@@ -92,7 +92,6 @@ function gl_getShaderInfoLog(gl, shader) {
     return stringToPtr(idToObject(gl).getShaderInfoLog(idToObject(shader))); // Assumes stringToPtr is a function that converts JS string to Wasm memory pointer
 }
 
-// Buffer Management
 function gl_createBuffer(gl) {
     return objectToId(idToObject(gl).createBuffer());
 }
@@ -106,13 +105,12 @@ function gl_bufferData(gl, target, size, data, usage) {
     idToObject(gl).bufferData(target, dataArray, usage);
 }
 
-// Uniform and Attribute Management
 function gl_getUniformLocation(gl, program, name) {
     return objectToId(idToObject(gl).getUniformLocation(idToObject(program), getString(name)));
 }
 
 function gl_uniformMatrix4fv(gl, location, transpose, value) {
-    var valueArray = new Float32Array(memorybuffer, value, 16); // 16 for 4x4 matrix
+    var valueArray = new Float32Array(memorybuffer, value, 16);
     idToObject(gl).uniformMatrix4fv(idToObject(location), transpose, valueArray);
 }
 

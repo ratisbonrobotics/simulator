@@ -47,7 +47,11 @@ typedef enum
     STATIC_DRAW = 0x88E4,
     FLOAT = 0x1406,
     LINK_STATUS = 0x8B82,
-} GLenum;
+    DEPTH_BUFFER_BIT = 0x0100,
+    COLOR_BUFFER_BIT = 0x4000,
+    CULL_FACE = 0x0B44,
+    DEPTH_TEST = 0x0B71,
+} GLenum; /* https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants */
 
 extern unsigned int gl_getContext(const char *canvas);
 extern unsigned int gl_createProgram(unsigned int gl);
