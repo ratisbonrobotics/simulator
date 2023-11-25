@@ -1,5 +1,5 @@
 #include "webgl.h"
-
+/*
 unsigned int createProgram(unsigned int gl, unsigned int vertexShader, unsigned int fragmentShader)
 {
     unsigned int program = gl_createProgram(gl);
@@ -49,23 +49,15 @@ unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource
     return createProgram(gl, vertexShader, fragmentShader);
 }
 
-// Assuming a predefined max number of attributes
-#define MAX_ATTRIBS 10
-
-typedef struct
-{
-    int locations[MAX_ATTRIBS];
-} AttribLocations;
-
-AttribLocations getAttribLocations(unsigned int gl, unsigned int program, const char **names, int count)
-{
-    AttribLocations attribs;
-    for (int i = 0; i < count && i < MAX_ATTRIBS; i++)
-    {
-        attribs.locations[i] = gl_getAttribLocation(gl, program, names[i]);
-    }
-    return attribs;
-}
+//AttribLocations getAttribLocations(unsigned int gl, unsigned int program, const char **names, int count)
+//{
+//    AttribLocations attribs;
+//    for (int i = 0; i < count && i < MAX_ATTRIBS; i++)
+//    {
+//        attribs.locations[i] = gl_getAttribLocation(gl, program, names[i]);
+//    }
+//    return attribs;
+//}
 
 void init3D(unsigned int gl, int width, int height)
 {
@@ -91,3 +83,4 @@ void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer,
     gl_bindBuffer(gl, type, buffer);
     gl_vertexAttribPointer(gl, attribLocation, valuesPerVertex, FLOAT, 0, 0, 0);
 }
+*/

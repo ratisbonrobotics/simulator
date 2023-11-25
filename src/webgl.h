@@ -44,4 +44,20 @@ extern int gl_getAttribLocation(unsigned int gl, unsigned int program, const cha
 extern void gl_vertexAttribPointer(unsigned int gl, int index, int size, GLenum type, int normalized, int stride, const void *pointer);
 extern void gl_enableVertexAttribArray(unsigned int gl, int index);
 
-//
+// IMPLEMENTATION
+unsigned int createProgram(unsigned int gl, unsigned int vertexShader, unsigned int fragmentShader);
+unsigned int compileShader(unsigned int gl, GLenum type, const char *source);
+unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
+
+// Assuming a predefined max number of attributes
+#define MAX_ATTRIBS 10
+
+typedef struct
+{
+    int locations[MAX_ATTRIBS];
+} AttribLocations;
+
+AttribLocations getAttribLocations(unsigned int gl, unsigned int program, const char **names, int count);
+void init3D(unsigned int gl, int width, int height);
+unsigned int createBuffer(unsigned int gl, GLenum type, const float *data, unsigned int size);
+void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, int attribLocation, int valuesPerVertex, int enable);

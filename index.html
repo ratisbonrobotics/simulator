@@ -112,7 +112,7 @@
         const wasmImports = {
             env: {
                 print: print,
-                gl_getContext: gl_getContext,
+                /*gl_getContext: gl_getContext,
                 gl_createProgram: gl_createProgram,
                 gl_attachShader: gl_attachShader,
                 gl_linkProgram: gl_linkProgram,
@@ -128,7 +128,7 @@
                 gl_uniformMatrix4fv: gl_uniformMatrix4fv,
                 gl_getAttribLocation: gl_getAttribLocation,
                 gl_vertexAttribPointer: gl_vertexAttribPointer,
-                gl_enableVertexAttribArray: gl_enableVertexAttribArray,
+                gl_enableVertexAttribArray: gl_enableVertexAttribArray,*/
             },
         };
         WebAssembly.instantiateStreaming(fetch('executable.wasm'), wasmImports).then(function (result) {
