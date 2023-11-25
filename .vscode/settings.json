@@ -3,6 +3,8 @@
     "files.associations": {
         "varargs.h": "c",
         "stdarg.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "webassembly.h": "c",
+        "stdbool.h": "c"
     }
 }

@@ -1,4 +1,4 @@
-#include "webassembly.h"
+#include "webgl.h"
 
 unsigned int createProgram(unsigned int gl, unsigned int vertexShader, unsigned int fragmentShader)
 {
@@ -15,9 +15,9 @@ unsigned int createProgram(unsigned int gl, unsigned int vertexShader, unsigned 
     {
         char infoLog[1024]; // Adjust size as needed
         gl_getProgramInfoLog(gl, program, infoLog);
-        printf("Error linking program: %s\n", infoLog);
-        // Add code to delete the program if necessary
-        // Depending on your implementation you might need a gl_deleteProgram function
+        // printf("Error linking program: %s\n", infoLog);
+        //  Add code to delete the program if necessary
+        //  Depending on your implementation you might need a gl_deleteProgram function
         return 0; // Return 0 or an appropriate error code
     }
 }
@@ -36,8 +36,8 @@ unsigned int compileShader(unsigned int gl, GLenum type, const char *source)
     {
         char infoLog[1024]; // Adjust size as needed
         gl_getShaderInfoLog(gl, shader, infoLog);
-        printf("Error compiling shader: %s\n", infoLog);
-        // Add code to delete the shader if necessary
+        // printf("Error compiling shader: %s\n", infoLog);
+        //  Add code to delete the shader if necessary
         return 0; // Return 0 or an appropriate error code
     }
 }
