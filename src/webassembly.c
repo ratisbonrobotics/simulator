@@ -11,7 +11,7 @@ int printf(const char *format, ...)
         {
             if (*(format_ptr + 1) != '\0')
             {
-                if (*(format_ptr + 1) == 'd' || *(format_ptr + 1) == 's')
+                if (*(format_ptr + 1) == 'd' || *(format_ptr + 1) == 's' || *(format_ptr + 1) == 'f')
                 {
                     count++;
                     format_ptr++;

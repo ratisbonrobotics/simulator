@@ -68,3 +68,30 @@ export function gl_getAttribLocation(gl, program, name) {
 export function gl_getUniformLocation(gl, program, name) {
     return objectToId(idToObject(gl).getUniformLocation(idToObject(program), getString(name)));
 }
+
+export function gl_createBuffer(gl) {
+    return objectToId(idToObject(gl).createBuffer());
+}
+export function gl_bindBuffer(gl, target, buffer) {
+    idToObject(gl).bindBuffer(target, idToObject(buffer));
+}
+export function gl_bufferData(gl, target, data, usage) {
+    idToObject(gl).bufferData(target, data, usage);
+}
+
+export function gl_enableVertexAttribArray(gl, index) {
+    idToObject(gl).enableVertexAttribArray(index);
+}
+export function gl_vertexAttribPointer(gl, index, size, type, normalized, stride, offset) {
+    idToObject(gl).vertexAttribPointer(index, size, type, normalized, stride, offset);
+}
+
+export function gl_createTexture(gl) {
+    return objectToId(idToObject(gl).createTexture());
+}
+export function gl_bindTexture(gl, target, texture) {
+    idToObject(gl).bindTexture(target, idToObject(texture));
+}
+export function gl_texImage2D(gl, target, level, internalformat, width, height, border, format, type, data) {
+    idToObject(gl).texImage2D(target, level, internalformat, width, height, border, format, type, data);
+}

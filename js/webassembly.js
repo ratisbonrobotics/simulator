@@ -21,7 +21,7 @@ let env = {
     print: function (format, argptr) {
         let str = getString(format);
         let argIndex = 0;
-        console.log(str.replace(/%[sd]/g, (match) => {
+        console.log(str.replace(/%[sdf]/g, (match) => {
             switch (match) {
                 case '%s': {
                     let ret = getString(new DataView(memorybuffer).getUint32(argptr + argIndex, true));
@@ -30,6 +30,11 @@ let env = {
                 }
                 case '%d': {
                     let ret = new DataView(memorybuffer).getUint32(argptr + argIndex, true);
+                    argIndex += 4;
+                    return ret;
+                }
+                case '%f': {
+                    let ret = new DataView(memorybuffer).getFloat32(argptr + argIndex, true);
                     argIndex += 4;
                     return ret;
                 }
