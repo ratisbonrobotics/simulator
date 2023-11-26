@@ -7,21 +7,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get install lld -y
   build:
-    needs: prepare
     runs-on: ubuntu-latest
     steps:
+    - run: sudo apt-get update && sudo apt-get install lld -y
     - uses: actions/checkout@v3
     - run: make
-  upload:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
     - uses: actions/upload-pages-artifact@v2.0.0
       with:
         path: ./
@@ -29,7 +20,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    needs: upload
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/deploy-pages@v2
