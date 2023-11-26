@@ -1,8 +1,10 @@
 DUMMY := $(shell git submodule update --init --recursive)
 
+WASM_LD_PATH := $(shell which wasm-ld || find /usr/lib/llvm-* -name wasm-ld 2>/dev/null | head -n 1)
+
 CC := clang
 CFLAGS := -std=iso9899:1999 --target=wasm32 --no-standard-libraries -MMD -MP $(shell find . -type d -not -path '*/\.*' | sed 's/^/-I/')
-LFLAGS := -std=iso9899:1999 --target=wasm32 --no-standard-libraries -fuse-ld=/usr/lib/llvm-10/bin/wasm-ld -Wl,--export-all,--no-entry,--allow-undefined
+LFLAGS := -std=iso9899:1999 --target=wasm32 --no-standard-libraries -fuse-ld=$(WASM_LD_PATH) -Wl,--export-all,--no-entry,--allow-undefined
 
 REPO_NAME := $(shell basename `git rev-parse --show-toplevel`)
 SRC := $(shell find . -name "*.c")
