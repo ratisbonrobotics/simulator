@@ -56,3 +56,11 @@ unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, ch
     gl_enable(gl, DEPTH_TEST);
     return createShaderProgram(gl, vertexShaderSource, fragmentShaderSource);
 }
+
+void getAttribLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        locations[i] = gl_getAttribLocation(gl, program, name[i]);
+    }
+}

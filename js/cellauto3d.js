@@ -272,6 +272,11 @@ const parentr3webgl = {
 		gl.deleteShader(shader);
 	},
 
+	createShaderProgram: function (vertexshadersource, fragmentshadersource) {
+		var gl = this.gl;
+		return this.createProgram(this.compileShader(gl.VERTEX_SHADER, vertexshadersource), this.compileShader(gl.FRAGMENT_SHADER, fragmentshadersource));
+	},
+
 	init3D: function () {
 		var gl = this.gl;
 		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -279,11 +284,6 @@ const parentr3webgl = {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		gl.enable(gl.CULL_FACE);
 		gl.enable(gl.DEPTH_TEST);
-	},
-
-	createShaderProgram: function (vertexshadersource, fragmentshadersource) {
-		var gl = this.gl;
-		return this.createProgram(this.compileShader(gl.VERTEX_SHADER, vertexshadersource), this.compileShader(gl.FRAGMENT_SHADER, fragmentshadersource));
 	},
 
 	getAttribLocations: function (program, names) {

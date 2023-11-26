@@ -48,6 +48,7 @@ export function gl_getProgramInfoLog(gl, program, strptr, maxlen) {
     let str = objectToId(idToObject(gl).getProgramInfoLog(idToObject(program)));
     setString(strptr, str, maxlen);
 }
+
 export function gl_viewport(gl, x, y, width, height) {
     idToObject(gl).viewport(x, y, width, height);
 }
@@ -59,4 +60,11 @@ export function gl_clear(gl, mask) {
 }
 export function gl_enable(gl, cap) {
     idToObject(gl).enable(cap);
+}
+
+export function gl_getAttribLocation(gl, program, name) {
+    return idToObject(gl).getAttribLocation(idToObject(program), getString(name));
+}
+export function gl_getUniformLocation(gl, program, name) {
+    return objectToId(idToObject(gl).getUniformLocation(idToObject(program), getString(name)));
 }
