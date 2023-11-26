@@ -27,7 +27,7 @@ int printf(const char *format, ...)
 
     for (unsigned int i = 0; i < count; i++)
     {
-        args_arr[i] = va_arg(args_va, void *);
+        args_arr[i] = va_arg(args_va, void *); // float has to be correctly interpreted here I believe
     }
 
     va_end(args_va);

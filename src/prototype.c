@@ -6,8 +6,7 @@ int main_simulator(void)
 {
     float m[16];
     createIdentityMatrix(m);
-    printf("%f\n", m[0]);
-    printf("%d\n", 1);
+    printf("%f\n", 2.3 + 88.2);
 
     return 0;
 }
