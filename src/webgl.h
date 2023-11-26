@@ -19,8 +19,8 @@ typedef enum
 } GLenum; /* https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants */
 
 extern unsigned int gl_getContext(const char *canvas);
-/*extern unsigned int gl_createProgram(unsigned int gl);
-extern unsigned int gl_attachShader(unsigned int gl, unsigned int program, unsigned int shader);
+extern unsigned int gl_createProgram(unsigned int gl);
+/*extern unsigned int gl_attachShader(unsigned int gl, unsigned int program, unsigned int shader);
 extern unsigned int gl_linkProgram(unsigned int gl, unsigned int program);
 extern unsigned int gl_createShader(unsigned int gl, GLenum type);
 extern void gl_getProgramInfoLog(unsigned int gl, unsigned int program, char *infoLog);

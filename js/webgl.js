@@ -8,6 +8,7 @@ function objectToId(object) {
     return id++;
 }
 function idToObject(id) {
+    console.log(objects[id])
     return objects[id];
 }
 export function gl_getContext(canvas) {
