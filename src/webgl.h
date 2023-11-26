@@ -20,4 +20,10 @@ extern void gl_compileShader(unsigned int gl, unsigned int shader);
 extern int gl_getShaderParameter(unsigned int gl, unsigned int shader, GLenum pname);
 extern void gl_getShaderInfoLog(unsigned int gl, unsigned int shader, char *infoLog, unsigned int maxLength);
 
-unsigned int compileShader(unsigned int gl, GLenum type, const char *source);
+extern unsigned int gl_createProgram(unsigned int gl);
+extern void gl_attachShader(unsigned int gl, unsigned int program, unsigned int shader);
+extern void gl_linkProgram(unsigned int gl, unsigned int program);
+extern int gl_getProgramParameter(unsigned int gl, unsigned int program, GLenum pname);
+extern void gl_getProgramInfoLog(unsigned int gl, unsigned int program, char *infoLog, unsigned int maxLength);
+
+unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
