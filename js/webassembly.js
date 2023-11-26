@@ -1,4 +1,4 @@
-import { gl_getContext } from '/js/webgl.js';
+import * as webgl from '/js/webgl.js';
 
 let memorybuffer;
 
@@ -10,29 +10,41 @@ export function getString(ptr) {
     }
     return str;
 }
-
-// Printing
-function print(format, argptr) {
-    let str = getString(format);
-    let argIndex = 0;
-    console.log(str.replace(/%[sd]/g, (match) => {
-        switch (match) {
-            case '%s': {
-                let ret = getString(new DataView(memorybuffer).getUint32(argptr + argIndex, true));
-                argIndex += 4;
-                return ret;
-            }
-            case '%d': {
-                let ret = new DataView(memorybuffer).getUint32(argptr + argIndex, true);
-                argIndex += 4;
-                return ret;
-            }
-            default: return match;
-        }
-    }));
+export function setString(ptr, str, maxlen) {
+    let bytearray = new Uint8Array(memorybuffer, ptr);
+    for (let i = 0; i < str.length && i < maxlen; i++) {
+        bytearray[i] = str.charCodeAt(i);
+    }
 }
 
-WebAssembly.instantiateStreaming(fetch('executable.wasm'), { env: { print: print, gl_getContext: gl_getContext } }).then(function (result) {
+let env = {
+    print: function (format, argptr) {
+        let str = getString(format);
+        let argIndex = 0;
+        console.log(str.replace(/%[sd]/g, (match) => {
+            switch (match) {
+                case '%s': {
+                    let ret = getString(new DataView(memorybuffer).getUint32(argptr + argIndex, true));
+                    argIndex += 4;
+                    return ret;
+                }
+                case '%d': {
+                    let ret = new DataView(memorybuffer).getUint32(argptr + argIndex, true);
+                    argIndex += 4;
+                    return ret;
+                }
+                default: return match;
+            }
+        }));
+    }
+};
+for (let key in webgl) {
+    if (Object.prototype.hasOwnProperty.call(webgl, key)) {
+        env[key] = webgl[key];
+    }
+}
+
+WebAssembly.instantiateStreaming(fetch('executable.wasm'), { env: env }).then(function (result) {
     memorybuffer = result.instance.exports.memory.buffer;
     result.instance.exports.main();
 })
