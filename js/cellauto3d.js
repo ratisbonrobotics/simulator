@@ -322,18 +322,6 @@ const parentr3webgl = {
 		return texture;
 	},
 
-	createRandomNoiseTexture: function (dim) {
-		var gl = this.gl;
-		var tex = gl.createTexture();
-		gl.bindTexture(gl.TEXTURE_2D, tex);
-		var data = [];
-		for (var i = 0; i < gl.canvas.width * gl.canvas.height; i++) { var col = Math.round(Math.random() * Math.random()) * 255; data.push(col, col, col); }
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, dim.x, dim.y, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array(data));
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		return tex;
-	},
-
 	createModelMatrix: function (tx, ty, tz, rx, ry, rz, sx, sy, sz) {
 		var modelmatrix = m4.createIdentityMatrix();
 		modelmatrix = m4.mult(m4.createTranslationMatrix(tx, ty, tz), modelmatrix);
