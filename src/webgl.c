@@ -64,3 +64,19 @@ void getAttribLocations(unsigned int gl, unsigned int program, unsigned int *loc
         locations[i] = gl_getAttribLocation(gl, program, name[i]);
     }
 }
+
+void getUniformLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        locations[i] = gl_getUniformLocation(gl, program, name[i]);
+    }
+}
+
+unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, const void *data, GLenum usage)
+{
+    unsigned int buffer = gl_createBuffer(gl);
+    gl_bindBuffer(gl, target, buffer);
+    gl_bufferData(gl, target, size, data, usage);
+    return buffer;
+}

@@ -298,16 +298,6 @@ const parentr3webgl = {
 		return uniformlocations;
 	},
 
-	createModelMatrix: function (tx, ty, tz, rx, ry, rz, sx, sy, sz) {
-		var modelmatrix = m4.createIdentityMatrix();
-		modelmatrix = m4.mult(m4.createTranslationMatrix(tx, ty, tz), modelmatrix);
-		modelmatrix = m4.mult(m4.createXRotationMatrix(m4.degreeToRadians(rx)), modelmatrix);
-		modelmatrix = m4.mult(m4.createYRotationMatrix(m4.degreeToRadians(ry)), modelmatrix);
-		modelmatrix = m4.mult(m4.createZRotationMatrix(m4.degreeToRadians(rz)), modelmatrix);
-		modelmatrix = m4.mult(m4.createScaleMatrix(sx, sy, sz), modelmatrix);
-		return modelmatrix;
-	},
-
 	createBuffer: function (type, data) {
 		var gl = this.gl;
 		var buffer = gl.createBuffer();
@@ -342,6 +332,16 @@ const parentr3webgl = {
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		return tex;
+	},
+
+	createModelMatrix: function (tx, ty, tz, rx, ry, rz, sx, sy, sz) {
+		var modelmatrix = m4.createIdentityMatrix();
+		modelmatrix = m4.mult(m4.createTranslationMatrix(tx, ty, tz), modelmatrix);
+		modelmatrix = m4.mult(m4.createXRotationMatrix(m4.degreeToRadians(rx)), modelmatrix);
+		modelmatrix = m4.mult(m4.createYRotationMatrix(m4.degreeToRadians(ry)), modelmatrix);
+		modelmatrix = m4.mult(m4.createZRotationMatrix(m4.degreeToRadians(rz)), modelmatrix);
+		modelmatrix = m4.mult(m4.createScaleMatrix(sx, sy, sz), modelmatrix);
+		return modelmatrix;
 	},
 
 	attachTextureSourceAsync: function (texture, source, flipVertically) {
