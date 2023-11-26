@@ -10,14 +10,6 @@ function getString(ptr) {
     return str;
 }
 
-function stringToPtr(str, ptr) {
-    let bytearray = new Uint8Array(memorybuffer);
-    for (let i = 0; i < str.length; i++) {
-        bytearray[ptr + i] = str.charCodeAt(i);
-    }
-    bytearray[ptr + str.length] = 0;
-}
-
 // Printing
 function print(format, argptr) {
     str = getString(format);
@@ -39,29 +31,7 @@ function print(format, argptr) {
     }));
 }
 
-const wasmImports = {
-    env: {
-        print: print,
-        /*gl_getContext: gl_getContext,
-        gl_createProgram: gl_createProgram,
-        gl_attachShader: gl_attachShader,
-        gl_linkProgram: gl_linkProgram,
-        gl_createShader: gl_createShader,
-        gl_shaderSource: gl_shaderSource,
-        gl_compileShader: gl_compileShader,
-        gl_getShaderParameter: gl_getShaderParameter,
-        gl_getShaderInfoLog: gl_getShaderInfoLog,
-        gl_createBuffer: gl_createBuffer,
-        gl_bindBuffer: gl_bindBuffer,
-        gl_bufferData: gl_bufferData,
-        gl_getUniformLocation: gl_getUniformLocation,
-        gl_uniformMatrix4fv: gl_uniformMatrix4fv,
-        gl_getAttribLocation: gl_getAttribLocation,
-        gl_vertexAttribPointer: gl_vertexAttribPointer,
-        gl_enableVertexAttribArray: gl_enableVertexAttribArray,*/
-    },
-};
-WebAssembly.instantiateStreaming(fetch('executable.wasm'), wasmImports).then(function (result) {
+WebAssembly.instantiateStreaming(fetch('executable.wasm'), { env: { print: print } }).then(function (result) {
     memorybuffer = result.instance.exports.memory.buffer;
     result.instance.exports.main();
     cellularautomata3d();
