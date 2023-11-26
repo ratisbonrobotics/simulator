@@ -11,6 +11,8 @@ typedef enum
     VERTEX_SHADER = 0x8B31,
     COMPILE_STATUS = 0x8B81,
     LINK_STATUS = 0x8B82,
+    RGBA = 0x1908,
+    UNSIGNED_BYTE = 0x1401,
 } GLenum;
 
 extern unsigned int gl_getContext(const char *canvas);
@@ -41,9 +43,14 @@ extern void gl_bufferData(unsigned int gl, GLenum target, unsigned int size, con
 extern void gl_enableVertexAttribArray(unsigned int gl, unsigned int index);
 extern void gl_vertexAttribPointer(unsigned int gl, unsigned int index, int size, GLenum type, unsigned char normalized, unsigned int stride, const void *pointer);
 
+extern void gl_createTexture(unsigned int gl, GLenum target, unsigned int texture);
+extern void gl_bindTexture(unsigned int gl, GLenum target, unsigned int texture);
+extern void gl_texImage2D(unsigned int gl, GLenum target, int level, int internalFormat, int width, int height, int border, GLenum format, GLenum type, const void *data);
+
 unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
 unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, char *vertexShaderSource, const char *fragmentShaderSource);
 void getAttribLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length);
 void getUniformLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length);
 unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, const void *data, GLenum usage);
 void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, unsigned int location, unsigned size);
+unsigned int createTexture(unsigned int gl, GLenum target, unsigned int width, unsigned int height, const void *data);

@@ -88,3 +88,12 @@ void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer,
     gl_bindBuffer(gl, type, buffer);
     gl_vertexAttribPointer(gl, location, size, FLOAT, false, 0, 0);
 }
+
+unsigned int createTexture(unsigned int gl, GLenum target, unsigned int width, unsigned int height, const void *data)
+{
+    unsigned int texture;
+    gl_createTexture(gl, target, texture);
+    gl_bindTexture(gl, target, texture);
+    gl_texImage2D(gl, target, 0, RGBA, width, height, 0, RGBA, UNSIGNED_BYTE, data);
+    return texture;
+}
