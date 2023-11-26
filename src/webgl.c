@@ -46,3 +46,13 @@ unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource
     unsigned int fragmentShader = compileShader(gl, FRAGMENT_SHADER, fragmentShaderSource);
     return createProgram(gl, vertexShader, fragmentShader);
 }
+
+unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, char *vertexShaderSource, const char *fragmentShaderSource)
+{
+    gl_viewport(gl, 0, 0, height, width);
+    gl_clearColor(gl, 0.0f, 0.0f, 0.0f, 1.0f);
+    gl_clear(gl, COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
+    gl_enable(gl, CULL_FACE);
+    gl_enable(gl, DEPTH_TEST);
+    return createShaderProgram(gl, vertexShaderSource, fragmentShaderSource);
+}

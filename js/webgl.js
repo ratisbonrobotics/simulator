@@ -48,3 +48,15 @@ export function gl_getProgramInfoLog(gl, program, strptr, maxlen) {
     let str = objectToId(idToObject(gl).getProgramInfoLog(idToObject(program)));
     setString(strptr, str, maxlen);
 }
+export function gl_viewport(gl, x, y, width, height) {
+    idToObject(gl).viewport(x, y, width, height);
+}
+export function gl_clearColor(gl, r, g, b, a) {
+    idToObject(gl).clearColor(r, g, b, a);
+}
+export function gl_clear(gl, mask) {
+    idToObject(gl).clear(mask);
+}
+export function gl_enable(gl, cap) {
+    idToObject(gl).enable(cap);
+}

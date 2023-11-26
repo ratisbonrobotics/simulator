@@ -26,4 +26,10 @@ extern void gl_linkProgram(unsigned int gl, unsigned int program);
 extern int gl_getProgramParameter(unsigned int gl, unsigned int program, GLenum pname);
 extern void gl_getProgramInfoLog(unsigned int gl, unsigned int program, char *infoLog, unsigned int maxLength);
 
+extern void gl_viewport(unsigned int gl, int x, int y, int width, int height);
+extern void gl_clearColor(unsigned int gl, float red, float green, float blue, float alpha);
+extern void gl_clear(unsigned int gl, GLenum mask);
+extern void gl_enable(unsigned int gl, GLenum cap);
+
 unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
+unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, char *vertexShaderSource, const char *fragmentShaderSource);
