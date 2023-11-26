@@ -378,7 +378,7 @@ const parentr3webgl = {
 
 
 // ----------------------------------- LOGIC -----------------------------------
-
+cellularautomata3d();
 function cellularautomata3d() {
 
 	function parseRulestring3D(rulestring) {

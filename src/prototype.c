@@ -1,10 +1,11 @@
 #include "webassembly.h"
+#include "webgl.h"
 
-int main_simulator()
+int main_simulator(void)
 {
-    const char *hello = "Hello World!";
-    int drei = 3;
+    unsigned int gl = gl_getContext("canvas");
+    unsigned int gl1 = gl_getContext("canvas");
+    printf("gl: %d, gl1: %d\n", gl, gl1);
 
-    printf("The answer is %d and %s and %d\n", drei, hello, 244 + 2222);
-    return drei + 5;
+    return 0;
 }

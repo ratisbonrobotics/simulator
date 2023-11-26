@@ -19,7 +19,7 @@ typedef enum
 } GLenum; /* https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants */
 
 extern unsigned int gl_getContext(const char *canvas);
-extern unsigned int gl_createProgram(unsigned int gl);
+/*extern unsigned int gl_createProgram(unsigned int gl);
 extern unsigned int gl_attachShader(unsigned int gl, unsigned int program, unsigned int shader);
 extern unsigned int gl_linkProgram(unsigned int gl, unsigned int program);
 extern unsigned int gl_createShader(unsigned int gl, GLenum type);
@@ -61,3 +61,4 @@ AttribLocations getAttribLocations(unsigned int gl, unsigned int program, const 
 void init3D(unsigned int gl, int width, int height);
 unsigned int createBuffer(unsigned int gl, GLenum type, const float *data, unsigned int size);
 void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, int attribLocation, int valuesPerVertex, int enable);
+*/
