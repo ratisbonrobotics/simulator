@@ -1,5 +1,6 @@
 #include "webgl.h"
 #include "webassembly.h"
+#include <stdbool.h>
 
 static unsigned int compileShader(unsigned int gl, GLenum type, const char *source)
 {
@@ -79,4 +80,11 @@ unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, con
     gl_bindBuffer(gl, target, buffer);
     gl_bufferData(gl, target, size, data, usage);
     return buffer;
+}
+
+void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, unsigned int location, unsigned size)
+{
+    gl_enableVertexAttribArray(gl, location);
+    gl_bindBuffer(gl, type, buffer);
+    gl_vertexAttribPointer(gl, location, size, FLOAT, false, 0, 0);
 }

@@ -38,7 +38,12 @@ extern unsigned int gl_createBuffer(unsigned int gl);
 extern void gl_bindBuffer(unsigned int gl, GLenum target, unsigned int buffer);
 extern void gl_bufferData(unsigned int gl, GLenum target, unsigned int size, const void *data, GLenum usage);
 
+extern void gl_enableVertexAttribArray(unsigned int gl, unsigned int index);
+extern void gl_vertexAttribPointer(unsigned int gl, unsigned int index, int size, GLenum type, unsigned char normalized, unsigned int stride, const void *pointer);
+
 unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
 unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, char *vertexShaderSource, const char *fragmentShaderSource);
 void getAttribLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length);
 void getUniformLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length);
+unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, const void *data, GLenum usage);
+void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, unsigned int location, unsigned size);
