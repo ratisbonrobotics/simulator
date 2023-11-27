@@ -57,7 +57,7 @@ void ftoa(float n, char *res, int afterpoint)
     float fpart = n - (float)ipart;
 
     // convert integer part to string
-    int i = intToStr(ipart, res, 0);
+    int i = intToStr(ipart, res, 1);
 
     // If the number is negative, shift the string one position to the right
     // and place '-' at the beginning
