@@ -37,7 +37,11 @@ let env = {
                 default: return match;
             }
         }));
-    }
+    },
+    memset: function (ptr, value, len) {
+        let bytearray = new Uint8Array(memorybuffer, ptr, len);
+        bytearray.fill(value);
+    },
 };
 for (let key in webgl) {
     if (Object.prototype.hasOwnProperty.call(webgl, key)) {

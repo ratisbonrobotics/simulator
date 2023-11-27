@@ -5,6 +5,7 @@
         "stdarg.h": "c",
         "stdint.h": "c",
         "webassembly.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "matrix.h": "c"
     }
 }
