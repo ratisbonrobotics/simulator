@@ -18,7 +18,14 @@ export function setString(ptr, str, maxlen) {
 }
 
 let env = {
-    memory: new WebAssembly.Memory({ initial: 256, maximum: 16384 }),
+    pow: Math.pow,
+    fmod: function (a, b) {
+        return a % b;
+    },
+    sinf: Math.sin,
+    cosf: Math.cos,
+    tanf: Math.tan,
+    sqrtf: Math.sqrt,
     print: function (format, argptr) {
         let str = getString(format);
         let argIndex = 0;
