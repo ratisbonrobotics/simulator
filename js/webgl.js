@@ -95,3 +95,6 @@ export function gl_bindTexture(gl, target, texture) {
 export function gl_texImage2D(gl, target, level, internalformat, width, height, border, format, type, data) {
     idToObject(gl).texImage2D(target, level, internalformat, width, height, border, format, type, data);
 }
+export function gl_texImage2D_2(gl, target, level, internalformat, format, type, data) {
+    idToObject(gl).texImage2D(target, level, internalformat, format, type, idToObject(data));
+}

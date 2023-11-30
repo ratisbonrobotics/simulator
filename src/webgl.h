@@ -13,6 +13,7 @@ typedef enum
     LINK_STATUS = 0x8B82,
     RGBA = 0x1908,
     UNSIGNED_BYTE = 0x1401,
+    TEXTURE_2D = 0x0DE1
 } GLenum;
 
 extern unsigned int gl_getContext(const char *canvas);
@@ -46,6 +47,7 @@ extern void gl_vertexAttribPointer(unsigned int gl, unsigned int index, int size
 extern void gl_createTexture(unsigned int gl, GLenum target, unsigned int texture);
 extern void gl_bindTexture(unsigned int gl, GLenum target, unsigned int texture);
 extern void gl_texImage2D(unsigned int gl, GLenum target, int level, int internalFormat, int width, int height, int border, GLenum format, GLenum type, const void *data);
+extern void gl_texImage2D_2(unsigned int gl, GLenum target, int level, int internalFormat, int format, int type, const void *data);
 
 unsigned int createShaderProgram(unsigned int gl, const char *vertexShaderSource, const char *fragmentShaderSource);
 unsigned int init3D(unsigned int gl, unsigned int height, unsigned int width, char *vertexShaderSource, const char *fragmentShaderSource);
@@ -53,4 +55,5 @@ void getAttribLocations(unsigned int gl, unsigned int program, unsigned int *loc
 void getUniformLocations(unsigned int gl, unsigned int program, unsigned int *locations, const char **name, unsigned int length);
 unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, const void *data, GLenum usage);
 void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, unsigned int location, unsigned size);
-unsigned int createTexture(unsigned int gl, GLenum target, unsigned int width, unsigned int height, const void *data);
+unsigned int createTexture(unsigned int gl, unsigned int width, unsigned int height);
+void createModelMatrix(float m[16], float tx, float ty, float tz, float rx, float ry, float rz, float sx, float sy, float sz);

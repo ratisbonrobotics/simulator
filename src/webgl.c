@@ -89,11 +89,34 @@ void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer,
     gl_vertexAttribPointer(gl, location, size, FLOAT, false, 0, 0);
 }
 
-unsigned int createTexture(unsigned int gl, GLenum target, unsigned int width, unsigned int height, const void *data)
+unsigned int createTexture(unsigned int gl, unsigned int width, unsigned int height)
 {
     unsigned int texture;
-    gl_createTexture(gl, target, texture);
-    gl_bindTexture(gl, target, texture);
-    gl_texImage2D(gl, target, 0, RGBA, width, height, 0, RGBA, UNSIGNED_BYTE, data);
+    gl_createTexture(gl, TEXTURE_2D, texture);
+    gl_bindTexture(gl, TEXTURE_2D, texture);
+    gl_texImage2D(gl, TEXTURE_2D, 0, RGBA, width, height, 0, RGBA, UNSIGNED_BYTE, 0);
     return texture;
+}
+
+void createModelMatrix(float m[16], float tx, float ty, float tz, float rx, float ry, float rz, float sx, float sy, float sz)
+{
+    createIdentityMatrix(m);
+    float res[16];
+    createTranslationMatrix(res, tx, ty, tz);
+    mult(m, res, m);
+    createXRotationMatrix(res, degreeToRadians(rx));
+    mult(m, res, m);
+    createYRotationMatrix(res, degreeToRadians(ry));
+    mult(m, res, m);
+    createZRotationMatrix(res, degreeToRadians(rz));
+    mult(m, res, m);
+    createScaleMatrix(res, sx, sy, sz);
+    mult(m, res, m);
+}
+
+void addTexture(unsigned int gl, unsigned int texture, const char *img)
+{
+    gl_bindTexture(gl, TEXTURE_2D, texture);
+    gl_texImage2D_2(gl, TEXTURE_2D, 0, RGBA, RGBA, UNSIGNED_BYTE, img);
+    gl_generateMipmap(gl, TEXTURE_2D);
 }
