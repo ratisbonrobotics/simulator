@@ -1,6 +1,15 @@
 #include "matrix.h"
 #include "webassembly.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+double degreeToRadians(double degree)
+{
+    return degree * (M_PI / 180.0);
+}
+
 void printMatrix(float *m)
 {
     char buffer[1024] = {0}; // Large enough buffer to hold the entire matrix as a string
@@ -182,7 +191,7 @@ void createPerspectiveMatrix(float *m, float fovInRadians, float aspect, float n
     m[15] = 0.0f;
 }
 
-void inverseMatrix(float *result, float *m)
+void inverse(float *result, float *m)
 {
     float m00 = m[0];
     float m01 = m[1];

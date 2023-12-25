@@ -1,17 +1,3 @@
-/*
-* Copyright 2021 Markus Heimerl, OTH Regensburg
-* Licensed under CC BY-NC 4.0
-*
-* ANY USE OF THIS SOFTWARE MUST COMPLY WITH THE
-* CREATIVE COMMONS ATTRIBUTION-NONCOMMERCIAL 4.0 INTERNATIONAL LICENSE
-* AGREEMENTS
-*/
-
-/*
-optimization:
-- use gl.drawElements instead of gl.drawArrays and draw each cube using 8 instead of 36 verticies (4.5 times less!) - tried it. Its not faster at all and I dont know why. Can be found under /cellularautomata/cellauto3ddrawElements.js
-*/
-
 function getBaseLog(x, y) {
 	return Math.log(y) / Math.log(x);
 }

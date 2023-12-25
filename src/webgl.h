@@ -1,3 +1,6 @@
+#ifndef WEBGL_H
+#define WEBGL_H
+
 typedef enum
 {
     DEPTH_BUFFER_BIT = 0x0100,
@@ -57,3 +60,6 @@ unsigned int createBuffer(unsigned int gl, GLenum target, unsigned int size, con
 void connectBufferToAttribute(unsigned int gl, GLenum type, unsigned int buffer, unsigned int location, unsigned size);
 unsigned int createTexture(unsigned int gl, unsigned int width, unsigned int height);
 void createModelMatrix(float m[16], float tx, float ty, float tz, float rx, float ry, float rz, float sx, float sy, float sz);
+void addTexture(unsigned int gl, unsigned int texture, const char *img);
+
+#endif // WEBGL_H

@@ -2,8 +2,6 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-#define PI 3.14159265358979323846
-
 extern int print(const char *format, void *args);
 extern double pow(double x, double y);
 
