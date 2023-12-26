@@ -1,33 +1,4 @@
 // ----------------------------------- LOGIC -----------------------------------
-
-function parseRulestring3D(rulestring) {
-	var res = rulestring.split("/");
-	res[0] = res[0].substring(1);
-	res[1] = res[1].substring(1);
-
-	var bornValues = [];
-	if (res[0] == "") {
-		bornValues[0] = -9999;
-	} else {
-		var commasplit = res[0].split(",");
-		for (var i = 0; i < commasplit.length; i++) {
-			bornValues[i] = parseInt(commasplit[i]);
-		}
-	}
-
-	var surviveValues = [];
-	if (res[1] == "") {
-		surviveValues[1] = -9999;
-	} else {
-		var commasplit = res[1].split(",");
-		for (var i = 0; i < commasplit.length; i++) {
-			surviveValues[i] = parseInt(commasplit[i]);
-		}
-	}
-
-	return [bornValues, surviveValues];
-}
-
 function checkRuleConditions(neighborcount, values) {
 	for (var i = 0; i < values.length; i++) {
 		if (neighborcount == values[i]) return true;
@@ -69,8 +40,8 @@ function createCellGridWireframe(cellularworldsize, randomize) {
 
 var cellularworldsize = 60;
 var cellgrid = createCellGridWireframe(cellularworldsize, true);
-var survivevalues = parseRulestring3D($("#cellRuleInput3D").val())[1];
-var bornvalues = parseRulestring3D($("#cellRuleInput3D").val())[0];
+var survivevalues = [20, 24]
+var bornvalues = [4]
 
 cellularAutomataLogic();
 function cellularAutomataLogic() {
@@ -104,11 +75,11 @@ function cellularAutomataLogic() {
 					neighborcount += cellgrid[x][y][zp1] + cellgrid[x][yp1][zp1] + cellgrid[x][ym1][zp1] + cellgrid[xp1][y][zp1]
 						+ cellgrid[xm1][y][zp1] + cellgrid[xp1][yp1][zp1] + cellgrid[xp1][ym1][zp1] + cellgrid[xm1][ym1][zp1] + cellgrid[xm1][yp1][zp1];
 
-					// if cell alive and neighborcount 2,3 or 8, it stays alive
+					// if cell alive and neighborcount is 20 or 24 it stays alive
 					if (status == 1 && checkRuleConditions(neighborcount, survivevalues)) {
 						cellgridnextframe[x][y][z] = 1;
 					}
-					// if cell is dead and neighborcount is 3, it is born
+					// if cell is dead and neighborcount is 4, it is born
 					else if (status == 0 && checkRuleConditions(neighborcount, bornvalues)) {
 						cellgridnextframe[x][y][z] = 1;
 					}
@@ -121,8 +92,6 @@ function cellularAutomataLogic() {
 	}
 	setTimeout(cellularAutomataLogic, 100);
 }
-
-
 
 // --- DRAWING CODE ---
 const vertexshadersource = `
