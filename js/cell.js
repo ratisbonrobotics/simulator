@@ -2,122 +2,6 @@ function getBaseLog(x, y) {
 	return Math.log(y) / Math.log(x);
 }
 
-const parentr3webgl = {
-
-	createProgram: function (vertexshader, fragmentshader) {
-		var gl = this.gl;
-		var program = gl.createProgram();
-		gl.attachShader(program, vertexshader);
-		gl.attachShader(program, fragmentshader);
-		gl.linkProgram(program);
-		if (gl.getProgramParameter(program, gl.LINK_STATUS)) { return program; }
-		console.log(gl.getProgramInfoLog(program));
-		gl.deleteProgram(program);
-	},
-
-	compileShader: function (type, source) {
-		var gl = this.gl;
-		var shader = gl.createShader(type);
-		gl.shaderSource(shader, source);
-		gl.compileShader(shader);
-		if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) { return shader; }
-		console.log(gl.getShaderInfoLog(shader));
-		gl.deleteShader(shader);
-	},
-
-	createShaderProgram: function (vertexshadersource, fragmentshadersource) {
-		var gl = this.gl;
-		return this.createProgram(this.compileShader(gl.VERTEX_SHADER, vertexshadersource), this.compileShader(gl.FRAGMENT_SHADER, fragmentshadersource));
-	},
-
-	init3D: function () {
-		var gl = this.gl;
-		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.enable(gl.CULL_FACE);
-		gl.enable(gl.DEPTH_TEST);
-	},
-
-	getAttribLocations: function (program, names) {
-		var attriblocations = {};
-		for (var i = 0; i < names.length; i++) { attriblocations[names[i]] = this.gl.getAttribLocation(program, names[i]); }
-		return attriblocations;
-	},
-
-	getUniformLocations: function (program, names) {
-		var uniformlocations = {};
-		for (var i = 0; i < names.length; i++) { uniformlocations[names[i]] = this.gl.getUniformLocation(program, names[i]); }
-		return uniformlocations;
-	},
-
-	createBuffer: function (type, data) {
-		var gl = this.gl;
-		var buffer = gl.createBuffer();
-		gl.bindBuffer(type, buffer);
-		gl.bufferData(type, new Float32Array(data), gl.STATIC_DRAW);
-		return buffer;
-	},
-
-	connectBufferToAttribute: function (type, buffer, attriblocation, valuespervertex, enable) {
-		var gl = this.gl;
-		if (enable) gl.enableVertexAttribArray(attriblocation);
-		gl.bindBuffer(type, buffer);
-		gl.vertexAttribPointer(attriblocation, valuespervertex, gl.FLOAT, false, 0, 0);
-	},
-
-	createTexture: function (dim) {
-		dim = dim ? dim : { x: 1, y: 1 };
-		var gl = this.gl;
-		var texture = gl.createTexture();
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, dim.x, dim.y, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-		return texture;
-	},
-
-	createModelMatrix: function (tx, ty, tz, rx, ry, rz, sx, sy, sz) {
-		var modelmatrix = createIdentityMatrix();
-		modelmatrix = mult(createTranslationMatrix(tx, ty, tz), modelmatrix);
-		modelmatrix = mult(createXRotationMatrix(degreeToRadians(rx)), modelmatrix);
-		modelmatrix = mult(createYRotationMatrix(degreeToRadians(ry)), modelmatrix);
-		modelmatrix = mult(createZRotationMatrix(degreeToRadians(rz)), modelmatrix);
-		modelmatrix = mult(createScaleMatrix(sx, sy, sz), modelmatrix);
-		return modelmatrix;
-	},
-
-	attachTextureSourceAsync: function (texture, source, flipVertically) {
-		var gl = this.gl;
-		var image = new Image();
-		image.src = source;
-
-		image.addEventListener("load", function () {
-			if (flipVertically) {
-				var canvas = document.createElement("canvas");
-				canvas.width = image.width;
-				canvas.height = image.height;
-				canvas.getContext("2d").scale(1, -1);
-				canvas.getContext("2d").drawImage(image, 0, image.height * -1);
-				var flipImage = new Image();
-				flipImage.src = canvas.toDataURL("image/png");
-				flipImage.addEventListener("load", function () {
-					addTexture(flipImage);
-				});
-			} else {
-				addTexture(image);
-			}
-		});
-
-		function addTexture(img) {
-			gl.bindTexture(gl.TEXTURE_2D, texture);
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-			gl.generateMipmap(gl.TEXTURE_2D);
-		}
-	}
-};
-
-
-
-
 // ----------------------------------- LOGIC -----------------------------------
 cellularautomata3d();
 function cellularautomata3d() {
@@ -357,8 +241,6 @@ function cellularautomata3d() {
 		}, 200);
 	});
 	var gl = fscanvas.getContext("webgl"/*, {antialias: true}*/);
-	const r3webgl = { ...parentr3webgl };
-	r3webgl.gl = gl;
 	/*
 	Anti Aliasing intensity setting
 	gl.enable(gl.SAMPLE_COVERAGE);
@@ -406,15 +288,15 @@ function cellularautomata3d() {
 	// --- ---
 
 	// --- MAKE SHADERS AND PROGRAM ---
-	const program = r3webgl.createShaderProgram(vertexshadersource, fragmentshadersource);
+	const program = createShaderProgram(gl, vertexshadersource, fragmentshadersource);
 	gl.useProgram(program);
 
 	// --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS
-	const attribLocations = r3webgl.getAttribLocations(program, ["vertexposition", "texturecoordinate", "normal"]);
-	const uniformLocations = r3webgl.getUniformLocations(program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "reverseLightDirection"]);
+	const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "normal"]);
+	const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "reverseLightDirection"]);
 
 	// --- INIT 3D ---
-	r3webgl.init3D();
+	init3D(gl);
 
 	// --- THERE SHALL BE LIGHT ---
 	gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 1.0]));
@@ -429,14 +311,14 @@ function cellularautomata3d() {
 		const text = await response.text();
 		var data = parseOBJ(text, true);
 		console.log(data);
-		cubevertexbuffer = r3webgl.createBuffer(gl.ARRAY_BUFFER, data["Cube"].positions);
-		cubetexcoordbuffer = r3webgl.createBuffer(gl.ARRAY_BUFFER, data["Cube"].texcoords);
-		cubenormalbuffer = r3webgl.createBuffer(gl.ARRAY_BUFFER, data["Cube"].normals);
+		cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].positions);
+		cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].texcoords);
+		cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].normals);
 	}
 
 	// --- GET OBJ TEXTURE ---
-	var texturecube = r3webgl.createTexture();
-	r3webgl.attachTextureSourceAsync(texturecube, "data/cubetexturetest.png", true);
+	var texturecube = createTexture(gl);
+	attachTextureSourceAsync(gl, texturecube, "data/cubetexturetest.png", true);
 
 	// --- ENABLE TEXTURE0 ---
 	gl.uniform1i(uniformLocations.texture, 0);
@@ -501,9 +383,9 @@ function cellularautomata3d() {
 
 
 			// --- CONNECT BUFFERS TO ATTRIBUTES --- (only has to be done once since the only object vertex data we ever need is that of a cube)
-			r3webgl.connectBufferToAttribute(gl.ARRAY_BUFFER, cubevertexbuffer, attribLocations.vertexposition, 3, true);
-			r3webgl.connectBufferToAttribute(gl.ARRAY_BUFFER, cubenormalbuffer, attribLocations.normal, 3, true);
-			r3webgl.connectBufferToAttribute(gl.ARRAY_BUFFER, cubetexcoordbuffer, attribLocations.texturecoordinate, 2, true);
+			connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubevertexbuffer, attribLocations.vertexposition, 3, true);
+			connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubenormalbuffer, attribLocations.normal, 3, true);
+			connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubetexcoordbuffer, attribLocations.texturecoordinate, 2, true);
 
 
 			// -- DRAW ---
@@ -512,7 +394,7 @@ function cellularautomata3d() {
 				for (var y = 0; y < cellularworldsize; y++) {
 					for (var z = 0; z < cellularworldsize; z++) {
 						if (cellgrid[x][y][z] == 1) {
-							gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, r3webgl.createModelMatrix(x, y, z, 0, 0, 0, 0.5, 0.5, 0.5));
+							gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(x, y, z, 0, 0, 0, 0.5, 0.5, 0.5));
 							gl.drawArrays(gl.TRIANGLES, 0, 6 * 2 * 3);
 						}
 					}
