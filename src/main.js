@@ -1,42 +1,42 @@
 // --- DRAWING CODE ---
 const vertexshadersource = `
-		precision highp float;
+    precision highp float;
 
-		attribute vec4 vertexposition;
-		attribute vec2 texturecoordinate;
-		attribute vec3 normal;
+    attribute vec4 vertexposition;
+    attribute vec2 texturecoordinate;
+    attribute vec3 normal;
 
-		uniform mat4 modelmatrix;
-		uniform mat4 projectionmatrix;
-		uniform mat4 viewmatrix;
+    uniform mat4 modelmatrix;
+    uniform mat4 projectionmatrix;
+    uniform mat4 viewmatrix;
 
-		varying vec2 o_texturecoordinate;
-		varying vec3 o_normal;
+    varying vec2 o_texturecoordinate;
+    varying vec3 o_normal;
 
-		void main(){
-			o_texturecoordinate = texturecoordinate;
-			o_normal = mat3(modelmatrix) * normal;
-			gl_Position = projectionmatrix * viewmatrix * modelmatrix * vertexposition;
-		}
-	`;
+    void main(){
+        o_texturecoordinate = texturecoordinate;
+        o_normal = mat3(modelmatrix) * normal;
+        gl_Position = projectionmatrix * viewmatrix * modelmatrix * vertexposition;
+    }
+`;
 
 const fragmentshadersource = `
-		precision highp float;
+    precision highp float;
 
-		varying vec2 o_texturecoordinate;
-		varying vec3 o_normal;
+    varying vec2 o_texturecoordinate;
+    varying vec3 o_normal;
 
-		uniform sampler2D texture;
-		uniform vec3 reverseLightDirection;
+    uniform sampler2D texture;
+    uniform vec3 reverseLightDirection;
 
-		void main(){
-			vec3 normal = normalize(o_normal);
-			float light = dot(normal, reverseLightDirection);
+    void main(){
+        vec3 normal = normalize(o_normal);
+        float light = dot(normal, reverseLightDirection);
 
-			gl_FragColor = texture2D(texture, o_texturecoordinate);
-			//gl_FragColor.rgb *= light;
-		}
-	`;
+        gl_FragColor = texture2D(texture, o_texturecoordinate);
+        //gl_FragColor.rgb *= light;
+    }
+`;
 
 // --- MAKE SHADERS AND PROGRAM ---
 const program = createShaderProgram(gl, vertexshadersource, fragmentshadersource);
