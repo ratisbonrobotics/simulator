@@ -9,12 +9,7 @@ window.addEventListener("orientationchange", function () {
         fscanvas.width = newwidth;
     }, 200);
 });
-var gl = fscanvas.getContext("webgl"/*, {antialias: true}*/);
-/*
-Anti Aliasing intensity setting
-gl.enable(gl.SAMPLE_COVERAGE);
-gl.sampleCoverage(0.5, false);
-*/
+var gl = fscanvas.getContext("webgl");
 
 // --- ADD EVENT LISTENERS ---
 $("#cellauto3dtoggle").click(toggle);
