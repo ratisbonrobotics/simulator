@@ -1,4 +1,3 @@
-
 // --- DRAWING CODE ---
 const vertexshadersource = `
 		precision highp float;
@@ -94,7 +93,6 @@ function drawScene(now) {
         then = now;
 
         // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
-        //var projectionmatrix = createOrthographicMatrix(0, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, 400, -400);
         var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 200000);
         gl.uniformMatrix4fv(uniformLocations.projectionmatrix, false, projectionmatrix);
 
@@ -130,7 +128,6 @@ function drawScene(now) {
         // --- SETUP VIEWMATRIX --- (MOVE THE WORLD INVERSE OF THE CAMERAMOVEMENT)
         var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
         var viewmatrix = inverse(cameramatrix);
-        var viewmatrixlocation = gl.getUniformLocation(program, "viewmatrix");
         gl.uniformMatrix4fv(uniformLocations.viewmatrix, false, viewmatrix);
 
 
@@ -141,7 +138,6 @@ function drawScene(now) {
 
 
         // -- DRAW ---
-        //console.time("drawloop");
         for (var x = 0; x < cellularworldsize; x++) {
             for (var y = 0; y < cellularworldsize; y++) {
                 for (var z = 0; z < cellularworldsize; z++) {
@@ -152,7 +148,6 @@ function drawScene(now) {
                 }
             }
         }
-        //console.timeEnd("drawloop");
 
     }
     requestAnimationFrame(drawScene);
