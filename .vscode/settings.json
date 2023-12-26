@@ -1,11 +1,3 @@
 {
-    "editor.formatOnSave": true,
-    "files.associations": {
-        "varargs.h": "c",
-        "stdarg.h": "c",
-        "stdint.h": "c",
-        "webassembly.h": "c",
-        "stdbool.h": "c",
-        "matrix.h": "c"
-    }
+    "editor.formatOnSave": true
 }
