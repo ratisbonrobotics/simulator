@@ -59,19 +59,19 @@ async function load() {
     // ---
 }
 
-var camerapos = [50.0, 50.0, -10.0];
+var camerapos = [0.0, 0.1, -1.0];
 
 requestAnimationFrame(drawScene);
 toggle();
 
 var then = 0;
-function drawScene(now) {
+function drawScene() {
     if (running) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
         // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
-        var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 200000);
+        var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
         gl.uniformMatrix4fv(uniformLocations.projectionmatrix, false, projectionmatrix);
 
 
@@ -82,7 +82,7 @@ function drawScene(now) {
 
 
         // --- FIRST PERSON CAMERA ---
-        var movementspeed = 0.3;
+        var movementspeed = 0.0125;
         var factorws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
         lookatposition[0] += Math.sin(degreeToRadians(viewxz)) * movementspeed * factorws;
         lookatposition[1] += Math.sin(degreeToRadians(viewy)) * movementspeed * factorws;
@@ -110,17 +110,9 @@ function drawScene(now) {
 
 
         // -- DRAW ---
-        for (var x = 0; x < cellularworldsize; x++) {
-            for (var y = 0; y < cellularworldsize; y++) {
-                for (var z = 0; z < cellularworldsize; z++) {
-                    if (cellgrid[x][y][z] == 1) {
-                        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(x, y, z, 0, 0, 0, 20.5, 20.5, 20.5));
-                        gl.drawArrays(gl.TRIANGLES, 0, 1668);
-                    }
-                }
-            }
-        }
-
+        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0));
+        gl.drawArrays(gl.TRIANGLES, 0, 1668);
     }
+
     requestAnimationFrame(drawScene);
 }
