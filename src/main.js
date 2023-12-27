@@ -59,11 +59,13 @@ var cubenormalbuffer;
 load();
 async function load() {
     var new_data = await parseOBJNew('data/drone.obj');
-    console.log(new_data);
-    const response = await fetch('data/cube.obj');
+
+    const response = await fetch('data/drone.obj');
     const text = await response.text();
     var data = parseOBJ(text, true);
-    console.log(new_data["Center"].v);
+    console.log(new_data["Center"]["v"]);
+    console.log(data["Center"]["positions"]);
+
     cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["v"]);
     cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vt"]);
     cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vn"]);
@@ -71,12 +73,14 @@ async function load() {
 
 // --- GET OBJ TEXTURE ---
 var texturecube = createTexture(gl);
-attachTextureSourceAsync(gl, texturecube, "data/cubetexturetest.png", true);
+attachTextureSourceAsync(gl, texturecube, "data/drone.png", true);
 
 // --- ENABLE TEXTURE0 ---
 gl.uniform1i(uniformLocations.texture, 0);
 
 var camerapos = [30.0, 30.0, -100.0];
+
+gl.disable(gl.CULL_FACE);
 
 requestAnimationFrame(drawScene);
 toggle();
@@ -106,7 +110,7 @@ function drawScene(now) {
 
 
         // --- FIRST PERSON CAMERA ---
-        var movementspeed = 0.8;
+        var movementspeed = 0.3;
         var factorws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
         lookatposition[0] += Math.sin(degreeToRadians(viewxz)) * movementspeed * factorws;
         lookatposition[1] += Math.sin(degreeToRadians(viewy)) * movementspeed * factorws;
