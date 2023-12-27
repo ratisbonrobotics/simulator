@@ -100,7 +100,7 @@ function drawScene() {
         lookatposition[1] += factoreq;
         camerapos[1] += factoreq;
 
-
+        console.log(camerapos);
         // --- SETUP VIEWMATRIX ---
         var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
         var viewmatrix = inverse(cameramatrix);
