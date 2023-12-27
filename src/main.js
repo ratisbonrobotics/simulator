@@ -70,13 +70,6 @@ function drawScene(now) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-        // convert requestanimationframe timestamp to seconds
-        now *= 0.001;
-        // subtract the previous time from the current time
-        var deltaTime = now - then;
-        // remember the current time for the next frame
-        then = now;
-
         // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
         var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 1, 200000);
         gl.uniformMatrix4fv(uniformLocations.projectionmatrix, false, projectionmatrix);
