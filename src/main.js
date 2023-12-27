@@ -63,10 +63,10 @@ async function load() {
     const response = await fetch('data/cube.obj');
     const text = await response.text();
     var data = parseOBJ(text, true);
-    //console.log(data);
-    cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].positions);
-    cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].texcoords);
-    cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].normals);
+    console.log(new_data["Center"].v);
+    cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["v"]);
+    cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vt"]);
+    cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vn"]);
 }
 
 // --- GET OBJ TEXTURE ---
@@ -144,7 +144,7 @@ function drawScene(now) {
             for (var y = 0; y < cellularworldsize; y++) {
                 for (var z = 0; z < cellularworldsize; z++) {
                     if (cellgrid[x][y][z] == 1) {
-                        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(x, y, z, 0, 0, 0, 0.5, 0.5, 0.5));
+                        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(x, y, z, 0, 0, 0, 20.5, 20.5, 20.5));
                         gl.drawArrays(gl.TRIANGLES, 0, 6 * 2 * 3);
                     }
                 }
