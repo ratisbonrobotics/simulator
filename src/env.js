@@ -1,4 +1,4 @@
-// --- GET CANVAS CONTEXT AND SETUP KEY LISTENERS ---
+// --- GET CANVAS CONTEXT ---
 var running = true;
 
 var fscanvas = $("#canvas")[0];
@@ -11,7 +11,7 @@ window.addEventListener("orientationchange", function () {
 });
 var gl = fscanvas.getContext("webgl");
 
-// --- ADD EVENT LISTENERS ---
+// --- ADD EVENT LISTENERS AND KEY LISTENERS ---
 $("#cellauto3dtoggle").click(toggle);
 function toggle() { running ? (running = false, $("#cellauto3dtoggle").html("Start")) : (running = true, $("#cellauto3dtoggle").html("Stop")); }
 

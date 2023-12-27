@@ -62,6 +62,12 @@ async function load() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vt"]);
     drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vn"]);
+
+    // --- CONNECT BUFFERS TO ATTRIBUTES ---
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.normal, 3, true);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
+    // ---
 }
 
 // --- GET OBJ TEXTURE ---
@@ -126,12 +132,6 @@ function drawScene(now) {
         var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
         var viewmatrix = inverse(cameramatrix);
         gl.uniformMatrix4fv(uniformLocations.viewmatrix, false, viewmatrix);
-
-
-        // --- CONNECT BUFFERS TO ATTRIBUTES --- (only has to be done once since the only object vertex data we ever need is that of a cube)
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.normal, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
 
 
         // -- DRAW ---
