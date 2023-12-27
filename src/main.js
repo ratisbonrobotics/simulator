@@ -52,16 +52,16 @@ init3D(gl);
 // --- THERE SHALL BE LIGHT ---
 gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 1.0]));
 
-// GET DATA FROM OBJ
-var vertexbuffer;
-var texcoordbuffer;
-var normalbuffer;
+// --- GET DATA FROM OBJ ---
+var drone_vertexbuffer;
+var drone_texcoordbuffer;
+var drone_normalbuffer;
 load();
 async function load() {
     let data = await parseOBJ('data/drone.obj');
-    vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["v"]);
-    texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vt"]);
-    normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vn"]);
+    drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["v"]);
+    drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vt"]);
+    drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vn"]);
 }
 
 // --- GET OBJ TEXTURE ---
@@ -71,9 +71,7 @@ attachTextureSourceAsync(gl, texturecube, "data/drone.png", true);
 // --- ENABLE TEXTURE0 ---
 gl.uniform1i(uniformLocations.texture, 0);
 
-var camerapos = [30.0, 30.0, -100.0];
-
-gl.disable(gl.CULL_FACE);
+var camerapos = [50.0, 50.0, -10.0];
 
 requestAnimationFrame(drawScene);
 toggle();
@@ -131,9 +129,9 @@ function drawScene(now) {
 
 
         // --- CONNECT BUFFERS TO ATTRIBUTES --- (only has to be done once since the only object vertex data we ever need is that of a cube)
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, vertexbuffer, attribLocations.vertexposition, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, normalbuffer, attribLocations.normal, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, texcoordbuffer, attribLocations.texturecoordinate, 2, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.normal, 3, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
 
 
         // -- DRAW ---
