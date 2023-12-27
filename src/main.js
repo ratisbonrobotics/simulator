@@ -53,9 +53,9 @@ init3D(gl);
 gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 1.0]));
 
 // GET DATA FROM OBJ
-var cubevertexbuffer;
-var cubetexcoordbuffer;
-var cubenormalbuffer;
+var vertexbuffer;
+var texcoordbuffer;
+var normalbuffer;
 load();
 async function load() {
     var new_data = await parseOBJNew('data/drone.obj');
@@ -63,12 +63,12 @@ async function load() {
     const response = await fetch('data/drone.obj');
     const text = await response.text();
     var data = parseOBJ(text, true);
-    console.log(new_data["Center"]["v"]);
-    console.log(data["Center"]["positions"]);
+    console.log(new_data);
+    //console.log(data["drone"]["positions"]);
 
-    cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["v"]);
-    cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vt"]);
-    cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["Center"]["vn"]);
+    vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["v"]);
+    texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["vt"]);
+    normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["vn"]);
 }
 
 // --- GET OBJ TEXTURE ---
@@ -138,9 +138,9 @@ function drawScene(now) {
 
 
         // --- CONNECT BUFFERS TO ATTRIBUTES --- (only has to be done once since the only object vertex data we ever need is that of a cube)
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubevertexbuffer, attribLocations.vertexposition, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubenormalbuffer, attribLocations.normal, 3, true);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, cubetexcoordbuffer, attribLocations.texturecoordinate, 2, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, vertexbuffer, attribLocations.vertexposition, 3, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, normalbuffer, attribLocations.normal, 3, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, texcoordbuffer, attribLocations.texturecoordinate, 2, true);
 
 
         // -- DRAW ---
@@ -149,7 +149,7 @@ function drawScene(now) {
                 for (var z = 0; z < cellularworldsize; z++) {
                     if (cellgrid[x][y][z] == 1) {
                         gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(x, y, z, 0, 0, 0, 20.5, 20.5, 20.5));
-                        gl.drawArrays(gl.TRIANGLES, 0, 6 * 2 * 3);
+                        gl.drawArrays(gl.TRIANGLES, 0, 1668);
                     }
                 }
             }
