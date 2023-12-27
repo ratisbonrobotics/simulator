@@ -56,12 +56,15 @@ gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 
 var drone_vertexbuffer;
 var drone_texcoordbuffer;
 var drone_normalbuffer;
+var drone_texture;
 load();
 async function load() {
-    let data = await parseOBJ('data/drone.obj');
-    drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["v"]);
-    drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vt"]);
-    drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vn"]);
+    let [obj, mtl] = await parseOBJ('data/drone.obj');
+    drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
+    drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
+    drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
+    drone_texture = gl.createTexture();
+    addTexture(gl, drone_texture, mtl["Material"]["map_Kd"].src);
 
     // --- CONNECT BUFFERS TO ATTRIBUTES ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
@@ -69,10 +72,6 @@ async function load() {
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
     // ---
 }
-
-// --- GET OBJ TEXTURE ---
-var texturecube = createTexture(gl);
-addTexture(gl, texturecube, "data/drone.png");
 
 // --- ENABLE TEXTURE0 ---
 gl.uniform1i(uniformLocations.texture, 0);
