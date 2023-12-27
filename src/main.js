@@ -43,7 +43,7 @@ gl.useProgram(program);
 
 // --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS ---
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "normal"]);
-const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "reverseLightDirection"]);
+const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "reverseLightDirection"]);
 
 // --- INIT 3D ---
 init3D(gl);
@@ -62,8 +62,7 @@ async function load() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
-    drone_texture = gl.createTexture();
-    addTexture(gl, drone_texture, mtl["Material"]["map_Kd"].src);
+    drone_texture = addAndActivateTexture(gl, uniformLocations.texture, mtl["Material"]["map_Kd"].src);
 
     // --- CONNECT BUFFERS TO ATTRIBUTES ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
