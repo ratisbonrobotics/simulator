@@ -58,10 +58,12 @@ var cubetexcoordbuffer;
 var cubenormalbuffer;
 load();
 async function load() {
+    var new_data = await parseOBJNew('data/drone.obj');
+    console.log(new_data);
     const response = await fetch('data/cube.obj');
     const text = await response.text();
     var data = parseOBJ(text, true);
-    console.log(data);
+    //console.log(data);
     cubevertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].positions);
     cubetexcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].texcoords);
     cubenormalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["Cube"].normals);
