@@ -58,17 +58,10 @@ var texcoordbuffer;
 var normalbuffer;
 load();
 async function load() {
-    var new_data = await parseOBJNew('data/drone.obj');
-
-    const response = await fetch('data/drone.obj');
-    const text = await response.text();
-    var data = parseOBJ(text, true);
-    console.log(new_data);
-    //console.log(data["drone"]["positions"]);
-
-    vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["v"]);
-    texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["vt"]);
-    normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, new_data["drone"]["vn"]);
+    let data = await parseOBJ('data/drone.obj');
+    vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["v"]);
+    texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vt"]);
+    normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, data["drone"]["vn"]);
 }
 
 // --- GET OBJ TEXTURE ---

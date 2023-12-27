@@ -15,9 +15,6 @@ var gl = fscanvas.getContext("webgl");
 $("#cellauto3dtoggle").click(toggle);
 function toggle() { running ? (running = false, $("#cellauto3dtoggle").html("Start")) : (running = true, $("#cellauto3dtoggle").html("Stop")); }
 
-$("#cellauto3dapply").click(apply);
-function apply() { survivevalues = parseRulestring3D($("#cellRuleInput3D").val())[1]; bornvalues = parseRulestring3D($("#cellRuleInput3D").val())[0]; }
-
 $("#cellauto3drandomize").click(randomize);
 function randomize() { cellgrid = createCellGridWireframe(cellularworldsize, true); }
 
