@@ -67,6 +67,7 @@ function drawScene() {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+
         // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
         var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
         gl.uniformMatrix4fv(uniformLocations.projectionmatrix, false, projectionmatrix);
@@ -100,14 +101,14 @@ function drawScene() {
         camerapos[1] += factoreq;
 
 
-        // --- SETUP VIEWMATRIX --- (MOVE THE WORLD INVERSE OF THE CAMERAMOVEMENT)
+        // --- SETUP VIEWMATRIX ---
         var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
         var viewmatrix = inverse(cameramatrix);
         gl.uniformMatrix4fv(uniformLocations.viewmatrix, false, viewmatrix);
 
 
         // -- DRAW ---
-        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, createModelMatrix(0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0));
+        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, droneModelMatrix);
         gl.drawArrays(gl.TRIANGLES, 0, 1668);
     }
 
