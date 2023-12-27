@@ -5,7 +5,6 @@ const vertexshadersource = `
     attribute vec4 vertexposition;
     attribute vec2 texturecoordinate;
     attribute vec3 normal;
-
     uniform mat4 modelmatrix;
     uniform mat4 projectionmatrix;
     uniform mat4 viewmatrix;
@@ -23,11 +22,11 @@ const vertexshadersource = `
 const fragmentshadersource = `
     precision highp float;
 
-    varying vec2 o_texturecoordinate;
-    varying vec3 o_normal;
-
     uniform sampler2D texture;
     uniform vec3 reverseLightDirection;
+
+    varying vec2 o_texturecoordinate;
+    varying vec3 o_normal;
 
     void main(){
         vec3 normal = normalize(o_normal);
@@ -44,7 +43,7 @@ gl.useProgram(program);
 
 // --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS ---
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "normal"]);
-const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "reverseLightDirection"]);
+const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "reverseLightDirection"]);
 
 // --- INIT 3D ---
 init3D(gl);
@@ -72,9 +71,6 @@ async function load() {
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
     // ---
 }
-
-// --- ENABLE TEXTURE0 ---
-gl.uniform1i(uniformLocations.texture, 0);
 
 var camerapos = [50.0, 50.0, -10.0];
 
