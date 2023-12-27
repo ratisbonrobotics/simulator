@@ -72,7 +72,7 @@ async function load() {
 
 // --- GET OBJ TEXTURE ---
 var texturecube = createTexture(gl);
-attachTextureSourceAsync(gl, texturecube, "data/drone.png", true);
+addTexture(gl, texturecube, "data/drone.png");
 
 // --- ENABLE TEXTURE0 ---
 gl.uniform1i(uniformLocations.texture, 0);
