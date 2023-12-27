@@ -4,17 +4,14 @@ const vertexshadersource = `
 
     attribute vec4 vertexposition;
     attribute vec2 texturecoordinate;
-    attribute vec3 normal;
     uniform mat4 modelmatrix;
     uniform mat4 projectionmatrix;
     uniform mat4 viewmatrix;
 
     varying vec2 o_texturecoordinate;
-    varying vec3 o_normal;
 
     void main(){
         o_texturecoordinate = texturecoordinate;
-        o_normal = mat3(modelmatrix) * normal;
         gl_Position = projectionmatrix * viewmatrix * modelmatrix * vertexposition;
     }
 `;
@@ -23,17 +20,11 @@ const fragmentshadersource = `
     precision highp float;
 
     uniform sampler2D texture;
-    uniform vec3 reverseLightDirection;
 
     varying vec2 o_texturecoordinate;
-    varying vec3 o_normal;
 
     void main(){
-        vec3 normal = normalize(o_normal);
-        float light = dot(normal, reverseLightDirection);
-
         gl_FragColor = texture2D(texture, o_texturecoordinate);
-        //gl_FragColor.rgb *= light;
     }
 `;
 
@@ -42,8 +33,8 @@ const program = createShaderProgram(gl, vertexshadersource, fragmentshadersource
 gl.useProgram(program);
 
 // --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS ---
-const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "normal"]);
-const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "reverseLightDirection"]);
+const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate"]);
+const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture"]);
 
 // --- INIT 3D ---
 init3D(gl);
@@ -54,19 +45,16 @@ gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 
 // --- GET DATA FROM OBJ ---
 var drone_vertexbuffer;
 var drone_texcoordbuffer;
-var drone_normalbuffer;
 var drone_texture;
 load();
 async function load() {
     let [obj, mtl] = await parseOBJ('data/drone.obj');
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
-    drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
     drone_texture = addAndActivateTexture(gl, uniformLocations.texture, mtl["Material"]["map_Kd"].src);
 
     // --- CONNECT BUFFERS TO ATTRIBUTES ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.normal, 3, true);
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
     // ---
 }
