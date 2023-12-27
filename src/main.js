@@ -39,9 +39,6 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 // --- INIT 3D ---
 init3D(gl);
 
-// --- THERE SHALL BE LIGHT ---
-gl.uniform3fv(uniformLocations.reverseLightDirection, normalize([1.0, 0.0, 0.0, 1.0]));
-
 // --- GET DATA FROM OBJ ---
 var drone_vertexbuffer;
 var drone_texcoordbuffer;
