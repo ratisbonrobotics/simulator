@@ -141,11 +141,8 @@ class Drone3D {
 
 	advanceState(dt) {
 		const worldAxisAcc = this.worldAxisAccelerations();
-		console.log('worldAxisAcc:', worldAxisAcc);
 		const bodyAxisAcc = this.bodyAxisAccelerations();
-		console.log('bodyAxisAcc:', bodyAxisAcc);
 		const linearWorldAcc = this.linearWorldAccelerations();
-		console.log('linearWorldAcc:', linearWorldAcc);
 
 		const X_dot = [
 			this.X[6],
@@ -193,11 +190,10 @@ class Drone3D {
 }
 
 // --- Simulation Constants ---
-// See chapter "Determination of Simulation Parameters"
 const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const m = 1.0;
-const L = 0.23; // See illustration "3D Drone from above" (in the list of figures)
+const L = 0.23;
 const i_x = 0.0121;
 const i_y = 0.0119;
 const i_z = 0.0223;
