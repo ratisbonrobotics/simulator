@@ -40,20 +40,26 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 init3D(gl);
 
 // --- GET DATA FROM OBJ ---
+var terrain_vertexbuffer;
+var terrain_texcoordbuffer;
+var terrain_texture;
+loadTerrain();
+async function loadTerrain() {
+    let [obj, mtl] = await parseOBJ('data/terrain.obj');
+    terrain_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["terrain"]["v"]);
+    terrain_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["terrain"]["vt"]);
+    terrain_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+}
+
 var drone_vertexbuffer;
 var drone_texcoordbuffer;
 var drone_texture;
-load();
-async function load() {
+loadDrone();
+async function loadDrone() {
     let [obj, mtl] = await parseOBJ('data/drone.obj');
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
-    drone_texture = addAndActivateTexture(gl, uniformLocations.texture, mtl["Material"]["map_Kd"].src);
-
-    // --- CONNECT BUFFERS TO ATTRIBUTES ---
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, true);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
-    // ---
+    drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
 var camerapos = [0.0, 0.1, -1.0];
@@ -70,7 +76,7 @@ function drawScene() {
 
         // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
         var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
-        gl.uniformMatrix4fv(uniformLocations.projectionmatrix, false, projectionmatrix);
+        gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 
         // --- SETUP LOOKAT MATRIX ---
@@ -104,11 +110,20 @@ function drawScene() {
         // --- SETUP VIEWMATRIX ---
         var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
         var viewmatrix = inverse(cameramatrix);
-        gl.uniformMatrix4fv(uniformLocations.viewmatrix, false, viewmatrix);
+        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
+        // --- DRAW TERRAIN ---
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3, true);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
+        activateTexture(gl, uniformLocations["texture"], terrain_texture);
+        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, createIdentityMatrix());
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-        // -- DRAW ---
-        gl.uniformMatrix4fv(uniformLocations.modelmatrix, false, droneModelMatrix);
+        // -- DRAW DRONE ---
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, false);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2, false);
+        activateTexture(gl, uniformLocations["texture"], drone_texture);
+        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, droneModelMatrix);
         gl.drawArrays(gl.TRIANGLES, 0, 1668);
     }
 
