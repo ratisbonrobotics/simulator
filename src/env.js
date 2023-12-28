@@ -12,11 +12,8 @@ window.addEventListener("orientationchange", function () {
 var gl = fscanvas.getContext("webgl");
 
 // --- ADD EVENT LISTENERS AND KEY LISTENERS ---
-$("#cellauto3dtoggle").click(toggle);
-function toggle() { running ? (running = false, $("#cellauto3dtoggle").html("Start")) : (running = true, $("#cellauto3dtoggle").html("Stop")); }
-
-$("#cellauto3drandomize").click(randomize);
-function randomize() { cellgrid = createCellGridWireframe(cellularworldsize, true); }
+$("#startstop").click(toggle);
+function toggle() { running ? (running = false, $("#startstop").html("Start")) : (running = true, $("#startstop").html("Stop")); }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
 fscanvas.onclick = function () {
