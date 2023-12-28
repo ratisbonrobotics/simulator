@@ -29,8 +29,7 @@ const fragmentshadersource = `
 `;
 
 // --- MAKE SHADERS AND PROGRAM ---
-const program = createShaderProgram(gl, vertexshadersource, fragmentshadersource);
-gl.useProgram(program);
+const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource);
 
 // --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS ---
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate"]);
@@ -70,7 +69,7 @@ toggle();
 function drawScene() {
     if (running) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        //gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
 
         // --- SETUP PROJECTION MATRIX ---
