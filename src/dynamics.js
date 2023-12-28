@@ -85,33 +85,12 @@ class Drone3D {
 		return (this.calculateMoment(0) + this.calculateMoment(3)) - (this.calculateMoment(1) + this.calculateMoment(2));
 	}
 
-	// Setters for omega (propeller angular velocities) [rads/s]
-	set omega1(value) {
-		this.omega[0] = value;
-	}
-
-	set omega2(value) {
-		this.omega[1] = value;
-	}
-
-	set omega3(value) {
-		this.omega[2] = value;
-	}
-
-	set omega4(value) {
-		this.omega[3] = value;
-	}
-
-	R() {
-		return [
+	linearWorldAccelerations() {
+		const R = [
 			[Math.cos(this.psi) * Math.cos(this.theta), Math.cos(this.psi) * Math.sin(this.theta) * Math.sin(this.phi) - Math.sin(this.psi) * Math.cos(this.phi), Math.sin(this.psi) * Math.sin(this.phi) + Math.cos(this.psi) * Math.sin(this.theta) * Math.cos(this.phi)],
 			[Math.sin(this.psi) * Math.cos(this.theta), Math.cos(this.psi) * Math.cos(this.phi) + Math.sin(this.psi) * Math.sin(this.theta) * Math.sin(this.phi), Math.sin(this.psi) * Math.sin(this.theta) * Math.cos(this.phi) - Math.cos(this.psi) * Math.sin(this.phi)],
 			[-Math.sin(this.theta), Math.cos(this.theta) * Math.sin(this.phi), Math.cos(this.theta) * Math.cos(this.phi)]
 		];
-	}
-
-	linearWorldAccelerations() {
-		const R = this.R();
 		const g = [0, 0, this.g];
 		const c = -this.totalForce;
 		var v = this.addVectors(g, this.multiplyMatrixVector(R, [0, 0, c]));
