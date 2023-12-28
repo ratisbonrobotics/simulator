@@ -67,7 +67,6 @@ var camerapos = [0.0, 0.1, -1.0];
 requestAnimationFrame(drawScene);
 toggle();
 
-var then = 0;
 function drawScene() {
     if (running) {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
