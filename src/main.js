@@ -117,12 +117,8 @@ function drawScene() {
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3, true);
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
         activateTexture(gl, uniformLocations["texture"], terrain_texture);
-        for (var x = -10; x < 10; x++) {
-            for (var z = -10; z < 10; z++) {
-                gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, createModelMatrix(x / 5, 0.0, z / 5, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1));
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-            }
-        }
+        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
 
 
         // -- DRAW DRONE ---

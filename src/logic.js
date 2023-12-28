@@ -1,5 +1,6 @@
 // ----------------------------------- LOGIC -----------------------------------
 droneModelMatrix = createModelMatrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+terrainModelMatrix = createModelMatrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 
 droneLogic();
 function droneLogic() {
