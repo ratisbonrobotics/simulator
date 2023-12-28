@@ -74,7 +74,7 @@ function drawScene() {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
 
-        // --- SETUP PROJECTION MATRIX --- (MAKE EVERYTHING 3D)
+        // --- SETUP PROJECTION MATRIX ---
         var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
         gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
@@ -112,12 +112,18 @@ function drawScene() {
         var viewmatrix = inverse(cameramatrix);
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
+
         // --- DRAW TERRAIN ---
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3, true);
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2, true);
         activateTexture(gl, uniformLocations["texture"], terrain_texture);
-        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, createIdentityMatrix());
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        for (var x = -10; x < 10; x++) {
+            for (var z = -10; z < 10; z++) {
+                gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, createModelMatrix(x / 5, 0.0, z / 5, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1));
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+        }
+
 
         // -- DRAW DRONE ---
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3, false);
