@@ -91,13 +91,8 @@ class Drone3D {
 			[Math.sin(this.psi) * Math.cos(this.theta), Math.cos(this.psi) * Math.cos(this.phi) + Math.sin(this.psi) * Math.sin(this.theta) * Math.sin(this.phi), Math.sin(this.psi) * Math.sin(this.theta) * Math.cos(this.phi) - Math.cos(this.psi) * Math.sin(this.phi)],
 			[-Math.sin(this.theta), Math.cos(this.theta) * Math.sin(this.phi), Math.cos(this.theta) * Math.cos(this.phi)]
 		];
-		const g = [0, 0, this.g];
-		const c = -this.totalForce;
-		var v = this.addVectors(g, this.multiplyMatrixVector(R, [0, 0, c]));
-		v[0] /= this.m;
-		v[1] /= this.m;
-		v[2] /= this.m;
-		return v;
+		var v = this.addVectors([0, 0, this.g], this.multiplyMatrixVector(R, [0, 0, -this.totalForce]));
+		return this.multiplyVectors(v, [1 / this.m, 1 / this.m, 1 / this.m]);
 	}
 
 	bodyAxisAccelerations() {
@@ -161,6 +156,10 @@ class Drone3D {
 
 	multiplyMatrixVector(matrix, vector) {
 		return matrix.map(row => row.reduce((sum, value, i) => sum + value * vector[i], 0));
+	}
+
+	multiplyVectors(a, b) {
+		return a.map((val, i) => val * b[i]);
 	}
 
 	addVectors(a, b) {
