@@ -10,6 +10,12 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <title>Ratisbon Robotics</title>
+
+    <script type="module">
+        import { LaTeXJSComponent } from "https://cdn.jsdelivr.net/npm/latex.js/dist/latex.mjs"
+        customElements.define("latex-js", LaTeXJSComponent)
+    </script>
+
 </head>
 
 <body>
@@ -58,10 +64,17 @@
                         </aside>
                     </article>
                 </div>
+
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light">
-                        <canvas tabindex="1" id="canvas" width="1024" height="512" role="img" aria-label="canvas"
-                            style="border: 1px solid #000; box-shadow: 0px 0px 10px #aaa; border-radius: 7px; background-color: black;"></canvas>
+                        <latex-js baseURL="https://cdn.jsdelivr.net/npm/latex.js/dist/">
+                            \documentclass{article}
+                            \begin{document}
+                            Hello World.
+                            $$ E = mc^2 $$
+                            \end{document}
+                        </latex-js>
+
                     </article>
                 </div>
             </div>
