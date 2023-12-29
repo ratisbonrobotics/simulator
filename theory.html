@@ -71,7 +71,18 @@
 
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light has-text-centered">
-                        <img src="drone_dynamics.webp">
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var img = new Image();
+                                img.onload = function () {
+                                    document.getElementById('largeImage').src = this.src;
+                                };
+                                img.src = 'drone_dynamics.png';
+                            });
+                        </script>
+
+                        <img id="largeImage" alt="Loading..." />
+
                     </article>
                 </div>
             </div>
