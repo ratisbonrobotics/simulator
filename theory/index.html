@@ -31,7 +31,7 @@
                 <a class="navbar-item" href="/">
                     Simulation
                 </a>
-                <a class="navbar-item" href="/theory.html">
+                <a class="navbar-item" href="/theory/">
                     Theory
                 </a>
             </div>
@@ -55,19 +55,19 @@
                                 1.0 2D Simulation
                             </p>
                             <p class="menu-label">
-                                1.1 Dynamics
+                                1.1 State
                             </p>
                             <p class="menu-label">
-                                1.2 Control
+                                1.2 Dynamics
                             </p>
                             <p class="menu-label">
                                 2.0 3D Simulation
                             </p>
                             <p class="menu-label">
-                                2.1 Dynamics
+                                2.1 State
                             </p>
                             <p class="menu-label">
-                                2.2 Control
+                                2.2 Dynamics
                             </p>
                         </aside>
                     </article>
@@ -75,14 +75,13 @@
 
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light">
-                        <latex-js baseURL="https://cdn.jsdelivr.net/npm/latex.js/dist/">
-                            \documentclass{article}
-                            \usepackage{graphicx}
-                            \begin{document}
-                            Hello World.
-                            $$ E = mc^2 $$
-                            \end{document}
-                        </latex-js>
+                        <iframe id="myIframe" src="drone_dynamics.html" style="width: 100%;" frameborder="0"></iframe>
+                        <script>
+                            var iframe = document.getElementById("myIframe");
+                            iframe.onload = function () {
+                                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+                            };
+                        </script>
 
                     </article>
                 </div>
