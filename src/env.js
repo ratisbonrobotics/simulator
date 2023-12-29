@@ -1,55 +1,19 @@
-// --- GET CANVAS CONTEXT ---
+// --- SETUP ENVIRONMENT ---
 var running = true;
-
-var fscanvas = document.getElementById("canvas");
-fscanvas.width = Math.pow(2, Math.floor(getBaseLog(2, window.innerWidth * 0.88)));
-window.addEventListener("orientationchange", function () {
-    setTimeout(function () {
-        var newwidth = Math.pow(2, Math.floor(getBaseLog(2, window.innerWidth * 0.88)));
-        fscanvas.width = newwidth;
-    }, 200);
-});
-var gl = fscanvas.getContext("webgl");
-
-// --- ADD EVENT LISTENERS AND KEY LISTENERS ---
-var startstop = document.getElementById("startstop");
-startstop.addEventListener("click", toggle);
-function toggle() {
-    if (running) {
-        running = false;
-        startstop.innerHTML = "Start";
-    } else {
-        running = true;
-        startstop.innerHTML = "Stop";
-    }
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
-fscanvas.onclick = function () {
-    fscanvas.requestPointerLock();
-};
-
+var keys = {};
 var viewxz = 0;
 var viewy = 0;
+var fscanvas = document.getElementById("canvas");
+var gl = fscanvas.getContext("webgl");
+resizeCanvas();
 
-document.addEventListener("pointerlockchange", function () {
-    if (document.pointerLockElement === fscanvas) {
-        document.addEventListener("mousemove", updatePosition, false);
-    } else {
-        document.removeEventListener("mousemove", updatePosition, false);
-    }
-}, false);
-
-function updatePosition(e) {
-    viewxz -= e.movementX * 0.1;
-    viewy = Math.min(90, Math.max(-90, viewy - e.movementY * 0.1));
-}
-
-var keys = {};
-fscanvas.addEventListener("keydown", function (event) {
-    keys[event.key] = true;
+// --- ADD EVENT LISTENERS ---
+window.addEventListener("orientationchange", resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
+document.getElementById("startstop").addEventListener("click", toggle);
+fscanvas.addEventListener("mousemove", function (event) {
+    if (document.pointerLockElement === fscanvas && running) { updatePosition(event); }
 });
-fscanvas.addEventListener("keyup", function (event) {
-    keys[event.key] = false;
-});
-// --- ---
+fscanvas.addEventListener("click", fscanvas.requestPointerLock);
+fscanvas.addEventListener("keydown", function (event) { keys[event.key] = true; });
+fscanvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
