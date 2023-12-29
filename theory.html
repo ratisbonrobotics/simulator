@@ -7,54 +7,7 @@
     <meta name="Description" content="Ratisbon Robotics Web Simulator">
     <link rel="icon" href="https://avatars.githubusercontent.com/u/151067388" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <script type="module">
-        import { LaTeXJSComponent } from "https://cdn.jsdelivr.net/npm/latex.js/dist/latex.mjs"
-        customElements.define("latex-js", LaTeXJSComponent)
-    </script>
     <title>Ratisbon Robotics</title>
-    <script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
-
-    <script type="module">
-        var url = 'drone_dynamics.pdf';
-        var { pdfjsLib } = globalThis;
-
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
-        var loadingTask = pdfjsLib.getDocument(url);
-
-        loadingTask.promise.then(function (pdf) {
-            console.log('PDF loaded');
-            // Loop through eight pages
-            for (let i = 1; i <= 9; i++) {
-                pdf.getPage(i).then(function (page) {
-                    console.log('Page loaded');
-
-                    var scale = 4;
-                    var viewport = page.getViewport({ scale: scale });
-
-                    // Get the corresponding canvas for the page
-                    var canvas = document.getElementById('page' + i);
-                    var context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    // Render PDF page into canvas context
-                    var renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    var renderTask = page.render(renderContext);
-                    renderTask.promise.then(function () {
-                        console.log('Page rendered');
-                    });
-                });
-            }
-        }, function (reason) {
-            // PDF loading error
-            console.error(reason);
-        });
-    </script>
-
-
 </head>
 
 <body>
@@ -118,15 +71,7 @@
 
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light has-text-centered">
-                        <canvas id="page1" style="max-width: 80%;"></canvas>
-                        <canvas id="page2" style="max-width: 80%;"></canvas>
-                        <canvas id="page3" style="max-width: 80%;"></canvas>
-                        <canvas id="page4" style="max-width: 80%;"></canvas>
-                        <canvas id="page5" style="max-width: 80%;"></canvas>
-                        <canvas id="page6" style="max-width: 80%;"></canvas>
-                        <canvas id="page7" style="max-width: 80%;"></canvas>
-                        <canvas id="page8" style="max-width: 80%;"></canvas>
-                        <canvas id="page9" style="max-width: 80%;"></canvas>
+                        <img src="drone_dynamics.webp">
                     </article>
                 </div>
             </div>
