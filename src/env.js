@@ -1,24 +1,33 @@
 // --- GET CANVAS CONTEXT ---
 var running = true;
 
-var fscanvas = $("#canvas")[0];
-fscanvas.width = Math.pow(2, Math.floor(getBaseLog(2, $(window).width() * 0.88)));
+var fscanvas = document.getElementById("canvas");
+fscanvas.width = Math.pow(2, Math.floor(getBaseLog(2, window.innerWidth * 0.88)));
 window.addEventListener("orientationchange", function () {
     setTimeout(function () {
-        var newwidth = Math.pow(2, Math.floor(getBaseLog(2, $(window).width() * 0.88)));
+        var newwidth = Math.pow(2, Math.floor(getBaseLog(2, window.innerWidth * 0.88)));
         fscanvas.width = newwidth;
     }, 200);
 });
 var gl = fscanvas.getContext("webgl");
 
 // --- ADD EVENT LISTENERS AND KEY LISTENERS ---
-$("#startstop").click(toggle);
-function toggle() { running ? (running = false, $("#startstop").html("Start")) : (running = true, $("#startstop").html("Stop")); }
+var startstop = document.getElementById("startstop");
+startstop.addEventListener("click", toggle);
+function toggle() {
+    if (running) {
+        running = false;
+        startstop.innerHTML = "Start";
+    } else {
+        running = true;
+        startstop.innerHTML = "Stop";
+    }
+}
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
 fscanvas.onclick = function () {
     fscanvas.requestPointerLock();
-}
+};
 
 var viewxz = 0;
 var viewy = 0;
@@ -37,10 +46,10 @@ function updatePosition(e) {
 }
 
 var keys = {};
-$("#canvas").keydown(function (event) {
+fscanvas.addEventListener("keydown", function (event) {
     keys[event.key] = true;
 });
-$("#canvas").keyup(function (event) {
+fscanvas.addEventListener("keyup", function (event) {
     keys[event.key] = false;
 });
 // --- ---
