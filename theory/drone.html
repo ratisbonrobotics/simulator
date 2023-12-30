@@ -2,9 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>
-      Simulative Analysis of Drone Dynamics in 2D and 3D Environments
-    </title>
+    <title>Drone Dynamics: A Comprehensive Simulation Study</title>
     <link rel="stylesheet" href="pubcss-ieee.css" />
     <style>
       .equation {
@@ -22,7 +20,7 @@
   <body>
     <header class="col-span">
       <h1 class="title counter-skip">
-        Simulative Analysis of Drone Dynamics in 2D and 3D Environments
+        Drone Dynamics: A Comprehensive Simulation Study
       </h1>
       <div class="authors">
         <div class="author">
@@ -102,30 +100,31 @@
 
       <h2>Dynamics Formulation</h2>
       <p>
-        Dynamics are defined by how state \(X\) evolves under the influences of
-        \(F_{1}\) and \(F_{2}\). These forces are expressed through rotor
-        velocities (\(\omega_{1}, \omega_{2}\)) and their quadratic relationship
-        with thrust, denoted by \(k_{f}\), as shown in
-        <a href="#johansen2004">1</a>.
+        The dynamics of the drone are characterized by how its state \(X\)
+        evolves under the influence of forces \(F_{1}\) and \(F_{2}\). These
+        forces, as a function of rotor velocities (\(\omega_{1}, \omega_{2}\)),
+        follow a quadratic relationship with thrust (denoted by \(k_{f}\)), a
+        principle grounded in the laws of motion developed by Newton in the 17th
+        century.
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
       <p>
-        The relationship \(k_{f}\) is determined empirically, as detailed in
-        Chapter 4. Positional changes (\(x, y, \phi\)) result from integrating
-        velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in turn are derived
-        from integrating accelerations (\(\ddot{x}, \ddot{y}, \ddot{\phi}\)).
-        These accelerations are obtained using \(F = ma\) and gravitational
-        force \(F_{g} = mg\) with \(g = 9.81 \frac{m}{s^2}\):
+        Changes in the drone's position (\(x, y, \phi\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
+        turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
+        \ddot{\phi}\)). These accelerations are calculated using Newton’s second
+        law (\(F = ma\)) and the gravitational force (\(F_{g} = mg\)), with
+        \(g\) being the gravitational constant (9.81 m/s²).
       </p>
       <div class="equation">
         \[ -\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
         \frac{F_{x}}{m} \]
       </div>
       <p>
-        Here, \(F_{x}\) and \(F_{y}\) are the components of the total thrust
-        force (\(F_{total}\)) along the x-axis and y-axis, respectively. They
-        are determined using trigonometric relationships from the total thrust
-        force (\(F_{total}\)) and angle \(\phi\):
+        The thrust components \(F_{x}\) and \(F_{y}\), acting along the x-axis
+        and y-axis respectively, are computed using trigonometric relationships
+        derived from the total thrust force (\(F_{total} = F_1 + F_2\)) and the
+        orientation angle (\(\phi\)).
       </p>
       <div class="equation">
         \[ F_{y} = F_{total} \cos{\phi} \qquad F_{x} = F_{total} \sin{\phi} \]
@@ -165,37 +164,37 @@
       </div>
 
       <p>
-        The state at time \(t\) is determined by the sum of the current state
-        \(X(t)\) and the integral of the state's time derivative over the
-        interval \(\Delta t\).
+        The state of the drone at time \( t + \Delta t \) is determined by the
+        sum of its current state \( X_t \) and the integral of the state's time
+        derivative \( \dot{X} \) over the interval \( \Delta t \). This integral
+        represents a precise calculation of the state change. However, for
+        computational simplicity, we often use an approximation method developed
+        by Leonhard Euler in the 18th century (circa 1768). Euler's method
+        approximates the future state by assuming a constant rate of change (\(
+        \dot{X}_t \)) over a small interval (\( \Delta t \approx 0.01\)),
+        simplifying the integral to a product of the rate of change and the time
+        interval.
       </p>
       <div class="equation">
-        \( X(t + \Delta t) = X(t) + \int_{t}^{t+\Delta t}\dot{X}(\tau) d\tau \)
+        \begin{align*} X_{t + \Delta t} &= X_{t} + \int_{\tau=t}^{t+\Delta t}
+        \dot{X}_{\tau} d\tau \\ &\approx X_t + \dot{X}_t\Delta t \\ &\approx
+        \begin{bmatrix} x \\ y \\ \phi \\ \dot{x} \\ \vdots \end{bmatrix}_t +
+        \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\
+        \vdots \end{bmatrix}_t \end{align*}
       </div>
     </section>
 
     <h5 class="references">References</h5>
     <div class="references">
-      <cite id="johansen2004"
-        >Johansen, T. A. (2004). Control of vehicles with second order sliding
-        modes [Doctoral dissertation, Norwegian University of Science and
-        Technology]. NTNU Open.</cite
-      >
-      <cite id="johansen2015"
-        >Johnson, E. N., Lewis, F. L., & Stevens, B. L. (2015). Aircraft control
-        and simulation: dynamics, controls design, and autonomous systems (3rd
-        ed.). John Wiley & Sons.</cite
-      >
-      <cite id="diebel2006"
-        >Diebel, J. (2006). Representing attitude: Euler angles, unit
-        quaternions, and rotation vectors. Matrix, 58(15-16), 1-35.</cite
-      >
-      <cite id="xuanmung2019"
-        >Xuan-Mung, N., Metrikin, I., Soleymani, M., & Kuhnlenz, K. (2019).
-        Dynamical model of a quadcopter for indoor leader/follower missions.
-        International Journal of Micro Air Vehicles, 11, 1-13.
-        https://doi.org/10.1177/1756829319835772</cite
-      >
+      <cite id="newton1687">
+        Newton, I. (1687). Philosophiæ Naturalis Principia Mathematica.
+      </cite>
+      <cite id="euler1768">
+        Euler, L. (1768-1772). Institutiones calculi integralis.
+      </cite>
+      <cite id="archimedes">
+        Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν.
+      </cite>
     </div>
   </body>
 </html>
