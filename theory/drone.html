@@ -233,8 +233,11 @@
       <p>
         Except for the last three parameters, all information resides in the
         world coordinate system, which was the only one used in the
-        two-dimensional case from Chapter 2 The body coordinate system, however,
-        is a fixed coordinate system attached to the quadrotor.
+        two-dimensional case from Chapter
+        <a href="#chapter-Simulation-TwoDimensional"
+          >Two-Dimensional Simulation</a
+        >. The body coordinate system, however, is a fixed coordinate system
+        attached to the quadrotor.
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -242,8 +245,8 @@
             src="3d_drone_coordinate_system.png"
             alt="World and body coordinate systems"
             style="
-              max-width: 100%;
-              max-height: 100%;
+              max-width: 30%;
+              max-height: 30%;
               display: block;
               margin: auto;
             "
@@ -251,6 +254,7 @@
         </div>
         <figcaption>World and body coordinate systems</figcaption>
       </figure>
+
       <h2>Dynamics</h2>
       <p>
         Equation (2) still applies here as before. Analogous to Equation 10, in
@@ -299,8 +303,8 @@
             src="3d_drone_from_above.png"
             alt="3D Drone from above: Propeller rotation directions and numbers. \(kz\) goes into the plane of the drawing."
             style="
-              max-width: 100%;
-              max-height: 100%;
+              max-width: 30%;
+              max-height: 30%;
               display: block;
               margin: auto;
             "
@@ -316,10 +320,51 @@
         \(\dot{r}\) are calculated by the Euler's equation of motion, which is
       </p>
       <div class="equation">
-        \[ ... \]
-        <!-- Include the full Euler's equation of motion here -->
+        \[ M = I\dot{\omega} + \omega \times (I\omega) = \begin{bmatrix} M_{x}
+        \\ M_{y} \\ M_{z} \end{bmatrix} = \begin{bmatrix} I_{x} & 0 & 0 \\ 0 &
+        I_{y} & 0 \\ 0 & 0 & I_{z} \end{bmatrix} \begin{bmatrix} \dot{p} \\
+        \dot{q} \\ \dot{r} \end{bmatrix} + \begin{bmatrix} p \\ q \\ r
+        \end{bmatrix} \times \left( \begin{bmatrix} I_{x} & 0 & 0 \\ 0 & I_{y} &
+        0 \\ 0 & 0 & I_{z} \end{bmatrix} \begin{bmatrix} p \\ q \\ r
+        \end{bmatrix} \right) \]
       </div>
-      <!-- ... continue with the rest of the content ... -->
+      <p>
+        The moments of inertia \(I_{x}\), \(I_{y}\), and \(I_{z}\) are
+        determined by experiments, as explained in Chapter
+        <a href="#chapter-SimulationParameterDetermination"
+          >Simulation Parameter Determination</a
+        >. By rearranging, we then get the accelerations as
+      </p>
+      <div class="equation">
+        \[ \begin{bmatrix} \dot{p} \\ \dot{q} \\ \dot{r} \end{bmatrix} =
+        \begin{bmatrix} \frac{M_{x} - rq(I_{x} - I_{y})}{I_{x}} \\ \frac{M_{y} -
+        rp(I_{x} - I_{z})}{I_{y}} \\ \frac{M_{z} - pq(I_{y} - I_{x})}{I_{z}}
+        \end{bmatrix} \]
+      </div>
+
+      <p>
+        As remaining necessary quantities to establish \(\dot{X}\), which is the
+        goal in dynamics, we have the velocities about the world coordinate
+        system axes \(\dot{\phi}\), \(\dot{\theta}\), and \(\dot{\psi}\). These
+        are obtained, like the linear accelerations in Equation \ref{eq:24} with
+        the help of a rotation matrix specifically for Euler angle velocities.
+      </p>
+      <div class="equation">
+        \[ \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi}
+        \end{bmatrix} = \begin{bmatrix} 1 & \sin(\phi)\tan(\theta) &
+        \cos(\phi)\tan(\theta) \\ 0 & \cos(\phi) & -\sin(\phi) \\ 0 &
+        \sin(\phi)/\cos(\theta) & \cos(\phi)/\cos(\theta) \end{bmatrix}
+        \begin{bmatrix} p \\ q \\ r \end{bmatrix} \]
+      </div>
+
+      <p>
+        Thus, the state of the quadrotor at time \(t\) can be determined by the
+        sum of the state \(X(t)\) and the integral of the state's derivative
+        \(\dot{X}\).
+      </p>
+      <div class="equation">
+        \[ X(t + \Delta t) = X(t) + \int_{t}^{t+\Delta t}\dot{X}(\tau) d\tau \]
+      </div>
     </section>
 
     <h5 class="references">References</h5>
