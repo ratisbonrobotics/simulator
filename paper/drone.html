@@ -6,7 +6,6 @@
   <title>Two-and Three-Dimensional Simulations of Drone Dynamics</title>
   <link rel="stylesheet" href="pubcss-ieee.css">
   <style>
-    /* Additional custom styles, if necessary */
     .equation {
       text-align: center;
       margin: 10px;
@@ -14,6 +13,26 @@
 
     .reflist {
       list-style: none;
+    }
+
+    img.fig {
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
     }
   </style>
   <script type="text/javascript" async
@@ -23,81 +42,172 @@
 <body>
   <header class="col-span">
     <h1 class="title counter-skip">Two-and Three-Dimensional Simulations of Drone Dynamics</h1>
-    <div class="authors col-2">
+    <div class="authors">
       <div class="author">
-        <div>Author One</div>
-        <div>Department of Aerospace Engineering</div>
-        <div>Technical University of Regensburg, REG</div>
+        <div>Markus Heimerl</div>
+        <div>Department of Research and Development</div>
+        <div>Ratisbon Robotics</div>
         <div>Regensburg, Germany</div>
-        <div>author.one@oth-regensburg.de</div>
-      </div>
-      <div class="author">
-        <div>Author Two</div>
-        <div>Department of Electrical Engineering</div>
-        <div>Technical University of Regensburg, REG</div>
-        <div>Regensburg, Germany</div>
-        <div>author.two@oth-regensburg.de</div>
+        <div>markusheimerl@ratisbonrobotics.com</div>
       </div>
     </div>
   </header>
 
   <div class="abstract">
     <p><em>Abstract</em>—This document presents a comprehensive study on the two-dimensional and three-dimensional
-      simulations of drone dynamics...</p>
-    <p><em>Keywords</em>—simulation; drone dynamics; two-dimensional; three-dimensional; equations</p>
+      simulations of drone dynamics. It outlines the methodology for simulating the state and dynamics of drones in
+      two-dimensional and three-dimensional environments, and discusses the determination of simulation parameters,
+      including the experimental methods used. Theoretical models are established, and the results from the experiments
+      are provided to better understand and predict the performance and behavior of drones under different operational
+      conditions.</p>
+    <p><em>Keywords</em>—simulation; drone dynamics; two-dimensional; three-dimensional; equations; dynamics; state
+      vector; aerodynamics; experimental parameters; thrust; rotational velocity.</p>
   </div>
 
   <h1>Introduction</h1>
   <section>
-    <p>This document details the simulation of drone dynamics both in a two-dimensional and a three-dimensional space...
-    </p>
+    <p>This document details the simulation of drone dynamics both in a two-dimensional and a three-dimensional space.
+      The importance of accurate simulation lies in the potential for optimization of drone flight parameters for
+      efficiency, agility, and stability. The paper outlines a framework for generating realistic dynamic behaviors and
+      predicting the impact of design changes and environmental influences on flight performance.</p>
   </section>
-
-  <!-- Remainder of the paper content -->
 
   <h1>Two-Dimensional Simulation</h1>
   <section>
     <h2>State</h2>
-    <p>A simulation is considered complete when it can predict the state \( X \) of the drone for the next discrete time
-      segment...</p>
+    <p>A simulation is considered complete when it can predict the state $X$ of the drone for the next discrete time
+      segment.</p>
     <div class="equation">\( X = [x , y, \phi, \dot{x}, \dot{y}, \dot{\phi}] \)</div>
     <p>The state \( X \) consists of the coordinates on the y-axis, which points negatively towards the center of the
-      Earth...</p>
-    <!-- Additional content and figures as per the LaTeX content-->
+      Earth, the x-axis, and the angle vector \( \phi \), which represents rotational position around the x-axis.
+      Additionally, the velocities \( \dot{x}, \dot{y}, \dot{\phi} \) are part of the state vector. The thrust forces \(
+      F_1 \) and \( F_2 \) from the two rotors, combined with environmental forces, lead to changes in the drone's
+      state.</p>
+    <div class="figure">
+      <img class="fig" src="2d_drone.png" alt="Two-dimensional drone">
+      <p class="caption">Figure 1: Two-dimensional drone representation.</p>
+    </div>
+    <p>The thrust forces \( F_{1} \) and \( F_{2} \) are oriented at the angle \( \phi \) relative to the y-axis.</p>
   </section>
 
   <section>
     <h2>Dynamics</h2>
-    <p>Dynamics describe how the state \( X \) changes based on \( F_{1} \) and \( F_{2} \)...</p>
-    <!-- Additional content and equations as per the LaTeX content-->
+    <p>Dynamics describe how the state \( X \) changes over time based on the thrust forces \( F_1 \) and \( F_2 \). The
+      forces are expressed via the rotor velocities \( \omega_1 \) and \( \omega_2 \). The relationship between the
+      rotor velocity and the generated force is quadratic:</p>
+    <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
+    <p>This quadratic relationship \( k_{f} \) is empirically determined as detailed in the section on Simulation
+      Parameter Determination. The resultant force and torque dynamics subsequently determine the changes in the state
+      \( X \).</p>
+    <div class="figure">
+      <img class="fig" src="2d_drone_forces.png" alt="Forces on a 2D drone">
+      <p class="caption">Figure 2: Forces acting on a two-dimensional drone.</p>
+    </div>
+    <p>By resolving these forces into components parallel to the x and y axes and employing Newton's second law \( F =
+      ma \), it is possible to derive the accelerations across these axes.</p>
   </section>
-
+  <!--
   <h1>Three-Dimensional Simulation</h1>
   <section>
     <h2>State</h2>
-    <p>In the three-dimensional case, the state vector \( X \) consists of twelve quantities...</p>
-    <!-- Additional content and figures as per the LaTeX content-->
+    <p>In the three-dimensional case, the state vector \( X \) extends to accommodate three-dimensional space and
+      orientation. It comprises of twelve distinct elements:</p>
+    <div class="equation">\( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z}, p, q, r] \)</div>
+    <p>Here, \( x, y, z \) represent the drone's positional coordinates, \( \phi, \theta, \psi \) represent its
+      orientation in terms of Euler angles, and \( \dot{x}, \dot{y}, \dot{z}, p, q, r \) represent the velocities and
+      rotational rates, respectively. These values are referenced to either a world coordinate system or a body-fixed
+      coordinate system.</p>
+    <div class="figure">
+      <img class="fig" src="3d_drone_coordinate_system.png" alt="World and body coordinate systems">
+      <p class="caption">Figure 3: Illustration of world and body coordinate systems in 3D drone modeling.</p>
+    </div>
   </section>
 
   <section>
     <h2>Dynamics</h2>
-    <p>Equation \( F_{i} = k_{f} \omega_{i}^2 \) still applies here as before...</p>
-    <!-- Additional content and equations as per the LaTeX content-->
+    <p>The dynamics in the three-dimensional simulation extend those in the two-dimensional case to include additional
+      forces and moments due to the increased complexity of movement in 3D space. The established relationship between
+      thrust and rotor velocity remains valid. By integrating these forces over time, one can predict the future state
+      of the drone, accounting for the inertial properties and rotational dynamics.</p>
+    <div class="figure">
+      <img class="fig" src="3d_drone_from_above.png" alt="3D Drone from above">
+      <p class="caption">Figure 4: Top-down view of a three-dimensional drone showcasing propeller rotation directions
+        and numbering.</p>
+    </div>
   </section>
 
   <h1>Determination of Simulation Parameters</h1>
   <section>
-    <p>In addition to the laws of dynamics, some central quantities also determine the behavior of the quadrotor...</p>
-    <!-- Additional content and figures as per the LaTeX content-->
+    <p>Simulation accuracy greatly depends on the precise determination of several intrinsic and extrinsic parameters
+      that describe the drone's physical properties and its interaction with the environment. These include the mass \(
+      m \), thrust-to-velocity relationship constants \( k_f \) and \( k_m \), and the moments of inertia \( I_x, I_y,
+      I_z \). These parameters are derived from controlled experiments.</p>
+    <div class="figure">
+      <img class="fig" src="seesaw_diagram_kf.png" alt="Seesaw diagram for kf measurement">
+      <p class="caption">Figure 5: Diagrammatic representation of the experimental setup for determining the thrust
+        constant \( k_f \).</p>
+    </div>
+    <div class="figure">
+      <img class="fig" src="seesaw_km_real.jpg" alt="Seesaw measurement of km">
+      <p class="caption">Figure 6: Seesaw setup adapted for measuring the torque constant \( k_m \).</p>
+    </div>
+    <div class="figure">
+      <img class="fig" src="tachometer.jpg" alt="Tachometer measurement">
+      <p class="caption">Figure 7: Using a photo tachometer to measure rotor velocity \( \omega \).</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Measured \( \omega \) [rads/s]</th>
+          <th>Measured \( k_f \) [N]</th>
+          <th>Measured \( k_m \) [N]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>20.00</td>
+          <td>0.56898</td>
+          <td>0.11772</td>
+        </tr>
+        <tr>
+          <td>26.70</td>
+          <td>0.99081</td>
+          <td>0.30411</td>
+        </tr>
+        <tr>
+          <td>35.08</td>
+          <td>1.74618</td>
+          <td>0.37278</td>
+        </tr>
+        <tr>
+          <td>41.26</td>
+          <td>2.43288</td>
+          <td>0.68670</td>
+        </tr>
+        <tr>
+          <td>48.17</td>
+          <td>3.23730</td>
+          <td>0.98100</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The results of these experiments yield values for \( k_f \) and \( k_m \), as well as moments of inertia that are
+      crucial for simulating the drone dynamics with high fidelity.</p>
   </section>
-
-  <!-- Bibliography section in HTML as per the LaTeX content-->
-
+-->
+  <!-- Bibliography generated from the references in the LaTeX content -->
   <div class="references">
     <h5>References</h5>
     <ol class="reflist">
-      <li>G. Eason, B. Noble, and I. N. Sneddon, "On certain integrals..."</li>
-      <!-- Remaining references as per the LaTeX content-->
+      <li>Johansen, T. A. (2004). Control of vehicles with second order sliding modes [Doctoral dissertation, Norwegian
+        University of Science and Technology]. NTNU Open.</li>
+      <li>Johnson, E. N., Lewis, F. L., & Stevens, B. L. (2015). Aircraft control and simulation: dynamics, controls
+        design, and autonomous systems (3rd ed.). John Wiley & Sons.</li>
+      <li>Diebel, J. (2006). Representing attitude: Euler angles, unit quaternions, and rotation vectors. Matrix,
+        58(15-16), 1-35.</li>
+      <li>Xuan-Mung, N., Metrikin, I., Soleymani, M., & Kuhnlenz, K. (2019). Dynamical model of a quadcopter for indoor
+        leader/follower missions. International Journal of Micro Air Vehicles, 11, 1-13.
+        https://doi.org/10.1177/1756829319835772</li>
     </ol>
   </div>
 
