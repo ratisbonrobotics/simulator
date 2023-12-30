@@ -78,7 +78,8 @@
         angle (\(\phi\)) about the x-axis, and their corresponding velocities
         (\(\dot{x}, \dot{y}, \dot{\phi}\)). The thrust forces (\(F_{1}\) and
         \(F_{2}\)) from the rotors, combined with environmental factors, result
-        in the alteration of the state vector \(X\).
+        in the alteration of the state vector \(X\). The thrusts \(F_{1}\) and
+        \(F_{2}\) are angled relative to the y-axis by \(\phi\).
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -98,10 +99,6 @@
           brackets.
         </figcaption>
       </figure>
-      <p>
-        The thrusts \(F_{1}\) and \(F_{2}\) are angled relative to the y-axis by
-        \(\phi\).
-      </p>
 
       <h2>Dynamics Formulation</h2>
       <p>
@@ -126,8 +123,13 @@
       </div>
       <p>
         Here, \(F_{x}\) and \(F_{y}\) are the components of the total thrust
-        force (\(F_{total}\)) along the x-axis and y-axis, respectively.
+        force (\(F_{total}\)) along the x-axis and y-axis, respectively. They
+        are determined using trigonometric relationships from the total thrust
+        force (\(F_{total}\)) and angle \(\phi\):
       </p>
+      <div class="equation">
+        \[ F_{y} = F_{total} \cos{\phi} \qquad F_{x} = F_{total} \sin{\phi} \]
+      </div>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
@@ -143,24 +145,25 @@
         </div>
         <figcaption>Forces acting on a two-dimensional drone.</figcaption>
       </figure>
+
       <p>
-        The forces along the axes are determined using trigonometric
-        relationships from the total thrust force (\(F_{total}\)) and angle
-        \(\phi\):
+        In drone dynamics, we employ two torque formulas (\(M_{x}\)), each with
+        distinct historical and physical foundations. The first, \(M_{x} =
+        F_{\phi} L\), originates from Archimedes' concept of leverage (circa
+        287–212 BC), where \(F_{\phi}\) represents the force from the drone's
+        rotors and \(L\) is the lever arm - the distance from the center of mass
+        to the motors. This equation captures the rotational effect of force.
+        The second, \(M_{x} = I_{x} \ddot{\phi}\), is grounded in Newton's laws
+        of motion (circa 1687), linking torque (\(M_{x}\)) with the drone's
+        moment of inertia (\(I_{x}\)) and angular acceleration
+        (\(\ddot{\phi}\)). Together, these formulas allow us to determine the
+        angular acceleration of the drone.
       </p>
       <div class="equation">
-        \[ F_{y} = F_{total} \cos{\phi} \qquad F_{x} = F_{total} \sin{\phi} \]
+        \[ M_{x} = F_{\phi}L \\ I_{x} \ddot{\phi} = (F_{2} - F_{1})L \\
+        \ddot{\phi} = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
       </div>
-      <p>
-        Torque \(M\) and angular acceleration \(\ddot{\phi}\) are derived from
-        the forces produced by the dual rotors. The distance \(L\) from the
-        drone's center of mass to the motors, and the moment of inertia
-        \(I_{x}\) (experimentally determined), are key factors.
-      </p>
-      <div class="equation">
-        \[ M_{x} = F_{\phi} L \qquad M_{x} = I_{x} \ddot{\phi} \] \[ F_{\phi} =
-        F_{2} - F_{1} \qquad \ddot{\phi} = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
-      </div>
+
       <p>
         The state at time \(t\) is determined by the sum of the current state
         \(X(t)\) and the integral of the state's time derivative over the
