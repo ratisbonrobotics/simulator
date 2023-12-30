@@ -71,9 +71,21 @@
 
                 <div class="tile is-parent">
                     <article class="tile is-child notification has-background-light has-text-centered">
-                        <img src="drone_dynamics_1.webp" loading="lazy" alt="Drone Dynamics Part 1" />
-                        <img src="drone_dynamics_2.webp" loading="lazy" alt="Drone Dynamics Part 2" />
+                        <iframe src="paper/drone.html" style="width:100%; height:500px;"
+                            onload="resizeIframe(this)"></iframe>
                     </article>
+
+                    <script>
+                        function resizeIframe(iframe) {
+                            try {
+                                const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                                const height = (iframeDocument.documentElement.scrollHeight || iframeDocument.body.scrollHeight) + 50;
+                                iframe.style.height = height + 'px';
+                            } catch (e) {
+                                console.error('Error resizing iframe:', e);
+                            }
+                        }
+                    </script>
                 </div>
             </div>
             <div class="tile is-parent">
