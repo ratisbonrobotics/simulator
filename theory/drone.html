@@ -114,7 +114,7 @@
         turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
         \ddot{\phi}\)). These accelerations are calculated using Newton’s second
         law (\(F = ma\)) and the gravitational force (\(F_{g} = mg\)), with
-        \(g\) being the gravitational constant (9.81 m/s²).
+        \(g\) being the gravitational constant \( 9.81 \frac{m}{s^2} \).
       </p>
       <div class="equation">
         \[ -\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
@@ -149,12 +149,12 @@
         In drone dynamics, we employ two torque formulas (\(M_{x}\)), each with
         distinct historical and physical foundations. The first, \(M_{x} =
         F_{\phi} L\), originates from Archimedes' concept of leverage (circa
-        287–212 BC), where \(F_{\phi}\) represents the force from the drone's
-        rotors and \(L\) is the lever arm - the distance from the center of mass
-        to the motors. This equation captures the rotational effect of force.
-        The second, \(M_{x} = I_{x} \ddot{\phi}\), is grounded in Newton's laws
-        of motion (circa 1687), linking torque (\(M_{x}\)) with the drone's
-        moment of inertia (\(I_{x}\)) and angular acceleration
+        287–212 BC), where \(F_{\phi} = F_{2} - F_{1}\) represents the force
+        from the drone's rotors and \(L\) is the lever arm - the distance from
+        the center of mass to the motors. This equation captures the rotational
+        effect of force. The second, \(M_{x} = I_{x} \ddot{\phi}\), is grounded
+        in Newton's laws of motion (circa 1687), linking torque (\(M_{x}\)) with
+        the drone's moment of inertia (\(I_{x}\)) and angular acceleration
         (\(\ddot{\phi}\)). Together, these formulas allow us to determine the
         angular acceleration of the drone.
       </p>
@@ -176,11 +176,24 @@
         interval.
       </p>
       <div class="equation">
-        \begin{align*} X_{t + \Delta t} &= X_{t} + \int_{\tau=t}^{t+\Delta t}
-        \dot{X}_{\tau} d\tau \\ &\approx X_t + \dot{X}_t\Delta t \\ &\approx
-        \begin{bmatrix} x \\ y \\ \phi \\ \dot{x} \\ \vdots \end{bmatrix}_t +
-        \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\
-        \vdots \end{bmatrix}_t \end{align*}
+        \[ X_{t + \Delta t} = X_{t} + \int_{t}^{t+\Delta t} \dot{X}_{\tau} d\tau
+        \approx X_t + \Delta t\dot{X}_t \]
+      </div>
+
+      <p>
+        To fully and explicitly state the time evolution of the drone's state we
+        substitute the equations for \(\ddot{x}\), \(\ddot{y}\), and
+        \(\ddot{\phi}\) into the equation for \(X_{t + \Delta t}\).
+      </p>
+      <div class="equation">
+        \( X_t + \Delta t \dot{X}_t= \begin{bmatrix} x \\ y \\ \phi \\ \dot{x}
+        \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \Delta t \begin{bmatrix}
+        \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\ \ddot{y} \\ \ddot{\phi}
+        \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi \\ \dot{x} \\ \dot{y}
+        \\ \dot{\phi} \end{bmatrix}_t + \Delta t \begin{bmatrix} \dot{x} \\
+        \dot{y} \\ \dot{\phi} \\ \frac{\sin{\phi}(F_1 + F_2)}{m} \\ g -
+        \cos{\phi}(F_1 + F_2) \\ \frac{L(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t
+        \)
       </div>
     </section>
 
