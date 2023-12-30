@@ -1,91 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="Description" content="Ratisbon Robotics Web Simulator">
-    <link rel="icon" href="https://avatars.githubusercontent.com/u/151067388" type="image/png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="Description" content="Ratisbon Robotics Web Simulator" />
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/151067388"
+      type="image/png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
     <title>Ratisbon Robotics</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="https://github.com/ratisbonrobotics/simulator">
-                <img src="https://avatars.githubusercontent.com/u/151067388">
-            </a>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+      <div class="navbar-brand">
+        <a
+          class="navbar-item"
+          href="https://github.com/ratisbonrobotics/simulator"
+        >
+          <img src="https://avatars.githubusercontent.com/u/151067388" />
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasic"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasic" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/"> Simulation </a>
+          <a class="navbar-item" href="/theory/"> Theory </a>
         </div>
-        <div id="navbarBasic" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">
-                    Simulation
-                </a>
-                <a class="navbar-item" href="/theory/">
-                    Theory
-                </a>
-            </div>
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <a href="https://creativecommons.org/publicdomain/zero/1.0/"><img
-                            src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png">
-                    </a>
-                </div>
-            </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/"
+              ><img
+                src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/cc-zero.png"
+              />
+            </a>
+          </div>
         </div>
+      </div>
     </nav>
     <div class="tile is-ancestor">
-        <div class="tile is-vertical">
-            <div class="tile">
-                <div class="tile is-parent is-vertical is-2">
-                    <article class="tile is-child notification has-background-light">
-                        <p class="title">Control</p>
-                        <aside class="menu">
-                            <p class="menu-label">
-                                <button class="button" id="startstop">Stop</button>
-                            </p>
-                        </aside>
-                    </article>
-                </div>
-                <div class="tile is-parent">
-                    <article class="tile is-child notification has-background-light">
-                        <canvas tabindex="1" id="canvas" aria-label="canvas"
-                            style="border: 1px solid #000; box-shadow: 0px 0px 10px #aaa; border-radius: 7px; background-color: black;"></canvas>
-                    </article>
-                </div>
-            </div>
-            <div class="tile is-parent">
-                <article class="tile is-child notification has-background-light">
-                    <div class="content">
-                        <div class="content has-text-centered">
-                            <p>
-                                <strong>Ratisbon Robotics</strong> by <a href="https://markusheimerl.com">Markus
-                                    Heimerl</a>
-                            </p>
-                        </div>
-                    </div>
-                </article>
-            </div>
+      <div class="tile is-vertical">
+        <div class="tile">
+          <div class="tile is-parent is-vertical is-2">
+            <article class="tile is-child notification has-background-light">
+              <p class="title">Control</p>
+              <aside class="menu">
+                <p class="menu-label">
+                  <button class="button" id="startstop">Stop</button>
+                </p>
+              </aside>
+            </article>
+          </div>
+          <div class="tile is-parent">
+            <article class="tile is-child notification has-background-light">
+              <canvas
+                tabindex="1"
+                id="canvas"
+                aria-label="canvas"
+                style="
+                  border: 1px solid #000;
+                  box-shadow: 0px 0px 10px #aaa;
+                  border-radius: 7px;
+                  background-color: black;
+                "
+              ></canvas>
+            </article>
+          </div>
         </div>
+        <div class="tile is-parent">
+          <article class="tile is-child notification has-background-light">
+            <div class="content">
+              <div class="content has-text-centered">
+                <p>
+                  <strong>Ratisbon Robotics</strong> by
+                  <a href="https://markusheimerl.com">Markus Heimerl</a>
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            $navbarBurgers.forEach(el => {
-                el.addEventListener('click', () => {
-                    const target = el.dataset.target;
-                    const $target = document.getElementById(target);
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-                });
-            });
+      document.addEventListener("DOMContentLoaded", () => {
+        const $navbarBurgers = Array.prototype.slice.call(
+          document.querySelectorAll(".navbar-burger"),
+          0
+        );
+        $navbarBurgers.forEach((el) => {
+          el.addEventListener("click", () => {
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+            el.classList.toggle("is-active");
+            $target.classList.toggle("is-active");
+          });
         });
+      });
     </script>
     <script src="/lib/util.js"></script>
     <script src="/lib/matrix.js"></script>
@@ -93,6 +118,5 @@
     <script src="/src/env.js"></script>
     <script src="/src/dynamics.js"></script>
     <script src="/src/main.js"></script>
-</body>
-
+  </body>
 </html>
