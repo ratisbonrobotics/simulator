@@ -1,3 +1,10 @@
 {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "html.format.wrapLineLength": 80,
+    "html.format.indentInnerHtml": true,
+    "editor.wordWrap": "on",
+    "editor.wrappingIndent": "indent",
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }    
 }

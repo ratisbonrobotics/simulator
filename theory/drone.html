@@ -1,139 +1,229 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Two-and Three-Dimensional Simulations of Drone Dynamics</title>
+    <link rel="stylesheet" href="pubcss-ieee.css" />
+    <style>
+      .equation {
+        text-align: center;
+        margin: 10px;
+      }
+    </style>
+    <script
+      type="text/javascript"
+      async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Two-and Three-Dimensional Simulations of Drone Dynamics</title>
-  <link rel="stylesheet" href="pubcss-ieee.css">
-  <style>
-    .equation {
-      text-align: center;
-      margin: 10px;
-    }
-  </style>
-  <script type="text/javascript" async
-    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML"></script>
-</head>
-
-<body>
-  <header class="col-span">
-    <h1 class="title counter-skip">Two-and Three-Dimensional Simulations of Drone Dynamics</h1>
-    <div class="authors">
-      <div class="author">
-        <div>Markus Heimerl</div>
-        <div>Ratisbon Robotics</div>
-        <div>Regensburg, Germany</div>
-        <div>markusheimerl@ratisbonrobotics.com</div>
+  <body>
+    <header class="col-span">
+      <h1 class="title counter-skip">
+        Two-and Three-Dimensional Simulations of Drone Dynamics
+      </h1>
+      <div class="authors">
+        <div class="author">
+          <div>Markus Heimerl</div>
+          <div>Ratisbon Robotics</div>
+          <div>Regensburg, Germany</div>
+          <div>markusheimerl@ratisbonrobotics.com</div>
+        </div>
       </div>
+    </header>
+
+    <div class="abstract">
+      <p>
+        <em>Abstract</em>—This document presents a comprehensive study on the
+        two-dimensional and three-dimensional simulations of drone dynamics. It
+        outlines the methodology for simulating the state and dynamics of drones
+        in two-dimensional and three-dimensional environments, and discusses the
+        determination of simulation parameters, including the experimental
+        methods used. Theoretical models are established, and the results from
+        the experiments are provided to better understand and predict the
+        performance and behavior of drones under different operational
+        conditions.
+      </p>
+      <p>
+        <em>Keywords</em>—simulation; drone dynamics; two-dimensional;
+        three-dimensional; equations; dynamics; state vector; aerodynamics;
+        experimental parameters; thrust; rotational velocity.
+      </p>
     </div>
-  </header>
 
-  <div class="abstract">
-    <p><em>Abstract</em>—This document presents a comprehensive study on the
-      two-dimensional and three-dimensional simulations of drone dynamics. It outlines
-      the methodology for simulating the state and dynamics of drones in
-      two-dimensional and three-dimensional environments, and discusses the determination
-      of simulation parameters, including the experimental methods used. Theoretical models
-      are established, and the results from the experiments are provided to better understand
-      and predict the performance and behavior of drones under different operational
-      conditions.</p>
-    <p><em>Keywords</em>—simulation; drone dynamics; two-dimensional; three-dimensional;
-      equations; dynamics; state vector; aerodynamics; experimental parameters; thrust;
-      rotational velocity.</p>
-  </div>
+    <h1>Introduction</h1>
+    <section>
+      <p>
+        This document details the simulation of drone dynamics both in a
+        two-dimensional and a three-dimensional space. The importance of
+        accurate simulation lies in the potential for optimization of drone
+        flight parameters for efficiency, agility, and stability. The paper
+        outlines a framework for generating realistic dynamic behaviors and
+        predicting the impact of design changes and environmental influences on
+        flight performance.
+      </p>
+    </section>
 
-  <h1>Introduction</h1>
-  <section>
-    <p>This document details the simulation of drone dynamics both in a two-dimensional and
-      a three-dimensional space. The importance of accurate simulation lies in the potential
-      for optimization of drone flight parameters for efficiency, agility, and stability.
-      The paper outlines a framework for generating realistic dynamic behaviors and predicting
-      the impact of design changes and environmental influences on flight performance.</p>
-  </section>
-
-  <h1>Two-Dimensional Simulation</h1>
-  <section>
-    <h2>State</h2>
-    <p>A simulation is considered complete when it can predict the state \(X\) of the drone
-      for the next discrete time segment.</p>
-    <div class="equation">\( X = [x , y, \phi, \dot{x}, \dot{y}, \dot{\phi}] \)</div>
-    <p>The state \(X\) consists of the coordinates on the y-axis, which points negatively
-      towards the center of the Earth, the x-axis, and the vector \(\phi\), which describes
-      the rotation angle about the x-axis. Additionally, the velocities, i.e., the rates of
-      change, \(\dot{x}, \dot{y}, \dot{\phi}\) of these quantities are also part of the vector.
-      The thrust \(F_{1}\) and \(F_{2}\) of the two rotors, in combination with environmental
-      influences, produce all forces that result in changes to the state vector \(X\).</p>
-    <figure>
-      <figcaption>Two-dimensional drone representation.</figcaption>
-      <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden;">
-        <img src="2d_drone.svg" alt="Two-dimensional drone"
-          style="max-width: 100%; max-height: 100%; display: block; margin: auto;">
+    <h1>Two-Dimensional Simulation</h1>
+    <section>
+      <h2>State</h2>
+      <p>
+        A simulation is considered complete when it can predict the state \(X\)
+        of the drone for the next discrete time segment.
+      </p>
+      <div class="equation">
+        \( X = [x , y, \phi, \dot{x}, \dot{y}, \dot{\phi}] \)
       </div>
-    </figure>
-    <p>The thrusts \(F_{1}\) and \(F_{2}\) are directed at an angle \(\phi\) to the y-axis.</p>
+      <p>
+        The state \(X\) consists of the coordinates on the y-axis, which points
+        negatively towards the center of the Earth, the x-axis, and the vector
+        \(\phi\), which describes the rotation angle about the x-axis.
+        Additionally, the velocities, i.e., the rates of change, \(\dot{x},
+        \dot{y}, \dot{\phi}\) of these quantities are also part of the vector.
+        The thrust \(F_{1}\) and \(F_{2}\) of the two rotors, in combination
+        with environmental influences, produce all forces that result in changes
+        to the state vector \(X\).
+      </p>
+      <figure>
+        <figcaption>Two-dimensional drone representation.</figcaption>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="2d_drone.svg"
+            alt="Two-dimensional drone"
+            style="
+              max-width: 100%;
+              max-height: 100%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+      </figure>
+      <p>
+        The thrusts \(F_{1}\) and \(F_{2}\) are directed at an angle \(\phi\) to
+        the y-axis.
+      </p>
 
-    <h2>Dynamics</h2>
-    <p>Dynamics describe how the state \(X\) changes based on \(F_{1}\) and \(F_{2}\). To work
-      with fundamental quantities, \(F_{1}\) and \(F_{2}\) are expressed by their underlying
-      rotor velocities \(\omega_{1}\) and \(\omega_{2}\). The relationship \(k_{f}\) between
-      rotor velocity and force is quadratic as shown in <a href="#johansen2004">1</a>. Hence,
-      we have:</p>
-    <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
-    <p>This relationship \(k_{f}\) is determined empirically as explained in Chapter
-      SimulationParameterDetermination. The changes in state in the positions \(x\), \(y\),
-      and \(\phi\) result from the integration of the velocities \(\dot{z}, \dot{y}\), and
-      \(\dot{\phi}\). The state changes of these result from the integration of the accelerations
-      \(\ddot{x}, \ddot{y}\), and \(\ddot{\phi}\). These are derived from \(F = ma\) and the
-      force of gravity \(F_{g} = mg\) with \(g = 9.81 \frac{m}{s^2}\):</p>
-    <div class="equation">\(-\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
-      \frac{F_{x}}{m}\)</div>
-    <p>\(F_{x}\) is parallel to the x-axis, and \(F_{y}\) is parallel to the y-axis. Thus,
-      there is a right angle between \(F_{z}\) and \(F_{y}\). Additionally, it holds true that</p>
-    <div class="equation">\(F_{total} = \sum_{1}^{i} F_{i} = F_{1} + F_{2}\)</div>
-    <p>The total force of both rotors \(F_{total}\) is oriented at an angle \(\phi\) to the
-      y-axis.</p>
-    <figure>
-      <figcaption>Forces acting on a two-dimensional drone.</figcaption>
-      <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden;">
-        <img src="2d_drone_forces.svg" alt="Forces on a 2D drone"
-          style="max-width: 100%; max-height: 100%; display: block; margin: auto;">
+      <h2>Dynamics</h2>
+      <p>
+        Dynamics describe how the state \(X\) changes based on \(F_{1}\) and
+        \(F_{2}\). To work with fundamental quantities, \(F_{1}\) and \(F_{2}\)
+        are expressed by their underlying rotor velocities \(\omega_{1}\) and
+        \(\omega_{2}\). The relationship \(k_{f}\) between rotor velocity and
+        force is quadratic as shown in <a href="#johansen2004">1</a>. Hence, we
+        have:
+      </p>
+      <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
+      <p>
+        This relationship \(k_{f}\) is determined empirically as explained in
+        Chapter SimulationParameterDetermination. The changes in state in the
+        positions \(x\), \(y\), and \(\phi\) result from the integration of the
+        velocities \(\dot{z}, \dot{y}\), and \(\dot{\phi}\). The state changes
+        of these result from the integration of the accelerations \(\ddot{x},
+        \ddot{y}\), and \(\ddot{\phi}\). These are derived from \(F = ma\) and
+        the force of gravity \(F_{g} = mg\) with \(g = 9.81 \frac{m}{s^2}\):
+      </p>
+      <div class="equation">
+        \(-\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
+        \frac{F_{x}}{m}\)
       </div>
-    </figure>
-    <p>Thus, the forces \(F_{x}\) and \(F_{y}\) result from the triangle's trigonometry as</p>
-    <div class="equation">\(F_{y} = F_{total}\cos{\phi} \qquad F_{x} = F_{total}\sin{\phi}\)</div>
-    <p>and the accelerations along the z- and y-axes by combining Equations 5, 6, and 7:</p>
-    <div class="equation">\(\ddot{y} = \frac{(F_{1} + F_{2})\cos{\phi}}{m} - g \qquad \ddot{x} =
-      \frac{(F_{1} + F_{2})\sin{\phi}}{m}\)</div>
-    <p>\(\ddot{\phi}\) is derived through the combination of the equations for torque \(M\). \(l\)
-      is the distance from the center of mass of the dual-rotor drone to one of the motors.</p>
-    <div class="equation">\(M_{x} = F_{\phi} l \qquad M_{x} = I_{x} \ddot{\phi}\)</div>
-    <p>The moment of inertia \(I_{x}\) has to be determined experimentally, as described in Chapter
-      SimulationParameterDetermination. The force around the z-axis \(F_{\phi}\) is the difference
-      in the two motor forces \(F_1\) and \(F_2\) from Figure Two-dimensional drone. A positive
-      \(F_{\phi}\) corresponds to counter-clockwise rotation, and a negative value indicates
-      clockwise rotation. In summary, we have:</p>
-    <div class="equation">\(F_{\phi} = F_{2} - F_{1}\)</div>
-    <p>Therefore, the angular acceleration \(\ddot{\phi}\) can be described as</p>
-    <div class="equation">\(\ddot{\phi} = \frac{(F_{2} - F_{1}) \cdot l}{I_{x}}\)</div>
-    <p>Hence, the dual-rotor drone's state at time \(t\) can be determined by the sum of the state
-      \(X(t)\) and the integral of the time derivative of the state \(\dot{X}\).</p>
-    <div class="equation">\(X(t + \Delta t) = X(t) + \int_{t}^{t+\Delta t}\dot{X}(\tau) d\tau\)</div>
-  </section>
+      <p>
+        \(F_{x}\) is parallel to the x-axis, and \(F_{y}\) is parallel to the
+        y-axis. Thus, there is a right angle between \(F_{z}\) and \(F_{y}\).
+        Additionally, it holds true that
+      </p>
+      <div class="equation">
+        \(F_{total} = \sum_{1}^{i} F_{i} = F_{1} + F_{2}\)
+      </div>
+      <p>
+        The total force of both rotors \(F_{total}\) is oriented at an angle
+        \(\phi\) to the y-axis.
+      </p>
+      <figure>
+        <figcaption>Forces acting on a two-dimensional drone.</figcaption>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="2d_drone_forces.svg"
+            alt="Forces on a 2D drone"
+            style="
+              max-width: 100%;
+              max-height: 100%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+      </figure>
+      <p>
+        Thus, the forces \(F_{x}\) and \(F_{y}\) result from the triangle's
+        trigonometry as
+      </p>
+      <div class="equation">
+        \(F_{y} = F_{total}\cos{\phi} \qquad F_{x} = F_{total}\sin{\phi}\)
+      </div>
+      <p>
+        and the accelerations along the z- and y-axes by combining Equations 5,
+        6, and 7:
+      </p>
+      <div class="equation">
+        \(\ddot{y} = \frac{(F_{1} + F_{2})\cos{\phi}}{m} - g \qquad \ddot{x} =
+        \frac{(F_{1} + F_{2})\sin{\phi}}{m}\)
+      </div>
+      <p>
+        \(\ddot{\phi}\) is derived through the combination of the equations for
+        torque \(M\). \(l\) is the distance from the center of mass of the
+        dual-rotor drone to one of the motors.
+      </p>
+      <div class="equation">
+        \(M_{x} = F_{\phi} l \qquad M_{x} = I_{x} \ddot{\phi}\)
+      </div>
+      <p>
+        The moment of inertia \(I_{x}\) has to be determined experimentally, as
+        described in Chapter SimulationParameterDetermination. The force around
+        the z-axis \(F_{\phi}\) is the difference in the two motor forces
+        \(F_1\) and \(F_2\) from Figure Two-dimensional drone. A positive
+        \(F_{\phi}\) corresponds to counter-clockwise rotation, and a negative
+        value indicates clockwise rotation. In summary, we have:
+      </p>
+      <div class="equation">\(F_{\phi} = F_{2} - F_{1}\)</div>
+      <p>
+        Therefore, the angular acceleration \(\ddot{\phi}\) can be described as
+      </p>
+      <div class="equation">
+        \(\ddot{\phi} = \frac{(F_{2} - F_{1}) \cdot l}{I_{x}}\)
+      </div>
+      <p>
+        Hence, the dual-rotor drone's state at time \(t\) can be determined by
+        the sum of the state \(X(t)\) and the integral of the time derivative of
+        the state \(\dot{X}\).
+      </p>
+      <div class="equation">
+        \(X(t + \Delta t) = X(t) + \int_{t}^{t+\Delta t}\dot{X}(\tau) d\tau\)
+      </div>
+    </section>
 
-  <h5 class="references">References</h5>
-  <div class="references">
-    <cite id="johansen2004">Johansen, T. A. (2004). Control of vehicles with second order sliding modes
-      [Doctoral dissertation, Norwegian University of Science and Technology]. NTNU Open.</cite>
-    <cite id="johansen2015">Johnson, E. N., Lewis, F. L., & Stevens, B. L. (2015). Aircraft control and simulation:
-      dynamics, controls design, and autonomous systems (3rd ed.). John Wiley & Sons.</cite>
-    <cite id="diebel2006">Diebel, J. (2006). Representing attitude: Euler angles, unit quaternions, and rotation
-      vectors.
-      Matrix, 58(15-16), 1-35.</cite>
-    <cite id="xuanmung2019">Xuan-Mung, N., Metrikin, I., Soleymani, M., & Kuhnlenz, K. (2019). Dynamical model of a
-      quadcopter for indoor leader/follower missions. International Journal of Micro Air Vehicles, 11, 1-13.
-      https://doi.org/10.1177/1756829319835772</cite>
-  </div>
-
-</body>
-
+    <h5 class="references">References</h5>
+    <div class="references">
+      <cite id="johansen2004"
+        >Johansen, T. A. (2004). Control of vehicles with second order sliding
+        modes [Doctoral dissertation, Norwegian University of Science and
+        Technology]. NTNU Open.</cite
+      >
+      <cite id="johansen2015"
+        >Johnson, E. N., Lewis, F. L., & Stevens, B. L. (2015). Aircraft control
+        and simulation: dynamics, controls design, and autonomous systems (3rd
+        ed.). John Wiley & Sons.</cite
+      >
+      <cite id="diebel2006"
+        >Diebel, J. (2006). Representing attitude: Euler angles, unit
+        quaternions, and rotation vectors. Matrix, 58(15-16), 1-35.</cite
+      >
+      <cite id="xuanmung2019"
+        >Xuan-Mung, N., Metrikin, I., Soleymani, M., & Kuhnlenz, K. (2019).
+        Dynamical model of a quadcopter for indoor leader/follower missions.
+        International Journal of Micro Air Vehicles, 11, 1-13.
+        https://doi.org/10.1177/1756829319835772</cite
+      >
+    </div>
+  </body>
 </html>
