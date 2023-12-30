@@ -55,48 +55,33 @@
     </nav>
     <div class="tile is-ancestor">
       <div class="tile is-vertical">
-        <div class="tile">
-          <div class="tile is-parent is-vertical is-2">
-            <article class="tile is-child notification has-background-light">
-              <p class="title">Chapters</p>
-              <aside class="menu">
-                <p class="menu-label">1.0 2D Simulation</p>
-                <p class="menu-label">1.1 State</p>
-                <p class="menu-label">1.2 Dynamics</p>
-                <p class="menu-label">2.0 3D Simulation</p>
-                <p class="menu-label">2.1 State</p>
-                <p class="menu-label">2.2 Dynamics</p>
-              </aside>
-            </article>
-          </div>
+        <div class="tile is-parent">
+          <article
+            class="tile is-child notification has-background-light has-text-centered"
+          >
+            <iframe
+              src="drone.html"
+              style="width: 100%; height: 500px"
+              onload="resizeIframe(this)"
+            ></iframe>
+          </article>
 
-          <div class="tile is-parent">
-            <article
-              class="tile is-child notification has-background-light has-text-centered"
-            >
-              <iframe
-                src="drone.html"
-                style="width: 100%; height: 500px"
-                onload="resizeIframe(this)"
-              ></iframe>
-            </article>
-
-            <script>
-              function resizeIframe(iframe) {
-                try {
-                  const iframeDocument =
-                    iframe.contentDocument || iframe.contentWindow.document;
-                  const height =
-                    (iframeDocument.documentElement.scrollHeight ||
-                      iframeDocument.body.scrollHeight) + 50;
-                  iframe.style.height = height + "px";
-                } catch (e) {
-                  console.error("Error resizing iframe:", e);
-                }
+          <script>
+            function resizeIframe(iframe) {
+              try {
+                const iframeDocument =
+                  iframe.contentDocument || iframe.contentWindow.document;
+                const height =
+                  (iframeDocument.documentElement.scrollHeight ||
+                    iframeDocument.body.scrollHeight) + 50;
+                iframe.style.height = height + "px";
+              } catch (e) {
+                console.error("Error resizing iframe:", e);
               }
-            </script>
-          </div>
+            }
+          </script>
         </div>
+
         <div class="tile is-parent">
           <article class="tile is-child notification has-background-light">
             <div class="content">

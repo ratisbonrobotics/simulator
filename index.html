@@ -55,19 +55,12 @@
     </nav>
     <div class="tile is-ancestor">
       <div class="tile is-vertical">
-        <div class="tile">
-          <div class="tile is-parent is-vertical is-2">
-            <article class="tile is-child notification has-background-light">
-              <p class="title">Control</p>
-              <aside class="menu">
-                <p class="menu-label">
-                  <button class="button" id="startstop">Stop</button>
-                </p>
-              </aside>
-            </article>
-          </div>
-          <div class="tile is-parent">
-            <article class="tile is-child notification has-background-light">
+        <div class="tile is-parent">
+          <article
+            class="tile is-child notification has-background-light is-flex is-justify-content-center is-align-items-center"
+            style="flex-direction: column"
+          >
+            <div style="text-align: center">
               <canvas
                 tabindex="1"
                 id="canvas"
@@ -79,9 +72,11 @@
                   background-color: black;
                 "
               ></canvas>
-            </article>
-          </div>
+            </div>
+            <button class="button" id="startstop">Stop</button>
+          </article>
         </div>
+
         <div class="tile is-parent">
           <article class="tile is-child notification has-background-light">
             <div class="content">
