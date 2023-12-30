@@ -104,17 +104,19 @@
         evolves under the influence of forces \(F_{1}\) and \(F_{2}\). These
         forces, as a function of rotor velocities (\(\omega_{1}, \omega_{2}\)),
         follow a quadratic relationship with thrust (denoted by \(k_{f}\)), a
-        principle grounded in the laws of motion developed by Newton in the 17th
-        century.
+        principle grounded in the laws of motion developed by Newton
+        <a href="#newton1687">1</a>
+        in the 17th century.
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
       <p>
         Changes in the drone's position (\(x, y, \phi\)) are derived from the
         integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
         turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{\phi}\)). These accelerations are calculated using Newton’s second
-        law (\(F = ma\)) and the gravitational force (\(F_{g} = mg\)), with
-        \(g\) being the gravitational constant \( 9.81 \frac{m}{s^2} \).
+        \ddot{\phi}\)). These accelerations are calculated using Newton's second
+        law (\(F = ma\)) <a href="#newton1687">1</a> and the gravitational force
+        (\(F_{g} = mg\)), with \(g\) being the gravitational constant \( 9.81
+        \frac{m}{s^2} \).
       </p>
       <div class="equation">
         \[ -\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
@@ -148,13 +150,14 @@
       <p>
         In drone dynamics, we employ two torque formulas (\(M_{x}\)), each with
         distinct historical and physical foundations. The first, \(M_{x} =
-        F_{\phi} L\), originates from Archimedes' concept of leverage (circa
-        287–212 BC), where \(F_{\phi} = F_{2} - F_{1}\) represents the force
-        from the drone's rotors and \(L\) is the lever arm - the distance from
-        the center of mass to the motors. This equation captures the rotational
-        effect of force. The second, \(M_{x} = I_{x} \ddot{\phi}\), is grounded
-        in Newton's laws of motion (circa 1687), linking torque (\(M_{x}\)) with
-        the drone's moment of inertia (\(I_{x}\)) and angular acceleration
+        F_{\phi} L\), originates from Archimedes' concept of leverage
+        <a href="#archimedes">3</a>, where \(F_{\phi} = F_{2} - F_{1}\)
+        represents the force from the drone's rotors and \(L\) is the lever arm
+        - the distance from the center of mass to the motors. This equation
+        captures the rotational effect of force. The second, \(M_{x} = I_{x}
+        \ddot{\phi}\), is grounded in Newton's laws of motion
+        <a href="#newton1687">1</a>, linking torque (\(M_{x}\)) with the drone's
+        moment of inertia (\(I_{x}\)) and angular acceleration
         (\(\ddot{\phi}\)). Together, these formulas allow us to determine the
         angular acceleration of the drone.
       </p>
@@ -169,11 +172,11 @@
         derivative \( \dot{X} \) over the interval \( \Delta t \). This integral
         represents a precise calculation of the state change. However, for
         computational simplicity, we often use an approximation method developed
-        by Leonhard Euler in the 18th century (circa 1768). Euler's method
-        approximates the future state by assuming a constant rate of change (\(
-        \dot{X}_t \)) over a small interval (\( \Delta t \approx 0.01\)),
-        simplifying the integral to a product of the rate of change and the time
-        interval.
+        by Leonhard Euler in the 18th century <a href="#euler1768">2</a>.
+        Euler's method approximates the future state by assuming a constant rate
+        of change (\( \dot{X}_t \)) over a small interval (\( \Delta t \approx
+        0.01\)), simplifying the integral to a product of the rate of change and
+        the time interval.
       </p>
       <div class="equation">
         \[ X_{t + \Delta t} = X_{t} + \int_{t}^{t+\Delta t} \dot{X}_{\tau} d\tau
@@ -181,19 +184,21 @@
       </div>
 
       <p>
-        To fully and explicitly state the time evolution of the drone's state we
-        substitute the equations for \(\ddot{x}\), \(\ddot{y}\), and
-        \(\ddot{\phi}\) into the equation for \(X_{t + \Delta t}\).
+        To thoroughly describe the time evolution of the drone's state, we
+        substitude the explicit expressions for the accelerations \(\ddot{x}\),
+        \(\ddot{y}\), and \(\ddot{\phi}\) into the equation for \( X_{t + \Delta
+        t} \). These accelerations are directly derived from the drone's
+        dynamics, which include the influence of forces and torques resulting
+        from the rotor thrusts and environmental interactions.
       </p>
       <div class="equation">
         \( X_t + \Delta t \dot{X}_t= \begin{bmatrix} x \\ y \\ \phi \\ \dot{x}
         \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \Delta t \begin{bmatrix}
         \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\ \ddot{y} \\ \ddot{\phi}
         \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi \\ \dot{x} \\ \dot{y}
-        \\ \dot{\phi} \end{bmatrix}_t + \Delta t \begin{bmatrix} \dot{x} \\
-        \dot{y} \\ \dot{\phi} \\ \frac{\sin{\phi}(F_1 + F_2)}{m} \\ g -
-        \cos{\phi}(F_1 + F_2) \\ \frac{L(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t
-        \)
+        \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix} \vdots \\ \frac{\Delta
+        t\sin{\phi}(F_1 + F_2)}{m} \\ \Delta t(g - \cos{\phi}(F_1 + F_2)) \\
+        \frac{\Delta tL(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t \)
       </div>
     </section>
 
