@@ -189,29 +189,30 @@
         \(\ddot{y}\), and \(\ddot{\phi}\) into the equation for \( X_{t + \Delta
         t} \). These accelerations are directly derived from the drone's
         dynamics, which include the influence of forces and torques resulting
-        from the rotor thrusts and environmental interactions.
+        from the rotor thrusts and earth's gravity.
       </p>
       <div class="equation">
         \( X_t + \Delta t \dot{X}_t= \begin{bmatrix} x \\ y \\ \phi \\ \dot{x}
         \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \Delta t \begin{bmatrix}
         \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\ \ddot{y} \\ \ddot{\phi}
         \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi \\ \dot{x} \\ \dot{y}
-        \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix} \vdots \\ \frac{\Delta
-        t\sin{\phi}(F_1 + F_2)}{m} \\ \Delta t(g - \cos{\phi}(F_1 + F_2)) \\
-        \frac{\Delta tL(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t \)
+        \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix} \Delta t\dot{x} \\
+        \Delta t\dot{y} \\ \Delta t\dot{\phi} \\ \frac{\Delta t\sin{\phi}(F_1 +
+        F_2)}{m} \\ \Delta t(g - \cos{\phi}(F_1 + F_2)) \\ \frac{\Delta tL(F_{2}
+        - F_{1})}{I_{x}} \end{bmatrix}_t \)
       </div>
     </section>
 
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="newton1687">
-        Newton, I. (1687). Philosophiæ Naturalis Principia Mathematica.
+        Newton, I. (1687). Philosophiæ Naturalis Principia Mathematica
       </cite>
       <cite id="euler1768">
-        Euler, L. (1768-1772). Institutiones calculi integralis.
+        Euler, L. (1768-1772). Institutiones calculi integralis
       </cite>
       <cite id="archimedes">
-        Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν.
+        Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν
       </cite>
     </div>
   </body>
