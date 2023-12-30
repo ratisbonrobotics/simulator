@@ -10,11 +10,12 @@
       text-align: center;
       margin: 10px;
     }
+  </style>
 
-    .reflist {
+  <!--  <style>
+        .reflist {
       list-style: none;
     }
-
     img.fig {
       width: 100%;
       max-width: 300px;
@@ -34,7 +35,7 @@
     th {
       background-color: #f2f2f2;
     }
-  </style>
+  </style>-->
   <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML"></script>
 </head>
@@ -45,7 +46,6 @@
     <div class="authors">
       <div class="author">
         <div>Markus Heimerl</div>
-        <div>Department of Research and Development</div>
         <div>Ratisbon Robotics</div>
         <div>Regensburg, Germany</div>
         <div>markusheimerl@ratisbonrobotics.com</div>
@@ -87,10 +87,13 @@
       The thrust \(F_{1}\) and \(F_{2}\) of the two rotors, in combination with environmental influences, produce all
       forces
       that result in changes to the state vector \(X\).</p>
-    <div class="figure">
-      <img class="fig" src="2d_drone.png" alt="Two-dimensional drone">
-      <p class="caption">Figure 1: Two-dimensional drone representation.</p>
-    </div>
+    <figure>
+      <figcaption>Two-dimensional drone representation.</figcaption>
+      <div style="border: 1px solid #000; margin-top: 6px;">
+        <img src="2d_drone.svg" alt="Two-dimensional drone">
+      </div>
+    </figure>
+
     <p>The thrusts \(F_{1}\) and \(F_{2}\) are directed at an angle \(\phi\) to the y-axis. </p>
 
     <h2>Dynamics</h2>
