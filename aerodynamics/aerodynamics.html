@@ -230,6 +230,54 @@
       </p>
     </section>
 
+    <h1>Three Dimensions</h1>
+    <section>
+      <h2>State Representation</h2>
+      <p>
+        The three-dimensional state vector, \(X\), extends the two-dimensional
+        model by integrating additional spatial and rotational parameters.
+      </p>
+      <div class="equation">
+        \( X = [x, y, z, \theta, \phi, \psi, \dot{x}, \dot{y}, \dot{z},
+        \dot{\alpha}, \dot{\beta}, \dot{\gamma}] \)
+      </div>
+      <p>where</p>
+      <ul>
+        <li>\(x, y, z\) denote the drone's positional coordinates in space,</li>
+        <li>
+          \(\dot{x}, \dot{y}, \dot{z}\) represent linear velocities along the x,
+          y, and z axes,
+        </li>
+        <li>
+          \(\theta, \phi, \psi\) stand for rotational angles around the x, y,
+          and z axes, respectively,
+        </li>
+        <li>
+          \(\dot{\alpha}, \dot{\beta}, \dot{\gamma}\) hold the angular
+          velocities about the three axes within the drone's frame of reference.
+        </li>
+      </ul>
+
+      <figure>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="3d_drone_coordinate_system.png"
+            alt="Representation of world and body coordinate systems in 3D"
+            style="
+              max-width: 30%;
+              max-height: 30%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+        <figcaption>
+          Diagram illustrating the world and body coordinate systems in a 3D
+          space.
+        </figcaption>
+      </figure>
+    </section>
+
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="newton1687">
