@@ -87,11 +87,13 @@
       </div>
       <p>
         Here, \(X\) encapsulates the drone's coordinates (\(x, y\)), rotational
-        angle (\(\psi\)) about the x-axis, and their corresponding velocities
-        (\(\dot{x}, \dot{y}, \dot{\psi}\)). The thrust forces (\(F_{1}\) and
-        \(F_{2}\)) from the rotors, combined with environmental factors, result
-        in the alteration of the state vector \(X\). The thrusts \(F_{1}\) and
-        \(F_{2}\) are angled relative to the y-axis by \(\psi\).
+        angle (\(\psi\)), and their corresponding velocities
+        <span style="white-space: nowrap"
+          >(\(\dot{x}, \dot{y}, \dot{\psi}\))</span
+        >. The thrust forces (\(F_{1}\) and \(F_{2}\)) from the rotors, combined
+        with environmental factors, result in the alteration of the state vector
+        \(X\). The thrusts \(F_{1}\) and \(F_{2}\) are angled relative to the
+        y-axis by \(\psi\).
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -135,7 +137,7 @@
         the orientation angle (\(\psi\)).
       </p>
       <div class="equation">
-        \[ F_{y} = \cos(\psi)F_{total} \qquad F_{x} = \sin(\psi)F_{total} \]
+        \[ F_{x} = \sin(\psi)F_{total} \qquad F_{y} = \cos(\psi)F_{total} \]
       </div>
 
       <figure>
@@ -164,8 +166,8 @@
         \frac{m}{s^2} \).
       </p>
       <div class="equation">
-        \[ \ddot{y} = \frac{(F_{y} - F_{g})}{m} = \frac{F_{y}}{m} - g \qquad
-        \ddot{x} = \frac{F_{x}}{m} \]
+        \[ \ddot{x} = \frac{F_{x}}{m} \qquad \ddot{y} = \frac{(F_{y} -
+        F_{g})}{m} = \frac{F_{y}}{m} - g \]
       </div>
       <p>
         We employ two torque formulas (\(M_{x}\)), each with distinct historical
@@ -288,7 +290,7 @@
         </div>
         <figcaption>
           Three-dimensional state representation of a drone, illustrating
-          positional coordinates and rotational angles in space
+          positional coordinates and rotational angles in space.
         </figcaption>
       </figure>
 
@@ -298,12 +300,17 @@
         rotor speeds (\(\omega_{i}\)) and thrust (\(F_{i}\)):
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
+
+      <div class="equation">
+        \[ \begin{align*} F_{x} &= \cos(\phi)F_{total} \\ F_{y} &=
+        \cos(\psi)F_{xy} \\ F_{z} &= \cos(\theta)F_{total} \end{align*} \]
+      </div>
     </section>
 
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="newton1687">
-        Newton, I. (1687). psilosopsiæ Naturalis Principia Mathematica
+        Newton, I. (1687). Philosopsiæ Naturalis Principia Mathematica
       </cite>
       <cite id="euler1768">
         Euler, L. (1768-1772). Institutiones calculi integralis
