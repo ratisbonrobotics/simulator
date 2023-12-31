@@ -83,15 +83,15 @@
         state \(X\) for subsequent discrete time intervals.
       </p>
       <div class="equation">
-        \( X = [x, y, \phi, \dot{x}, \dot{y}, \dot{\phi}] \)
+        \( X = [x, y, \psi, \dot{x}, \dot{y}, \dot{\psi}] \)
       </div>
       <p>
         Here, \(X\) encapsulates the drone's coordinates (\(x, y\)), rotational
-        angle (\(\phi\)) about the x-axis, and their corresponding velocities
-        (\(\dot{x}, \dot{y}, \dot{\phi}\)). The thrust forces (\(F_{1}\) and
+        angle (\(\psi\)) about the x-axis, and their corresponding velocities
+        (\(\dot{x}, \dot{y}, \dot{\psi}\)). The thrust forces (\(F_{1}\) and
         \(F_{2}\)) from the rotors, combined with environmental factors, result
         in the alteration of the state vector \(X\). The thrusts \(F_{1}\) and
-        \(F_{2}\) are angled relative to the y-axis by \(\phi\).
+        \(F_{2}\) are angled relative to the y-axis by \(\psi\).
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -132,10 +132,10 @@
         based on principles established in Euclid's work
         <a href="#euclid300bc">4</a>, derived from the total thrust force
         <span style="white-space: nowrap">(\(F_{total} = F_1 + F_2\))</span> and
-        the orientation angle (\(\phi\)).
+        the orientation angle (\(\psi\)).
       </p>
       <div class="equation">
-        \[ F_{y} = \cos(\phi)F_{total} \qquad F_{x} = \sin(\phi)F_{total} \]
+        \[ F_{y} = \cos(\psi)F_{total} \qquad F_{x} = \sin(\psi)F_{total} \]
       </div>
 
       <figure>
@@ -154,10 +154,10 @@
         <figcaption>Forces acting on a two-dimensional drone.</figcaption>
       </figure>
       <p>
-        Changes in the drone's position (\(x, y, \phi\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
+        Changes in the drone's position (\(x, y, \psi\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}, \dot{\psi}\)), which in
         turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{\phi}\)). These accelerations are calculated using Newton's second
+        \ddot{\psi}\)). These accelerations are calculated using Newton's second
         law <span style="white-space: nowrap">(\(F = ma\))</span>
         <a href="#newton1687">1</a> and the gravitational force (\(F_{g} =
         mg\)), with \(g\) being earth's gravitational constant \( 9.81
@@ -169,21 +169,21 @@
       </div>
       <p>
         We employ two torque formulas (\(M_{x}\)), each with distinct historical
-        and physical foundations. The first, \(M_{x} = F_{\phi} L\), originates
+        and physical foundations. The first, \(M_{x} = F_{\psi} L\), originates
         from Archimedes' concept of leverage
-        <a href="#archimedes250bc">3</a>, where \(F_{\phi} = F_{2} - F_{1}\)
+        <a href="#archimedes250bc">3</a>, where \(F_{\psi} = F_{2} - F_{1}\)
         represents the force from the drone's rotors and \(L\) is the lever arm
         - the distance from the center of mass to the motors. This equation
         captures the rotational effect of force. The second, \(M_{x} = I_{x}
-        \ddot{\phi}\), is grounded in Newton's laws of motion
+        \ddot{\psi}\), is grounded in Newton's laws of motion
         <a href="#newton1687">1</a>, linking torque (\(M_{x}\)) with the drone's
         moment of inertia (\(I_{x}\)) and angular acceleration
-        (\(\ddot{\phi}\)). Together, these formulas allow us to determine the
+        (\(\ddot{\psi}\)). Together, these formulas allow us to determine the
         angular acceleration of the drone.
       </p>
       <div class="equation">
-        \[ M_{x} = F_{\phi}L \\ I_{x} \ddot{\phi} = (F_{2} - F_{1})L \\
-        \ddot{\phi} = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
+        \[ M_{x} = F_{\psi}L \\ I_{x} \ddot{\psi} = (F_{2} - F_{1})L \\
+        \ddot{\psi} = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
       </div>
 
       <p>
@@ -207,20 +207,20 @@
       <p>
         To thoroughly describe the time evolution of the drone's state, we
         substitude the explicit expressions for the accelerations \(\ddot{x}\),
-        \(\ddot{y}\), and \(\ddot{\phi}\) into the equation for \( X_{t + \Delta
+        \(\ddot{y}\), and \(\ddot{\psi}\) into the equation for \( X_{t + \Delta
         t} \). These accelerations are directly derived from the drone's
         dynamics, which include the influence of forces and torques resulting
         from the rotor speeds and earth's gravity.
       </p>
       <div class="equation">
         \( X_{t + \Delta t} \approx X_t + \Delta t \dot{X}_t= \begin{bmatrix} x
-        \\ y \\ \phi \\ \dot{x} \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t +
-        \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\phi} \\ \ddot{x} \\
-        \ddot{y} \\ \ddot{\phi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi
-        \\ \dot{x} \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix}
-        \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\phi} \\ \frac{\Delta
-        t\sin(\phi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
-        \frac{\cos(\phi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
+        \\ y \\ \psi \\ \dot{x} \\ \dot{y} \\ \dot{\psi} \end{bmatrix}_t +
+        \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\psi} \\ \ddot{x} \\
+        \ddot{y} \\ \ddot{\psi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \psi
+        \\ \dot{x} \\ \dot{y} \\ \dot{\psi} \end{bmatrix}_t + \begin{bmatrix}
+        \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
+        t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
+        \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
         tLk_f(\omega_2^2 - \omega_1^2)}{I_{x}} \end{bmatrix}_t \)
       </div>
       <h2>Mechanical Constants</h2>
@@ -295,7 +295,7 @@
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="newton1687">
-        Newton, I. (1687). Philosophiæ Naturalis Principia Mathematica
+        Newton, I. (1687). psilosopsiæ Naturalis Principia Mathematica
       </cite>
       <cite id="euler1768">
         Euler, L. (1768-1772). Institutiones calculi integralis
