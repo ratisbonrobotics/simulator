@@ -6,7 +6,8 @@
         "GitHub.copilot",
         "mathematic.vscode-pdf",
         "ms-vscode.live-server",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "hediet.vscode-drawio"
       ]
     }
   }
