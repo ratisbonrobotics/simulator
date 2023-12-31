@@ -113,28 +113,17 @@
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
       <p>
-        Changes in the drone's position (\(x, y, \phi\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
-        turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{\phi}\)). These accelerations are calculated using Newton's second
-        law <span style="white-space: nowrap">(\(F = ma\))</span>
-        <a href="#newton1687">1</a> and the gravitational force (\(F_{g} =
-        mg\)), with \(g\) being the gravitational constant \( 9.81 \frac{m}{s^2}
-        \).
-      </p>
-      <div class="equation">
-        \[ -\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
-        \frac{F_{x}}{m} \]
-      </div>
-      <p>
         The thrust components \(F_{x}\) and \(F_{y}\), acting along the x-axis
-        and y-axis respectively, are computed using trigonometric relationships
-        derived from the total thrust force (\(F_{total} = F_1 + F_2\)) and the
-        orientation angle (\(\phi\)).
+        and y-axis respectively, are determined by trigonometric relationships,
+        based on principles established in Euclid's work
+        <a href="#euclid300bc">4</a>, derived from the total thrust force
+        <span style="white-space: nowrap">(\(F_{total} = F_1 + F_2\))</span> and
+        the orientation angle (\(\phi\)).
       </p>
       <div class="equation">
-        \[ F_{y} = F_{total} \cos{\phi} \qquad F_{x} = F_{total} \sin{\phi} \]
+        \[ F_{y} = \cos(\phi)F_{total} \qquad F_{x} = \sin(\phi)F_{total} \]
       </div>
+
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
@@ -151,10 +140,24 @@
         <figcaption>Forces acting on a two-dimensional drone.</figcaption>
       </figure>
       <p>
-        In drone dynamics, we employ two torque formulas (\(M_{x}\)), each with
-        distinct historical and physical foundations. The first, \(M_{x} =
-        F_{\phi} L\), originates from Archimedes' concept of leverage
-        <a href="#archimedes">3</a>, where \(F_{\phi} = F_{2} - F_{1}\)
+        Changes in the drone's position (\(x, y, \phi\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
+        turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
+        \ddot{\phi}\)). These accelerations are calculated using Newton's second
+        law <span style="white-space: nowrap">(\(F = ma\))</span>
+        <a href="#newton1687">1</a> and the gravitational force (\(F_{g} =
+        mg\)), with \(g\) being earth's gravitational constant \( 9.81
+        \frac{m}{s^2} \).
+      </p>
+      <div class="equation">
+        \[ \ddot{y} = \frac{(F_{y} - F_{g})}{m} = \frac{F_{y}}{m} - g \qquad
+        \ddot{x} = \frac{F_{x}}{m} \]
+      </div>
+      <p>
+        We employ two torque formulas (\(M_{x}\)), each with distinct historical
+        and physical foundations. The first, \(M_{x} = F_{\phi} L\), originates
+        from Archimedes' concept of leverage
+        <a href="#archimedes250bc">3</a>, where \(F_{\phi} = F_{2} - F_{1}\)
         represents the force from the drone's rotors and \(L\) is the lever arm
         - the distance from the center of mass to the motors. This equation
         captures the rotational effect of force. The second, \(M_{x} = I_{x}
@@ -202,14 +205,14 @@
         \ddot{y} \\ \ddot{\phi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi
         \\ \dot{x} \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix}
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\phi} \\ \frac{\Delta
-        t\sin{\phi}(F_1 + F_2)}{m} \\ \Delta t(g - \cos{\phi}(F_1 + F_2)) \\
-        \frac{\Delta tL(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t \)
+        t\sin(\phi)(F_1 + F_2)}{m} \\ \Delta t(g - \frac{\cos(\phi)(F_1 +
+        F_2)}{m}) \\ \frac{\Delta tL(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t \)
       </div>
     </section>
 
     <h1>Three Dimensions</h1>
     <section>
-      <h2>State Representation in Three Dimensions</h2>
+      <h2>State Representation</h2>
       <p>
         The three-dimensional state vector, \(X\), extends the two-dimensional
         model by integrating additional spatial and rotational parameters. It is
@@ -262,7 +265,7 @@
         </figcaption>
       </figure>
 
-      <h2>Dynamics</h2>
+      <h2>Dynamics Formulation</h2>
       <p>
         Equation (2) still applies here as before. Analogous to Equation 10, in
         the three-dimensional case, we also require the derivative \(\dot{X}\)
@@ -394,9 +397,10 @@
       <cite id="euler1768">
         Euler, L. (1768-1772). Institutiones calculi integralis
       </cite>
-      <cite id="archimedes">
+      <cite id="archimedes250bc">
         Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν
       </cite>
+      <cite id="euclid300bc"> Euclid (ca. 300 BC). Στοιχεῖα</cite>
     </div>
   </body>
 </html>
