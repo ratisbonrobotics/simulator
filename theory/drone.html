@@ -196,7 +196,7 @@
         \(\ddot{y}\), and \(\ddot{\phi}\) into the equation for \( X_{t + \Delta
         t} \). These accelerations are directly derived from the drone's
         dynamics, which include the influence of forces and torques resulting
-        from the rotor thrusts and earth's gravity.
+        from the rotor speeds and earth's gravity.
       </p>
       <div class="equation">
         \( X_{t + \Delta t} \approx X_t + \Delta t \dot{X}_t= \begin{bmatrix} x
@@ -205,188 +205,29 @@
         \ddot{y} \\ \ddot{\phi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \phi
         \\ \dot{x} \\ \dot{y} \\ \dot{\phi} \end{bmatrix}_t + \begin{bmatrix}
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\phi} \\ \frac{\Delta
-        t\sin(\phi)(F_1 + F_2)}{m} \\ \Delta t(g - \frac{\cos(\phi)(F_1 +
-        F_2)}{m}) \\ \frac{\Delta tL(F_{2} - F_{1})}{I_{x}} \end{bmatrix}_t \)
+        t\sin(\phi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
+        \frac{\cos(\phi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
+        tLk_f(\omega_2^2 - \omega_1^2)}{I_{x}} \end{bmatrix}_t \)
       </div>
-    </section>
-
-    <h1>Three Dimensions</h1>
-    <section>
-      <h2>State Representation</h2>
+      <h2>Mechanical Constants</h2>
       <p>
-        The three-dimensional state vector, \(X\), extends the two-dimensional
-        model by integrating additional spatial and rotational parameters. It is
-        crucial for representing the drone's comprehensive state in
-        three-dimensional space.
+        To determine \(I_x\), we consider the drone's geometry and mass
+        distribution. The general formula, \(I = \sum (m_i \cdot r_i^2)\), where
+        \(m_i\) represents the mass of a small segment at distance \(r_i\) from
+        the center along the axis, is used. For continuous bodies, this
+        summation transforms into an integral, taking into account the
+        continuous radial mass distribution.
       </p>
-      <div class="equation">
-        \( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z}, p, q, r]
-        \)
-      </div>
-      <p>The elements of state vector \(X\) include:</p>
-      <ul>
-        <li>\(x, y, z\): The drone's positional coordinates in 3D space,</li>
-        <li>
-          \(\dot{x}, \dot{y}, \dot{z}\): Linear velocities along the x, y, and z
-          axes,
-        </li>
-        <li>
-          \(\phi, \theta, \psi\): Euler rotational angles around the x, y, and z
-          axes, respectively,
-        </li>
-        <li>
-          \(p, q, r\): Angular velocities related to the above axes, within the
-          drone's frame of reference.
-        </li>
-      </ul>
       <p>
-        It is imperative to differentiate between the "world coordinate system",
-        an external fixed reference frame, and the "body coordinate system",
-        which is intrinsic to the drone and changes with its movements and
-        orientation.
+        The calculation of the thrust coefficient (\(k_f\)) is influenced by
+        both physical and operational specifics of the rotor. The rotor's design
+        parameters such as the size, arrangement, and the number of blades have
+        a significant impact on \(k_f\). Crucially, the individual rotor blades
+        are typically curved and tilted to create an airfoil shape, which moves
+        air downwards. The magnitude of the generated thrust varies with rotor
+        speed, and by investigating this via computational fluid dynamics
+        simulations, a mathematical correlation can be constructed.
       </p>
-
-      <figure>
-        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
-          <img
-            src="3d_drone_coordinate_system.png"
-            alt="Representation of world and body coordinate systems in 3D"
-            style="
-              max-width: 30%;
-              max-height: 30%;
-              display: block;
-              margin: auto;
-            "
-          />
-        </div>
-        <figcaption>
-          Diagram illustrating the world and body coordinate systems in a 3D
-          space.
-        </figcaption>
-      </figure>
-
-      <h2>Dynamics Formulation</h2>
-      <p>
-        Equation (2) still applies here as before. Analogous to Equation 10, in
-        the three-dimensional case, we also require the derivative \(\dot{X}\)
-        of the state vector to move the state forward in time. Equations (3)
-        still apply but now, analogous to \(\ddot{y}\), we add the formula for
-        \(\ddot{x}\). In summary, still derived from Newton's \(F = ma\), we
-        have
-      </p>
-      <div class="equation">
-        \[ \ddot{z} = \frac{F_{g} - F_{z}}{m} = g - F_{z} \qquad \ddot{y} =
-        \frac{F_{y}}{m} \qquad \ddot{x} = \frac{F_{x}}{m} \]
-      </div>
-      <p>
-        Different from the two-dimensional case, however, are the formulas for
-        \(F_{x}\), \(F_{y}\), and \(F_{z}\). Here a rotation matrix is defined,
-        which transforms any vector from the body coordinate system into a
-        vector in the world coordinate system through multiplication.
-        Essentially, the matrix is still based on triangle trigonometry. The
-        matrix \(R_{Body}^{World}\) is
-      </p>
-      <div class="equation">
-        \begin{align*} R_{Body}^{World} &= \left[ \begin{array}{ccc} 1 & 0 & 0
-        \\ 0 & \cos(\phi) & -\sin(\phi) \\ 0 & \sin(\phi) & \cos(\phi) \\
-        \end{array} \right] \left[ \begin{array}{ccc} \cos(\theta) & 0 &
-        \sin(\theta) \\ 0 & 1 & 0 \\ -\sin(\theta) & 0 & \cos(\theta) \\
-        \end{array} \right] \left[ \begin{array}{ccc} \cos(\psi) & -\sin(\psi) &
-        0 \\ \sin(\psi) & \cos(\psi) & 0 \\ 0 & 0 & 1 \\ \end{array} \right] \\
-        &= \left[ \begin{array}{ccc} c(\psi)c(\theta) & c(\psi)s(\theta)s(\phi)
-        - s(\psi)c(\phi) & s(\psi)s(\phi) + c(\psi)s(\theta)c(\phi) \\
-        s(\psi)c(\theta) & c(\psi)c(\phi) + s(\psi)s(\theta)s(\phi) &
-        s(\psi)s(\theta)c(\phi) - c(\psi)s(\phi) \\ -s(\theta) &
-        c(\theta)s(\phi) & c(\theta)c(\phi) \end{array} \right] \end{align*}
-      </div>
-      <p>
-        So, from Equations (22) and (23), we derive the formulas for axis
-        accelerations in the world coordinate system as
-      </p>
-      <div class="equation">
-        \[ \begin{bmatrix} \ddot{x} \\ \ddot{y} \\ \ddot{z} \end{bmatrix} =
-        \left[ \begin{array}{c} 0 \\ 0 \\ g \end{array} \right] + \frac{1}{m}\:
-        R_{Body}^{World} \left[ \begin{array}{c} 0 \\ 0 \\ -F_{total}
-        \end{array} \right] = \left[ \begin{array}{c}
-        R_{13}\frac{1}{m}(-F_{total}) \\ R_{23}\frac{1}{m}(-F_{total}) \\ g +
-        R_{33}\frac{1}{m}(-F_{total}) \end{array} \right] \]
-      </div>
-      <p>
-        Here it is also shown that the propellers generate thrust in the
-        direction \(-kz\). On Earth, \(g = 9.81 \frac{m}{s^2}\). And the total
-        force now results from the sum of all four rotors, so that
-      </p>
-      <div class="equation">
-        \( F_{total} = \sum_{1}^{i} F_{i} = F_{1} + F_{2} + F_{3} + F_{4} \)
-      </div>
-      <figure>
-        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
-          <img
-            src="3d_drone_from_above.png"
-            alt="3D Drone from above: Propeller rotation directions and numbers. \(kz\) goes into the plane of the drawing."
-            style="
-              max-width: 30%;
-              max-height: 30%;
-              display: block;
-              margin: auto;
-            "
-          />
-        </div>
-        <figcaption>
-          3D Drone from above: Propeller rotation directions and numbers. \(kz\)
-          goes into the plane of the drawing.
-        </figcaption>
-      </figure>
-      <p>
-        The accelerations around the body axes \(\dot{p}\), \(\dot{q}\), and
-        \(\dot{r}\) are calculated by the Euler's equation of motion, which is
-      </p>
-      <div class="equation">
-        \[ M = I\dot{\omega} + \omega \times (I\omega) = \begin{bmatrix} M_{x}
-        \\ M_{y} \\ M_{z} \end{bmatrix} = \begin{bmatrix} I_{x} & 0 & 0 \\ 0 &
-        I_{y} & 0 \\ 0 & 0 & I_{z} \end{bmatrix} \begin{bmatrix} \dot{p} \\
-        \dot{q} \\ \dot{r} \end{bmatrix} + \begin{bmatrix} p \\ q \\ r
-        \end{bmatrix} \times \left( \begin{bmatrix} I_{x} & 0 & 0 \\ 0 & I_{y} &
-        0 \\ 0 & 0 & I_{z} \end{bmatrix} \begin{bmatrix} p \\ q \\ r
-        \end{bmatrix} \right) \]
-      </div>
-      <p>
-        The moments of inertia \(I_{x}\), \(I_{y}\), and \(I_{z}\) are
-        determined by experiments, as explained in Chapter
-        <a href="#chapter-SimulationParameterDetermination"
-          >Simulation Parameter Determination</a
-        >. By rearranging, we then get the accelerations as
-      </p>
-      <div class="equation">
-        \[ \begin{bmatrix} \dot{p} \\ \dot{q} \\ \dot{r} \end{bmatrix} =
-        \begin{bmatrix} \frac{M_{x} - rq(I_{x} - I_{y})}{I_{x}} \\ \frac{M_{y} -
-        rp(I_{x} - I_{z})}{I_{y}} \\ \frac{M_{z} - pq(I_{y} - I_{x})}{I_{z}}
-        \end{bmatrix} \]
-      </div>
-
-      <p>
-        As remaining necessary quantities to establish \(\dot{X}\), which is the
-        goal in dynamics, we have the velocities about the world coordinate
-        system axes \(\dot{\phi}\), \(\dot{\theta}\), and \(\dot{\psi}\). These
-        are obtained, like the linear accelerations in Equation \ref{eq:24} with
-        the help of a rotation matrix specifically for Euler angle velocities.
-      </p>
-      <div class="equation">
-        \[ \begin{bmatrix} \dot{\phi} \\ \dot{\theta} \\ \dot{\psi}
-        \end{bmatrix} = \begin{bmatrix} 1 & \sin(\phi)\tan(\theta) &
-        \cos(\phi)\tan(\theta) \\ 0 & \cos(\phi) & -\sin(\phi) \\ 0 &
-        \sin(\phi)/\cos(\theta) & \cos(\phi)/\cos(\theta) \end{bmatrix}
-        \begin{bmatrix} p \\ q \\ r \end{bmatrix} \]
-      </div>
-
-      <p>
-        Thus, the state of the quadrotor at time \(t\) can be determined by the
-        sum of the state \(X(t)\) and the integral of the state's derivative
-        \(\dot{X}\).
-      </p>
-      <div class="equation">
-        \[ X(t + \Delta t) = X(t) + \int_{t}^{t+\Delta t}\dot{X}(\tau) d\tau \]
-      </div>
     </section>
 
     <h5 class="references">References</h5>
