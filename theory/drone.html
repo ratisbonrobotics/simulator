@@ -113,9 +113,10 @@
         integration of velocities (\(\dot{x}, \dot{y}, \dot{\phi}\)), which in
         turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
         \ddot{\phi}\)). These accelerations are calculated using Newton's second
-        law (\(F = ma\)) <a href="#newton1687">1</a> and the gravitational force
-        (\(F_{g} = mg\)), with \(g\) being the gravitational constant \( 9.81
-        \frac{m}{s^2} \).
+        law <span style="white-space: nowrap">(\(F = ma\))</span>
+        <a href="#newton1687">1</a> and the gravitational force (\(F_{g} =
+        mg\)), with \(g\) being the gravitational constant \( 9.81 \frac{m}{s^2}
+        \).
       </p>
       <div class="equation">
         \[ -\ddot{y} = \frac{F_{g} - F_{y}}{m} = F_{y} - g \qquad \ddot{x} =
@@ -172,9 +173,10 @@
         computational simplicity, we often use an approximation method developed
         by Leonhard Euler in the 18th century <a href="#euler1768">2</a>.
         Euler's method approximates the future state by assuming a constant rate
-        of change (\( \dot{X}_t \)) over a small interval (\( \Delta t \approx
-        0.01\)), simplifying the integral to a product of the rate of change and
-        the time interval.
+        of change (\( \dot{X}_t \)) over a small interval
+        <span style="white-space: nowrap">(\( \Delta t \approx 0.01\))</span>,
+        simplifying the integral to a product of the rate of change and the time
+        interval.
       </p>
       <div class="equation">
         \[ X_{t + \Delta t} = X_{t} + \int_{t}^{t+\Delta t} \dot{X}_{\tau} d\tau
