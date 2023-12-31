@@ -190,7 +190,7 @@ droneDynamics();
 function droneDynamics() {
 	if (running) {
 		drone.advanceState(0.0001);
-		droneModelMatrix = createModelMatrix(drone.x, drone.y, drone.z, drone.phi, drone.theta, drone.psi, 1.0, 1.0, 1.0);
+		//droneModelMatrix = createModelMatrix(drone.x, drone.y, drone.z, drone.phi, drone.theta, drone.psi, 1.0, 1.0, 1.0);
 		console.log(drone.x, drone.y, drone.z, drone.phi, drone.theta, drone.psi, 1.0, 1.0, 1.0);
 	}
 	setTimeout(droneDynamics, 10);
