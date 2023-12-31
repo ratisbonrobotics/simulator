@@ -213,7 +213,7 @@
         from the rotor speeds and earth's gravity.
       </p>
       <div class="equation">
-        \( X_{t + \Delta t} \approx X_t + \Delta t \dot{X}_t= \begin{bmatrix} x
+        \[ X_{t + \Delta t} \approx X_t + \Delta t \dot{X}_t= \begin{bmatrix} x
         \\ y \\ \psi \\ \dot{x} \\ \dot{y} \\ \dot{\psi} \end{bmatrix}_t +
         \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\psi} \\ \ddot{x} \\
         \ddot{y} \\ \ddot{\psi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \psi
@@ -221,16 +221,17 @@
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
         t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
         \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
-        tLk_f(\omega_2^2 - \omega_1^2)}{I_{x}} \end{bmatrix}_t \)
+        tLk_f(\omega_2^2 - \omega_1^2)}{I_{x}} \end{bmatrix}_t \]
       </div>
       <h2>Mechanical Constants</h2>
       <p>
         To determine \(I_x\), we consider the drone's geometry and mass
-        distribution. The general formula, \(I = \sum (m_i \cdot r_i^2)\), where
-        \(m_i\) represents the mass of a small segment at distance \(r_i\) from
-        the center along the axis, is used. For continuous bodies, this
-        summation transforms into an integral, taking into account the
-        continuous radial mass distribution.
+        distribution. The general formula,
+        <span style="white-space: nowrap">\(I = \sum_i(m_i r_i^2)\)</span>,
+        where represents the masses (\(m_i\)) of small segments at different
+        distances (\(r_i\)) from the center along a shared axis, are summed. For
+        continuous bodies, this summation transforms into an integral, taking
+        into account the continuous radial mass distribution.
       </p>
       <p>
         The calculation of the thrust coefficient (\(k_f\)) is influenced by
@@ -276,7 +277,7 @@
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
             src="3d_drone.svg"
-            alt="Representation of world and body coordinate systems in 3D"
+            alt="Three-dimensional state representation of a drone, illustrating positional coordinates and rotational angles in space"
             style="
               max-width: 100%;
               max-height: 100%;
@@ -286,10 +287,17 @@
           />
         </div>
         <figcaption>
-          Diagram illustrating the world and body coordinate systems in a 3D
-          space.
+          Three-dimensional state representation of a drone, illustrating
+          positional coordinates and rotational angles in space
         </figcaption>
       </figure>
+
+      <h2>Dynamics Formulation</h2>
+      <p>
+        Extending to three dimensions, we maintain the relationship between
+        rotor speeds (\(\omega_{i}\)) and thrust (\(F_{i}\)):
+      </p>
+      <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
     </section>
 
     <h5 class="references">References</h5>
