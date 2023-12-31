@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Formalizing Aerodynamics</title>
+    <title>A formalization of co-axial rotored aerodynamics</title>
     <link rel="stylesheet" href="pubcss-ieee.css" />
     <style>
       .equation {
@@ -19,7 +19,9 @@
 
   <body>
     <header class="col-span">
-      <h1 class="title counter-skip">Formalizing Aerodynamics</h1>
+      <h1 class="title counter-skip">
+        A formalization of co-axial rotored aerodynamics
+      </h1>
       <div class="authors">
         <div class="author">
           <div>Markus Heimerl</div>
@@ -32,10 +34,10 @@
 
     <div class="abstract">
       <p>
-        <em>Abstract</em>—This work presents a formalization of dual and quad
-        rotor aerodynamic principles, which are integral branches of fluid
-        dynamics. This effort is aimed at establishing a solid theoretical
-        foundation for aeronautics and related disciplines.
+        <em>Abstract</em>—This work presents a formalization of co-axial dual
+        and quad rotor aerodynamic principles, integral branches of fluid
+        dynamics. This effort aims to establish a solid theoretical foundation
+        for aeronautics and related disciplines.
       </p>
       <p>
         <em>Keywords</em>—drone dynamics, formalization, 2D and 3D frameworks,
@@ -47,11 +49,15 @@
     <h1>Introduction</h1>
     <section>
       <p>
-        The objective of this wrk is to formalize the principles of dual and
-        quad rotor aerodynamics, as a specialized area within the broader field
-        of fluid dynamics. This formalization provides a foundational basis for
+        The objective of this work is to formalize the principles of co-axial
+        dual and quad rotor aerodynamics, a specialized area within fluid
+        dynamics. Co-axial rotors refer to systems where multiple rotors are
+        aligned along the same rotational axis, commonly facing in the same
+        direction. This formalization provides a foundational basis for
         practical applications in aeronautics, specifically in the design and
-        operation of airborne vehicles.
+        operation of airborne vehicles. In this context, "drone" refers to both
+        dual and quad rotor systems, where dual rotor implies a system with two
+        rotating propellers and quad rotor denotes a system with four.
       </p>
     </section>
 
@@ -205,37 +211,38 @@
     <section>
       <h2>State Representation in Three Dimensions</h2>
       <p>
-        Expanding upon the two-dimensional model, the three-dimensional
-        simulation of a drone incorporates additional parameters to fully
-        capture its state in space. This expanded state vector, \(X\), in three
-        dimensions, includes both positional and rotational elements, alongside
-        their respective velocities.
+        The three-dimensional state vector, \(X\), extends the two-dimensional
+        model by integrating additional spatial and rotational parameters. It is
+        crucial for representing the drone's comprehensive state in
+        three-dimensional space.
       </p>
       <div class="equation">
         \( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z}, p, q, r]
         \)
       </div>
-      <p>The state vector \(X\) is composed of:</p>
+      <p>The elements of state vector \(X\) include:</p>
       <ul>
-        <li>\(x, y, z\): Positional coordinates in 3D space,</li>
+        <li>\(x, y, z\): The drone's positional coordinates in 3D space,</li>
         <li>
-          \(\dot{x}, \dot{y}, \dot{z}\): Velocities along the x, y, and z axes,
+          \(\dot{x}, \dot{y}, \dot{z}\): Linear velocities along the x, y, and z
+          axes,
         </li>
         <li>
-          \(\phi, \theta, \psi\): Rotational angles (Euler angles) about the x,
-          y, and z axes, respectively, and
+          \(\phi, \theta, \psi\): Euler rotational angles around the x, y, and z
+          axes, respectively,
         </li>
         <li>
-          \(p, q, r\): Angular velocities about these axes, described in the
-          drone's own frame of reference.
+          \(p, q, r\): Angular velocities related to the above axes, within the
+          drone's frame of reference.
         </li>
       </ul>
       <p>
-        The distinction between the "world coordinate system" and the "body
-        coordinate system" is crucial. The former refers to a fixed external
-        reference frame, while the latter is attached to the drone itself,
-        moving and rotating with it.
+        It is imperative to differentiate between the "world coordinate system",
+        an external fixed reference frame, and the "body coordinate system",
+        which is intrinsic to the drone and changes with its movements and
+        orientation.
       </p>
+
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
