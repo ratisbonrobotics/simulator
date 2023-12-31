@@ -132,12 +132,15 @@
         The thrust components \(F_{x}\) and \(F_{y}\), acting along the x-axis
         and y-axis respectively, are determined by trigonometric relationships,
         based on principles established in Euclid's work
-        <a href="#euclid300bc">4</a>, derived from the total thrust force
-        <span style="white-space: nowrap">(\(F_{total} = F_1 + F_2\))</span> and
-        the orientation angle (\(\psi\)).
+        <a href="#euclid300bc">4</a>, derived from the total thrust force in the
+        plane
+        <span style="white-space: nowrap"
+          >(\(F_{total} = F_1 + F_2\ = F_{xy}))</span
+        >
+        and the orientation angle (\(\psi\)).
       </p>
       <div class="equation">
-        \[ F_{x} = \sin(\psi)F_{total} \qquad F_{y} = \cos(\psi)F_{total} \]
+        \[ F_{x} = \sin(\psi)F_{xy} \qquad F_{y} = \cos(\psi)F_{xy} \]
       </div>
 
       <figure>
@@ -300,10 +303,35 @@
         rotor speeds (\(\omega_{i}\)) and thrust (\(F_{i}\)):
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
+      <p>
+        To determine the contribution of \( F_{total} = F_1 + F_2 + F_3 + F_4\)
+        on the xy plane, it is necessary to acknowledge that some of the force
+        from \( F_{total} \) is distributed in another plane. For this analysis,
+        consider a triangle emerging from the drawing scene. This triangle
+        comprises three points: the first, located at the center of the drone,
+        is denoted as 'A'; the second, situated at the tip of \( F_{total} \) in
+        3D space, is labeled 'B'; and the third, positioned at the tip of \(
+        F_{xy} \), is identified as 'C'. The angle at point 'C' is 90°, while
+        the angle at point 'A' is \( \theta \). The length of the hypotenuse,
+        corresponding to the magnitude of \( F_{total} \), is known. To
+        ascertain the length of \( F_{xy} \), one must consider \( \cos(\theta)
+        \). Similarly, for the xz plane, another triangle can be visualized.
+        Again, the first point 'A' is at the center of the drone. The second
+        point 'B' is at the tip of \( F_{total} \), and the third point 'C' is
+        at the apex of \( F_{xz} \). In this scenario, the angle at 'C' is 90°,
+        and the angle at 'A' is \( \psi \), indicating that \( F_{xz} \) must be
+        \( \cos(\psi) \). Continuing with this logic, for the yz plane, \(
+        F_{yz} \) must be \( \cos(\phi) \), following the same method of
+        analysis. This train of thought can then be continued to determine the
+        individual forces \( F_{x} \), \( F_{y} \), and \( F_{z} \) from \(
+        F_{xy} \), \( F_{xz} \), and \( F_{yz} \), respectively.
+      </p>
 
       <div class="equation">
-        \[ \begin{align*} F_{x} &= \cos(\phi)F_{total} \\ F_{y} &=
-        \cos(\psi)F_{xy} \\ F_{z} &= \cos(\theta)F_{total} \end{align*} \]
+        \[ \begin{alignat*}{2} F_{xz} &= \cos(\psi) F_{total} \quad & F_{x} &=
+        \cos(\phi)F_{xz} \\ F_{xy} &= \cos(\theta) F_{total} \quad & F_{y} &=
+        \cos(\psi)F_{xy} \\ F_{yz} &= \cos(\phi) F_{total} \quad & F_{z} &=
+        \cos(\theta)F_{yz} \end{alignat*} \]
       </div>
     </section>
 
