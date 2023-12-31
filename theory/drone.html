@@ -32,34 +32,30 @@
 
     <div class="abstract">
       <p>
-        <em>Abstract</em>—In this study, a comprehensive analysis of drone
-        dynamics through two-dimensional (2D) and three-dimensional (3D)
-        simulations is presented. The paper elaborates on simulation
-        methodologies in 2D and 3D spaces, discussing the determination of key
-        simulation parameters and experimental methodologies. Theoretical models
-        are formulated, and empirical data are analyzed to enhance the
-        understanding and prediction of drone behavior under various operational
-        scenarios.
+        <em>Abstract</em>—This work presents a formalization of dual and quad
+        rotor aerodynamic principles, which are integral branches of fluid
+        dynamics. This effort is aimed at establishing a solid theoretical
+        foundation for aeronautics and related disciplines.
       </p>
       <p>
-        <em>Keywords</em>—drone dynamics, 2D and 3D simulation, state vectors,
-        aerodynamics, empirical modeling, thrust dynamics, rotational mechanics.
+        <em>Keywords</em>—drone dynamics, formalization, 2D and 3D frameworks,
+        aerodynamic principles, theoretical modeling, fluid dynamics, thrust
+        dynamics, rotational mechanics, mathematical representation.
       </p>
     </div>
 
     <h1>Introduction</h1>
     <section>
       <p>
-        This paper explores the simulation of drone dynamics in both 2D and 3D
-        perspectives, emphasizing the importance of precise simulation for
-        optimizing drone flight parameters including efficiency, agility, and
-        stability. It proposes a comprehensive framework for simulating
-        realistic drone behaviors and assessing the influence of design
-        modifications and environmental factors on flight performance.
+        The objective of this wrk is to formalize the principles of dual and
+        quad rotor aerodynamics, as a specialized area within the broader field
+        of fluid dynamics. This formalization provides a foundational basis for
+        practical applications in aeronautics, specifically in the design and
+        operation of airborne vehicles.
       </p>
     </section>
 
-    <h1>Two-Dimensional Simulation</h1>
+    <h1>Two Dimensions</h1>
     <section>
       <h2>State Representation</h2>
       <p>
@@ -91,8 +87,8 @@
           />
         </div>
         <figcaption>
-          Two-dimensional drone representation. Physical units are given in
-          brackets.
+          Two-dimensional schematic representation of a drone, with units
+          detailed in brackets.
         </figcaption>
       </figure>
       <h2>Dynamics Formulation</h2>
@@ -205,47 +201,46 @@
       </div>
     </section>
 
-    <h1>Three-Dimensional Simulation</h1>
+    <h1>Three Dimensions</h1>
     <section>
-      <h2>State</h2>
+      <h2>State Representation in Three Dimensions</h2>
       <p>
-        In the three-dimensional case, the state vector \(X\) consists of twelve
-        quantities and is formally defined as
+        Expanding upon the two-dimensional model, the three-dimensional
+        simulation of a drone incorporates additional parameters to fully
+        capture its state in space. This expanded state vector, \(X\), in three
+        dimensions, includes both positional and rotational elements, alongside
+        their respective velocities.
       </p>
       <div class="equation">
         \( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z}, p, q, r]
         \)
       </div>
-      <p>where</p>
+      <p>The state vector \(X\) is composed of:</p>
       <ul>
-        <li>\(x, y, z\) represent positions,</li>
+        <li>\(x, y, z\): Positional coordinates in 3D space,</li>
         <li>
-          \(\dot{x}, \dot{y}, \dot{z}\) represent velocities in their respective
-          axes,
+          \(\dot{x}, \dot{y}, \dot{z}\): Velocities along the x, y, and z axes,
         </li>
         <li>
-          \(\phi, \theta, \psi\), also known as Euler angles, represent
-          rotations about the x-axis, y-axis, and z-axis, and
+          \(\phi, \theta, \psi\): Rotational angles (Euler angles) about the x,
+          y, and z axes, respectively, and
         </li>
         <li>
-          \(p, q, r\) are the angular velocities about the axes \(kx\), \(ky\),
-          and \(kz\) in the body coordinate system.
+          \(p, q, r\): Angular velocities about these axes, described in the
+          drone's own frame of reference.
         </li>
       </ul>
       <p>
-        Except for the last three parameters, all information resides in the
-        world coordinate system, which was the only one used in the
-        two-dimensional case from Chapter
-        <a href="#chapter-Simulation-TwoDimensional"
-          >Two-Dimensional Simulation</a
-        >. The body coordinate system, however, is a fixed coordinate system
-        attached to the quadrotor.
+        The distinction between the "world coordinate system" and the "body
+        coordinate system" is crucial. The former refers to a fixed external
+        reference frame, while the latter is attached to the drone itself,
+        moving and rotating with it.
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
             src="3d_drone_coordinate_system.png"
-            alt="World and body coordinate systems"
+            alt="Representation of world and body coordinate systems in 3D"
             style="
               max-width: 30%;
               max-height: 30%;
@@ -254,7 +249,10 @@
             "
           />
         </div>
-        <figcaption>World and body coordinate systems</figcaption>
+        <figcaption>
+          Diagram illustrating the world and body coordinate systems in a 3D
+          space.
+        </figcaption>
       </figure>
 
       <h2>Dynamics</h2>
