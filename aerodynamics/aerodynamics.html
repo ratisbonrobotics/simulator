@@ -302,7 +302,7 @@
       <p>
         Extending to three dimensions, we maintain the relationship between
         rotor speeds (\(\omega_{i}\)) and thrust (\(F_{i}\)) as well as the
-        cumulative thrust (\(F_{total}\)) from all rotors.
+        cumulative thrust (\(F_{total}\)) from all four rotors.
       </p>
       <div class="equation">
         \[ F_{i} = k_{f} \omega_{i}^2 \qquad F_{total} = \sum_i F_i = F_1 + F_2
@@ -338,6 +338,16 @@
         \cos(\phi)F_{xz} \\ F_{xy} &= \cos(\theta) F_{total} \qquad & F_{y} &=
         \cos(\psi)F_{xy} \\ F_{yz} &= \cos(\phi) F_{total} \qquad & F_{z} &=
         \cos(\theta)F_{yz} \end{alignat*} \]
+      </div>
+
+      <p>
+        Furthermore we maintain the derivation of accelerations along the global
+        axis.
+      </p>
+
+      <div class="equation">
+        \[ \ddot{x} = \frac{F_{x}}{m} \qquad \ddot{y} = \frac{(F_{y} -
+        F_{g})}{m} = \frac{F_{y}}{m} - g \qquad \ddot{z} = \frac{F_{z}}{m}\]
       </div>
     </section>
 
