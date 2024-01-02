@@ -176,7 +176,7 @@
         Changes in the drone's orientation (\(\psi\)) are derived in the same
         fashion, by integrating twice over the angular acceleration
         (\(\ddot{\psi}\)). Determining \(\ddot{\psi}\) requires the
-        consideration of the concept of torque (\(\tau = L \times F \times
+        consideration of the concept of torque (\(\tau = L \cdot F \cdot
         sin(\kappa)\)) formalized by Archimedes
         <a href="#archimedes250bc">3</a>. Torque is a measure of the turning
         effect of a force applied at some angle (\(\kappa\)), at a distance
@@ -184,17 +184,17 @@
         positive when turning counterclockwise and negative when turning
         clockwise. The angular acceleration (\(\ddot{\psi}\)) is related to
         torque according to Newton's second law <a href="#newton1687">2</a>. The
-        radial mass distribution of the drone, or moment of inertia in the plane
-        (\(I_{xy}\)) i.e. the drones resistance to angular acceleration, times
+        radial mass distribution of the drone, or moment of inertia
+        (\(I_{\psi}\)) i.e. the drones resistance to angular acceleration, times
         the angular acceleration (\(\ddot{\psi}\)) gives the torque (\(\tau\))
         aswell.
       </p>
       <div class="equation">
-        \[ \begin{alignat*}{2} \tau_1 &= L \times F_1 \times sin(90°) \qquad &
-        \tau_{xy} = I_{xy}\ddot{\psi} \\ \tau_2 &= L \times F_2 \times sin(90°)
-        \qquad & L(F_2 - F_1) = I_{xy}\ddot{\psi} \\ \tau_{xy} &= \tau_2 -
-        \tau_1 = L(F_2 - F_1) \qquad & \ddot{\psi} = \frac{L(F_2 - F_1)}{I_{xy}}
-        \end{alignat*} \]
+        \[ \begin{alignat*}{2} \tau_1 &= L \cdot F_1 \cdot sin(90°) \qquad &
+        \tau_{\psi} = I_{\psi}\ddot{\psi} \\ \tau_2 &= L \cdot F_2 \cdot
+        sin(90°) \qquad & L(F_2 - F_1) = I_{\psi}\ddot{\psi} \\ \tau_{\psi} &=
+        \tau_2 - \tau_1 = L(F_2 - F_1) \qquad & \ddot{\psi} = \frac{L(F_2 -
+        F_1)}{I_{\psi}} \end{alignat*} \]
       </div>
 
       <h2>State Evolution</h2>
@@ -233,14 +233,14 @@
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
         t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
         \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
-        tLk_f(\omega_2^2 - \omega_1^2)}{I_{xy}} \end{bmatrix}_t \]
+        tLk_f(\omega_2^2 - \omega_1^2)}{I_{\psi}} \end{bmatrix}_t \]
       </div>
       <h2>Mechanical Constants</h2>
       <p>
-        To determine \(I_{xy}\), we consider the drone's geometry and mass
+        To determine \(I_{\psi}\), we consider the drone's geometry and mass
         distribution through the formula,
-        <span style="white-space: nowrap">\(I_{xy} = \sum_i(m_i r_i^2)\)</span>,
-        where the masses (\(m_i\)) of small segments at different radii
+        <span style="white-space: nowrap">\(I_{\psi} = \sum_i(m_i r_i^2)\)</span
+        >, where the masses (\(m_i\)) of small segments at different radii
         (\(r_i\)) from the center are summed. For continuous bodies, this
         summation transforms into an integral, taking into account the
         continuous radial mass distribution.
@@ -361,7 +361,7 @@
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
           <img
             src="3d_drone_at_rest.svg"
-            alt=""
+            alt="Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\)."
             style="
               max-width: 100%;
               max-height: 100%;
@@ -371,9 +371,7 @@
           />
         </div>
         <figcaption>
-          Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\). As long as
-          \(x,y,z = 0\) it is true that \( \alpha = \theta \), \( \beta = \phi
-          \) and \( \gamma = \psi\).
+          Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\).
         </figcaption>
       </figure>
 
@@ -381,22 +379,59 @@
       <div class="equation">
         \[
           \begin{align*}
-            \tau_{i,xy} &= L \times F_i \times sin(90°) \\
-            \tau_{xy} &= (\tau_{2,xy} + \tau_{3,xy}) - (\tau_{1,xy} + \tau_{4,xy}) \\
-            \tau_{xy} &= I_{xy} \ddot{\psi} \\
-            \tau_{i,yz} &= L \times F_i \times sin(90°) \\
-            \tau_{yz} &= (\tau_{3,yz} + \tau_{4,yz}) - (\tau_{1,yz} + \tau_{2,yz}) \\
-            \tau_{yz} &= I_{yz} \ddot{\theta} \\
-            \tau_{i,xz} &= k_m\omega^2 \\
-            \tau_{xz} &= (\tau_{3,xy} + \tau_{4,xy}) - (\tau_{1,xy} + \tau_{2,xy})
-          \end{align*}
-        \]
-      </div>
-      <!-- prettier-ignore -->
-      <div class="equation">
-        \[
-          \begin{align*}
-            \tau_{xy} &= I_{xy} \ddot{\psi} \\
+            \begin{bmatrix}
+            \tau_{\alpha} \\
+            \tau_{\beta} \\
+            \tau_{\gamma}
+            \end{bmatrix} &=
+            \begin{bmatrix}
+            I_{\alpha} & 0 & 0 \\
+            0 & I_{\beta} & 0 \\
+            0 & 0 & I_{\gamma}
+            \end{bmatrix}
+            \begin{bmatrix}
+            \ddot{\alpha} \\
+            \ddot{\beta} \\
+            \ddot{\gamma}
+            \end{bmatrix}
+            +
+            \begin{bmatrix}
+            \dot\alpha \\
+            \dot\beta \\
+            \dot\gamma
+            \end{bmatrix}
+            \times
+            \left(
+            \begin{bmatrix}
+            I_{\alpha} & 0 & 0 \\
+            0 & I_{\beta} & 0 \\
+            0 & 0 & I_{\gamma}
+            \end{bmatrix}
+            \begin{bmatrix}
+            \dot\alpha \\
+            \dot\beta \\
+            \dot\gamma
+            \end{bmatrix}
+            \right)
+            \\
+            \begin{bmatrix}
+            \ddot\alpha \\
+            \ddot\beta \\
+            \ddot\gamma
+            \end{bmatrix}
+            &=
+            \begin{bmatrix}
+            \frac{\tau_{\alpha} - \dot\gamma\dot\beta(I_{\alpha} - I_{\beta})}{I_{\alpha}} \\
+            \frac{\tau_{\beta} - \dot\gamma\dot\alpha(I_{\alpha} - I_{\gamma})}{I_{\beta}} \\
+            \frac{\tau_{\gamma} - \dot\alpha\dot\beta(I_{\beta} - I_{\alpha})}{I_{\gamma}}
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+            \frac{L((F_3 + F_4) - (F_2 + F_1)) - \dot\gamma\dot\beta(I_{\alpha} - I_{\beta})}{I_{\alpha}} \\
+            \frac{k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\gamma\dot\alpha(I_{\alpha} - I_{\gamma})}{I_{\beta}} \\
+            \frac{L((F_2 + F_3) - (F_1 + F_4)) - \dot\alpha\dot\beta(I_{\beta} - I_{\alpha})}{I_{\gamma}}
+            \end{bmatrix}
+
           \end{align*}
         \]
       </div>
@@ -404,7 +439,28 @@
       <div class="equation">
         \[
           \begin{align*}
-            \tau_{i} &= k_m\omega_i^2
+            \left[
+\begin{array}{c}
+\dot{\phi} \\
+\dot{\theta} \\
+\dot{\psi}
+\end{array}
+\right]
+=
+\left[
+\begin{array}{ccc}
+1 & \sin(\phi)\tan(\theta) & \cos(\phi)\tan(\theta) \\
+0 & \cos(\phi) & -\sin(\phi) \\
+0 & \sin(\phi)/\cos(\theta) & \cos(\phi)/\cos(\theta)
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+p \\
+q \\
+r
+\end{array}
+\right]
           \end{align*}
         \]
       </div>-->
