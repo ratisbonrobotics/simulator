@@ -435,35 +435,29 @@
           \end{align*}
         \]
       </div>
-      <!-- prettier-ignore 
+      <!-- prettier-ignore -->
       <div class="equation">
         \[
           \begin{align*}
-            \left[
-\begin{array}{c}
-\dot{\phi} \\
-\dot{\theta} \\
-\dot{\psi}
-\end{array}
-\right]
-=
-\left[
-\begin{array}{ccc}
-1 & \sin(\phi)\tan(\theta) & \cos(\phi)\tan(\theta) \\
-0 & \cos(\phi) & -\sin(\phi) \\
-0 & \sin(\phi)/\cos(\theta) & \cos(\phi)/\cos(\theta)
-\end{array}
-\right]
-\left[
-\begin{array}{c}
-p \\
-q \\
-r
-\end{array}
-\right]
+          \begin{bmatrix}
+            \dot{\theta} \\
+            \dot{\phi} \\
+            \dot{\psi}
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+            1 & \sin(\theta)\tan(\phi) & \cos(\theta)\tan(\phi) \\
+            0 & \cos(\theta) & -\sin(\theta) \\
+            0 & \sin(\theta)/\cos(\phi) & \cos(\theta)/\cos(\phi)
+            \end{bmatrix}
+            \begin{bmatrix}
+            \dot\alpha \\
+            \dot\beta \\
+            \dot\gamma
+            \end{bmatrix}
           \end{align*}
         \]
-      </div>-->
+      </div>
     </section>
 
     <h5 class="references">References</h5>
