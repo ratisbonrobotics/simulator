@@ -267,7 +267,7 @@
       </p>
       <div class="equation">
         \( X = [x, y, z, \theta, \phi, \psi, \dot{x}, \dot{y}, \dot{z},
-        \dot{\theta}, \dot{\phi}, \dot{\psi}] \)
+        \dot{\alpha}, \dot{\beta}, \dot{\gamma}] \)
       </div>
       <p>where</p>
       <ul>
@@ -281,8 +281,8 @@
           and z axes,
         </li>
         <li>
-          \(\dot{\theta}, \dot{\phi}, \dot{\psi}\) indicate rotational
-          velocities around the x, y, and z axes, respectively.
+          \(\dot{\alpha}, \dot{\beta}, \dot{\gamma}\) indicate rotational
+          velocities inside the drones frame of reference.
         </li>
       </ul>
 
@@ -371,7 +371,9 @@
           />
         </div>
         <figcaption>
-          Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\)
+          Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\). As long as
+          \(x,y,z = 0\) it is true that \( \alpha = \theta \), \( \beta = \phi
+          \) and \( \gamma = \psi\).
         </figcaption>
       </figure>
 
