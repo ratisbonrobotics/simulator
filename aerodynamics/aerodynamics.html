@@ -137,7 +137,7 @@
         <span style="white-space: nowrap"
           >(\(F_{total} = F_1 + F_2 = F_{xy}\))</span
         >
-        and the orientation angle (\(\psi\)).
+        and the angle of orientation (\(\psi\)).
       </p>
       <div class="equation">
         \[ F_{x} = \sin(\psi)F_{xy} \qquad F_{y} = \cos(\psi)F_{xy} \]
@@ -159,11 +159,11 @@
         <figcaption>Forces acting on a two-dimensional drone.</figcaption>
       </figure>
       <p>
-        Changes in the drone's position (\(x, y, \psi\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}, \dot{\psi}\)), which in
-        turn stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{\psi}\)). These accelerations are calculated using Newton's second
-        law <span style="white-space: nowrap">(\(F = ma\))</span>
+        Changes in the drone's position (\(x, y\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}\)), which in turn stem
+        from the integration of accelerations (\(\ddot{x}, \ddot{y}\)). These
+        accelerations are calculated using Newton's second law
+        <span style="white-space: nowrap">(\(F = ma\))</span>
         <a href="#newton1687">2</a> and the gravitational force (\(F_{g} =
         mg\)), with \(g\) being earth's gravitational constant \( 9.81
         \frac{m}{s^2} \).
@@ -173,24 +173,29 @@
         F_{g})}{m} = \frac{F_{y}}{m} - g \]
       </div>
       <p>
-        We employ two torque formulas (\(M\)), each with distinct historical and
-        physical foundations. The first,
-        <span style="white-space: nowrap">\(M = F_{\psi} L\)</span>, originates
-        from Archimedes' concept of leverage <a href="#archimedes250bc">3</a>,
-        where \(F_{\psi} = F_{2} - F_{1}\) represents the force from the drone's
-        rotors and \(L\) is the lever arm - the distance from the center of mass
-        to the motors. This equation captures the rotational effect of force.
-        The second, \(M = I \ddot{\psi}\), is grounded in Newton's laws of
-        motion <a href="#newton1687">2</a>, linking torque (\(M\)) with the
-        drone's moment of inertia (\(I\)) and angular acceleration
-        (\(\ddot{\psi}\)). Together, these formulas allow us to determine the
-        angular acceleration of the drone.
+        Changes in the drone's orientation (\(\psi\)) are derived in the same
+        fashion, by integrating twice over the angular acceleration
+        (\(\ddot{\psi}\)). Determining \(\ddot{\psi}\) requires the
+        consideration of the concept of torque (\(\tau = L \times F \times
+        sin(\kappa)\)) formalized by Archimedes
+        <a href="#archimedes250bc">3</a>. Torque is a measure of the turning
+        effect of a force applied at some angle (\(\kappa\)), at a distance
+        (\(L\)) from an axis of rotation. Convention dictates that torque is
+        positive when turning counterclockwise and negative when turning
+        clockwise. The angular acceleration (\(\ddot{\psi}\)) is related to
+        torque according to Newton's second law <a href="#newton1687">2</a>. The
+        radial mass distribution of the drone, or moment of inertia (\(I\)) i.e.
+        the drones resistance to angular acceleration, times the angular
+        acceleration (\(\ddot{\psi}\)) gives the torque (\(\tau\)) aswell.
       </p>
       <div class="equation">
-        \[ M = F_{\psi}L \\ I \ddot{\psi} = (F_{2} - F_{1})L \\ \ddot{\psi} =
-        \frac{(F_{2} - F_{1}) L}{I} \]
+        \[ \begin{alignat*}{2} -\tau_1 &= L F_1 sin(90°) \qquad & \tau_{total} =
+        I\ddot{\psi} \\ \tau_2 &= L F_2 sin(90°) \qquad & L(F_2 - F_1) =
+        I\ddot{\psi} \\ \tau_{total} &= \tau_2 - \tau_1 = L(F_2 - F_1) \qquad &
+        \ddot{\psi} = \frac{L(F_2 - F_1)}{I} \end{alignat*} \]
       </div>
 
+      <h2>State Prediction</h2>
       <p>
         The state of the drone at time \( t + \Delta t \) is determined by the
         sum of its current state \( X_t \) and the integral of the state's time
@@ -250,7 +255,7 @@
         a mathematical correlation can be constructed.
       </p>
     </section>
-
+    <!--
     <h1>Three Dimensions</h1>
     <section>
       <h2>State Representation</h2>
@@ -356,11 +361,11 @@
         \end{alignat*}\]
       </div>
     </section>
-
+-->
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="euler1768">
-        Euler, L. (1768-1772). Institutiones calculi integralis
+        Euler, L. (1770). Institutiones calculi integralis
       </cite>
       <cite id="newton1687">
         Newton, I. (1687). Philosopsiæ Naturalis Principia Mathematica
