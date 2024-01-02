@@ -75,7 +75,7 @@
       </p>
     </section>
 
-    <h1>Two Dimensions</h1>
+    <h1>Planar Dynamics</h1>
     <section>
       <h2>State Representation</h2>
       <p>
@@ -258,7 +258,7 @@
       </p>
     </section>
 
-    <h1>Three Dimensions</h1>
+    <h1>Spatial Dynamics</h1>
     <section>
       <h2>State Representation</h2>
       <p>
@@ -370,20 +370,38 @@
             "
           />
         </div>
-        <figcaption>Drone at X = [0, 0, 0, 0, 0, 0, 0, 0, 0]</figcaption>
+        <figcaption>Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0]\)</figcaption>
       </figure>
 
       <!-- prettier-ignore -->
       <div class="equation">
         \[
           \begin{align*}
-            \tau_1 &= l_{1,xy} \times F_1 \times sin(90°) \\
-            \tau_2 &= l_{2,xy} \times F_2 \times sin(90°) \\
-            \tau_3 &= l_{3,xy} \times F_3 \times sin(90°) \\
-            \tau_4 &= l_{4,xy} \times F_4 \times sin(90°)
+            \tau_{1} &= l_{1,xy} \times F_1 \times sin(90°) \\
+            \tau_{2} &= l_{2,xy} \times F_2 \times sin(90°) \\
+            \tau_{3} &= l_{3,xy} \times F_3 \times sin(90°) \\
+            \tau_{4} &= l_{4,xy} \times F_4 \times sin(90°)
           \end{align*}
         \]
       </div>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \begin{align*}
+            \tau_{xy} &= I_{xy} \ddot{\psi} \\
+            \tau_{yz} &= I_{yz} \ddot{\phi} \\
+            \tau_{xz} &= I_{xz} \ddot{\theta} \\
+          \end{align*}
+        \]
+      </div>
+      <!-- prettier-ignore 
+      <div class="equation">
+        \[
+          \begin{align*}
+            \tau_{i} &= k_m\omega_i^2
+          \end{align*}
+        \]
+      </div>-->
     </section>
 
     <h5 class="references">References</h5>
