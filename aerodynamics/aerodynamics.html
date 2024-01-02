@@ -173,22 +173,22 @@
         F_{g})}{m} = \frac{F_{y}}{m} - g \]
       </div>
       <p>
-        We employ two torque formulas (\(M_{x}\)), each with distinct historical
-        and physical foundations. The first, \(M_{x} = F_{\psi} L\), originates
-        from Archimedes' concept of leverage
-        <a href="#archimedes250bc">3</a>, where \(F_{\psi} = F_{2} - F_{1}\)
-        represents the force from the drone's rotors and \(L\) is the lever arm
-        - the distance from the center of mass to the motors. This equation
-        captures the rotational effect of force. The second, \(M_{x} = I_{x}
-        \ddot{\psi}\), is grounded in Newton's laws of motion
-        <a href="#newton1687">2</a>, linking torque (\(M_{x}\)) with the drone's
-        moment of inertia (\(I_{x}\)) and angular acceleration
+        We employ two torque formulas (\(M\)), each with distinct historical and
+        physical foundations. The first,
+        <span style="white-space: nowrap">\(M = F_{\psi} L\)</span>, originates
+        from Archimedes' concept of leverage <a href="#archimedes250bc">3</a>,
+        where \(F_{\psi} = F_{2} - F_{1}\) represents the force from the drone's
+        rotors and \(L\) is the lever arm - the distance from the center of mass
+        to the motors. This equation captures the rotational effect of force.
+        The second, \(M = I_{x} \ddot{\psi}\), is grounded in Newton's laws of
+        motion <a href="#newton1687">2</a>, linking torque (\(M\)) with the
+        drone's moment of inertia (\(I_{x}\)) and angular acceleration
         (\(\ddot{\psi}\)). Together, these formulas allow us to determine the
         angular acceleration of the drone.
       </p>
       <div class="equation">
-        \[ M_{x} = F_{\psi}L \\ I_{x} \ddot{\psi} = (F_{2} - F_{1})L \\
-        \ddot{\psi} = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
+        \[ M = F_{\psi}L \\ I_{x} \ddot{\psi} = (F_{2} - F_{1})L \\ \ddot{\psi}
+        = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
       </div>
 
       <p>
@@ -233,8 +233,8 @@
         To determine \(I_x\), we consider the drone's geometry and mass
         distribution. The general formula,
         <span style="white-space: nowrap">\(I = \sum_i(m_i r_i^2)\)</span>,
-        where represents the masses (\(m_i\)) of small segments at different
-        distances (\(r_i\)) from the center along a shared axis, are summed. For
+        where the masses (\(m_i\)) of small segments at different distances
+        (\(r_i\)) from the center along a shared axis, are summed. For
         continuous bodies, this summation transforms into an integral, taking
         into account the continuous radial mass distribution.
       </p>
@@ -348,6 +348,12 @@
       <div class="equation">
         \[ \ddot{x} = \frac{F_{x}}{m} \qquad \ddot{y} = \frac{(F_{y} -
         F_{g})}{m} = \frac{F_{y}}{m} - g \qquad \ddot{z} = \frac{F_{z}}{m}\]
+      </div>
+
+      <div class="equation">
+        \[ \begin{alignat*}{2} F_{\theta} &= ? \qquad & M_{x} &= ? \\ F_{\phi}
+        &= ? \qquad & M_{y} &= ? \\ F_{\psi} &= ? \qquad & M_{z} &= ?
+        \end{alignat*}\]
       </div>
     </section>
 
