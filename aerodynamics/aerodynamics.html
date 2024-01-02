@@ -180,15 +180,15 @@
         where \(F_{\psi} = F_{2} - F_{1}\) represents the force from the drone's
         rotors and \(L\) is the lever arm - the distance from the center of mass
         to the motors. This equation captures the rotational effect of force.
-        The second, \(M = I_{x} \ddot{\psi}\), is grounded in Newton's laws of
+        The second, \(M = I \ddot{\psi}\), is grounded in Newton's laws of
         motion <a href="#newton1687">2</a>, linking torque (\(M\)) with the
-        drone's moment of inertia (\(I_{x}\)) and angular acceleration
+        drone's moment of inertia (\(I\)) and angular acceleration
         (\(\ddot{\psi}\)). Together, these formulas allow us to determine the
         angular acceleration of the drone.
       </p>
       <div class="equation">
-        \[ M = F_{\psi}L \\ I_{x} \ddot{\psi} = (F_{2} - F_{1})L \\ \ddot{\psi}
-        = \frac{(F_{2} - F_{1}) L}{I_{x}} \]
+        \[ M = F_{\psi}L \\ I \ddot{\psi} = (F_{2} - F_{1})L \\ \ddot{\psi} =
+        \frac{(F_{2} - F_{1}) L}{I} \]
       </div>
 
       <p>
@@ -226,12 +226,12 @@
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
         t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
         \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
-        tLk_f(\omega_2^2 - \omega_1^2)}{I_{x}} \end{bmatrix}_t \]
+        tLk_f(\omega_2^2 - \omega_1^2)}{I} \end{bmatrix}_t \]
       </div>
       <h2>Mechanical Constants</h2>
       <p>
-        To determine \(I_x\), we consider the drone's geometry and mass
-        distribution. The general formula,
+        To determine \(I\), we consider the drone's geometry and mass
+        distribution through the formula,
         <span style="white-space: nowrap">\(I = \sum_i(m_i r_i^2)\)</span>,
         where the masses (\(m_i\)) of small segments at different distances
         (\(r_i\)) from the center along a shared axis, are summed. For
