@@ -184,18 +184,20 @@
         positive when turning counterclockwise and negative when turning
         clockwise. The angular acceleration (\(\ddot{\psi}\)) is related to
         torque according to Newton's second law <a href="#newton1687">2</a>. The
-        radial mass distribution of the drone, or moment of inertia (\(I\)) i.e.
-        the drones resistance to angular acceleration, times the angular
-        acceleration (\(\ddot{\psi}\)) gives the torque (\(\tau\)) aswell.
+        radial mass distribution of the drone, or moment of inertia in the plane
+        (\(I_{xy}\)) i.e. the drones resistance to angular acceleration, times
+        the angular acceleration (\(\ddot{\psi}\)) gives the torque (\(\tau\))
+        aswell.
       </p>
       <div class="equation">
-        \[ \begin{alignat*}{2} -\tau_1 &= L F_1 sin(90°) \qquad & \tau_{total} =
-        I\ddot{\psi} \\ \tau_2 &= L F_2 sin(90°) \qquad & L(F_2 - F_1) =
-        I\ddot{\psi} \\ \tau_{total} &= \tau_2 - \tau_1 = L(F_2 - F_1) \qquad &
-        \ddot{\psi} = \frac{L(F_2 - F_1)}{I} \end{alignat*} \]
+        \[ \begin{alignat*}{2} \tau_1 &= L \times F_1 \times sin(90°) \qquad &
+        \tau_{xy} = I_{xy}\ddot{\psi} \\ \tau_2 &= L \times F_2 \times sin(90°)
+        \qquad & L(F_2 - F_1) = I_{xy}\ddot{\psi} \\ \tau_{xy} &= \tau_2 -
+        \tau_1 = L(F_2 - F_1) \qquad & \ddot{\psi} = \frac{L(F_2 - F_1)}{I_{xy}}
+        \end{alignat*} \]
       </div>
 
-      <h2>State Prediction</h2>
+      <h2>State Evolution</h2>
       <p>
         The state of the drone at time \( t + \Delta t \) is determined by the
         sum of its current state \( X_t \) and the integral of the state's time
@@ -231,17 +233,17 @@
         \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
         t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
         \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
-        tLk_f(\omega_2^2 - \omega_1^2)}{I} \end{bmatrix}_t \]
+        tLk_f(\omega_2^2 - \omega_1^2)}{I_{xy}} \end{bmatrix}_t \]
       </div>
       <h2>Mechanical Constants</h2>
       <p>
-        To determine \(I\), we consider the drone's geometry and mass
+        To determine \(I_{xy}\), we consider the drone's geometry and mass
         distribution through the formula,
-        <span style="white-space: nowrap">\(I = \sum_i(m_i r_i^2)\)</span>,
-        where the masses (\(m_i\)) of small segments at different distances
-        (\(r_i\)) from the center along a shared axis, are summed. For
-        continuous bodies, this summation transforms into an integral, taking
-        into account the continuous radial mass distribution.
+        <span style="white-space: nowrap">\(I_{xy} = \sum_i(m_i r_i^2)\)</span>,
+        where the masses (\(m_i\)) of small segments at different radii
+        (\(r_i\)) from the center are summed. For continuous bodies, this
+        summation transforms into an integral, taking into account the
+        continuous radial mass distribution.
       </p>
       <p>
         The calculation of the thrust coefficient (\(k_f\)) is influenced by
@@ -255,7 +257,7 @@
         a mathematical correlation can be constructed.
       </p>
     </section>
-    <!--
+
     <h1>Three Dimensions</h1>
     <section>
       <h2>State Representation</h2>
@@ -265,7 +267,7 @@
       </p>
       <div class="equation">
         \( X = [x, y, z, \theta, \phi, \psi, \dot{x}, \dot{y}, \dot{z},
-        \dot{\alpha}, \dot{\beta}, \dot{\gamma}] \)
+        \dot{\theta}, \dot{\phi}, \dot{\psi}] \)
       </div>
       <p>where</p>
       <ul>
@@ -276,11 +278,11 @@
         </li>
         <li>
           \(\theta, \phi, \psi\) stand for rotational angles around the x, y,
-          and z axes, respectively,
+          and z axes,
         </li>
         <li>
-          \(\dot{\alpha}, \dot{\beta}, \dot{\gamma}\) hold the angular
-          velocities about the three axes within the drone's frame of reference.
+          \(\dot{\theta}, \dot{\phi}, \dot{\psi}\) indicate rotational
+          velocities around the x, y, and z axes, respectively.
         </li>
       </ul>
 
@@ -355,13 +357,35 @@
         F_{g})}{m} = \frac{F_{y}}{m} - g \qquad \ddot{z} = \frac{F_{z}}{m}\]
       </div>
 
+      <figure>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="3d_drone_from_above.png"
+            alt=""
+            style="
+              max-width: 30%;
+              max-height: 30%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+        <figcaption>Drone at X = [0, 0, 0, 0, 0, 0, 0, 0, 0]</figcaption>
+      </figure>
+
+      <!-- prettier-ignore -->
       <div class="equation">
-        \[ \begin{alignat*}{2} F_{\theta} &= ? \qquad & M_{x} &= ? \\ F_{\phi}
-        &= ? \qquad & M_{y} &= ? \\ F_{\psi} &= ? \qquad & M_{z} &= ?
-        \end{alignat*}\]
+        \[
+          \begin{align*}
+            \tau_1 &= l_{1,xy} \times F_1 \times sin(90°) \\
+            \tau_2 &= l_{2,xy} \times F_2 \times sin(90°) \\
+            \tau_3 &= l_{3,xy} \times F_3 \times sin(90°) \\
+            \tau_4 &= l_{4,xy} \times F_4 \times sin(90°)
+          \end{align*}
+        \]
       </div>
     </section>
--->
+
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="euler1768">
