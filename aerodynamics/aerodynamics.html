@@ -379,10 +379,14 @@
       <div class="equation">
         \[
           \begin{align*}
-            \tau_{1,xy} &= l_{xy} \times F_1 \times sin(90°) \\
-            \tau_{2,xy} &= l_{xy} \times F_2 \times sin(90°) \\
-            \tau_{3,xy} &= l_{xy} \times F_3 \times sin(90°) \\
-            \tau_{4,xy} &= l_{xy} \times F_4 \times sin(90°)
+            \tau_{i,xy} &= L \times F_i \times sin(90°) \\
+            \tau_{xy} &= (\tau_{2,xy} + \tau_{3,xy}) - (\tau_{1,xy} + \tau_{4,xy}) \\
+            \tau_{xy} &= I_{xy} \ddot{\psi} \\
+            \tau_{i,yz} &= L \times F_i \times sin(90°) \\
+            \tau_{yz} &= (\tau_{3,yz} + \tau_{4,yz}) - (\tau_{1,yz} + \tau_{2,yz}) \\
+            \tau_{yz} &= I_{yz} \ddot{\theta} \\
+            \tau_{i,xz} &= k_m\omega^2 \\
+            \tau_{xz} &= (\tau_{3,xy} + \tau_{4,xy}) - (\tau_{1,xy} + \tau_{2,xy})
           \end{align*}
         \]
       </div>
