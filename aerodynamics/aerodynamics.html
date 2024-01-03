@@ -132,16 +132,16 @@
         The thrust components \(F_{x}\) and \(F_{y}\), acting along the
         \(x\)-axis and \(y\)-axis within the world's frame of reference, are
         determined through the trigonometric relationships to the rotors thrusts
-        \(F_1\) and \(F_2\), based on principles established in Euclid's work
-        <a href="#euclid300bc">4</a>. The thrust of the rotors acts always along
-        the positive \(y\)-axis within the drone's frame of reference. But since
-        we ultimately care about the drones position and orientation within the
-        world's frame of reference, we seek an operation that maps any vector
-        from within the drone's frame of reference to the world's frame of
-        reference. Derived through step-by-step application of Euclid's
-        principles, chosing positive rotation to be counterclockwise and the
-        \(x\)-axis to grow positively leftwards, a matrix can be constructed
-        such that:
+        \(F_1\) and \(F_2\), based on principles established in Hipparchus's
+        work <a href="#hipparchus150bc">4</a>. The thrust of the rotors acts
+        always along the positive \(y\)-axis within the drone's frame of
+        reference. But since we ultimately care about the drones position and
+        orientation within the world's frame of reference, we seek an operation
+        that maps any vector from within the drone's frame of reference to the
+        world's frame of reference. Derived through step-by-step application of
+        trigonometric principles, chosing positive rotation to be
+        counterclockwise and the \(x\)-axis to grow positively leftwards, a
+        matrix can be constructed such that:
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
@@ -363,37 +363,42 @@
         Extending to three dimensions, we maintain the relationship between
         rotor speeds (\(\omega_{i}\)) and thrust (\(F_{i}\)).
       </p>
-      <div class="equation">\[ F_{i} = k_{f} \omega_{i}^2</div>
+      <div class="equation">\[ F_{i} = k_{f} \omega_{i}^2 \]</div>
       <p>
-        To determine the contribution of \( F_{total} \) on the \( xy \)-plane,
-        it is necessary to acknowledge that some of the force from \( F_{total}
-        \) is distributed in another plane. For this analysis, consider a
-        triangle emerging from the drawing scene. This triangle comprises three
-        points: the first, located at the center of the drone, is denoted as \(
-        A \); the second, situated at the tip of \( F_{total} \) in space, is
-        labeled \( B \); and the third, positioned at the tip of \( F_{xy} \),
-        is identified as \( C \). The angle at point \( C \) is a right angle,
-        while the angle at point \( A \) is \( \theta \). The length of the
-        hypotenuse, corresponding to the magnitude of \( F_{total} \), is known.
-        To ascertain the length of \( F_{xy} \), one must consider \(
-        \cos(\theta) \). Similarly, for the \( xz \)-plane, another triangle can
-        be visualized. Again, the first point \( A \) is at the center of the
-        drone. The second point \( B \) is at the tip of \( F_{total} \), and
-        the third point \( C \) is at the apex of \( F_{xz} \). In this
-        scenario, the angle at \( C \) is a right angle, and the angle at \( A
-        \) is \( \psi \), indicating that \( F_{xz} \) must be \( \cos(\psi) \).
-        Continuing with this logic, for the \( yz \)-plane, \( F_{yz} \) must be
-        \( \cos(\phi) \), following the same method of analysis. This train of
-        thought can then be continued to determine the individual forces \(
-        F_{x} \), \( F_{y} \), and \( F_{z} \) from \( F_{xy} \), \( F_{xz} \),
-        and \( F_{yz} \), respectively.
+        We extend the operation that maps vectors from within the drone's frame
+        of reference to the world's frame of reference to this spatial
+        treatment, again through step-by-step application of trigonometric
+        principles.
       </p>
-
+      <!-- prettier-ignore -->
       <div class="equation">
-        \[ \begin{alignat*}{2} F_{xz} &= \cos(\psi) F_{total} \qquad & F_{x} &=
-        \cos(\phi)F_{xz} \\ F_{xy} &= \cos(\theta) F_{total} \qquad & F_{y} &=
-        \cos(\psi)F_{xy} \\ F_{yz} &= \cos(\phi) F_{total} \qquad & F_{z} &=
-        \cos(\theta)F_{yz} \end{alignat*} \]
+        \[
+          \begin{bmatrix}
+            F_{x} \\
+            F_{y} \\
+            F_{z}
+          \end{bmatrix} =
+          \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & \cos(\theta) & \sin(\theta) \\
+            0 & -\sin(\theta) & \cos(\theta) \\
+          \end{bmatrix}
+          \begin{bmatrix}
+            \cos(\phi) & 0 & -\sin(\phi) \\
+            0 & 1 & 0 \\
+            \sin(\phi) & 0 & \cos(\phi) \\
+          \end{bmatrix}
+          \begin{bmatrix}
+            \cos(\psi) & \sin(\psi) & 0 \\
+            -\sin(\psi) & \cos(\psi) & 0 \\
+            0 & 0 & 1 
+          \end{bmatrix}
+          \begin{bmatrix}
+          0 \\
+          \sum_i^4 F_i \\
+          0
+        \end{bmatrix}
+        \]
       </div>
 
       <p>
@@ -425,85 +430,134 @@
         </figcaption>
       </figure>
 
+      We define the torques within the drones frame of reference according to
+      the principles of Archimedes and the relationship (\(k_m\)) between the
+      rotor speeds (\(\omega_i\)) and their angular acting force.
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \begin{align*}
+            \tau_{\theta'} &= L((F_3 + F_4) - (F_2 + F_1)) \\
+            \tau_{\phi'} &= k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2)) \\
+            \tau_{\psi'} &= L((F_2 + F_3) - (F_1 + F_4))
+          \end{align*}
+        \]
+      </div>
+
+      Through application of Euler's rotation equations we obtain the angular
+      acceleration within the drone's frame of reference.
+
       <!-- prettier-ignore -->
       <div class="equation">
         \[
           \begin{align*}
             \begin{bmatrix}
-            \tau_{\alpha} \\
-            \tau_{\beta} \\
-            \tau_{\gamma}
+            \tau_{\theta'} \\
+            \tau_{\phi'} \\
+            \tau_{\psi'}
             \end{bmatrix} &=
             \begin{bmatrix}
-            I_{\alpha} & 0 & 0 \\
-            0 & I_{\beta} & 0 \\
-            0 & 0 & I_{\gamma}
+            I_{\theta'} & 0 & 0 \\
+            0 & I_{\phi'} & 0 \\
+            0 & 0 & I_{\psi'}
             \end{bmatrix}
             \begin{bmatrix}
-            \ddot{\alpha} \\
-            \ddot{\beta} \\
-            \ddot{\gamma}
+            \ddot{\theta'} \\
+            \ddot{\phi'} \\
+            \ddot{\psi'}
             \end{bmatrix}
             +
             \begin{bmatrix}
-            \dot\alpha \\
-            \dot\beta \\
-            \dot\gamma
+            \dot{\theta'} \\
+            \dot\phi' \\
+            \dot\psi'
             \end{bmatrix}
             \times
             \left(
             \begin{bmatrix}
-            I_{\alpha} & 0 & 0 \\
-            0 & I_{\beta} & 0 \\
-            0 & 0 & I_{\gamma}
+            I_{\theta'} & 0 & 0 \\
+            0 & I_{\phi'} & 0 \\
+            0 & 0 & I_{\psi'}
             \end{bmatrix}
             \begin{bmatrix}
-            \dot\alpha \\
-            \dot\beta \\
-            \dot\gamma
+            \dot\theta' \\
+            \dot\phi' \\
+            \dot\psi'
             \end{bmatrix}
             \right)
             \\
             \begin{bmatrix}
-            \ddot\alpha \\
-            \ddot\beta \\
-            \ddot\gamma
+            \ddot\theta' \\
+            \ddot\phi' \\
+            \ddot\psi'
             \end{bmatrix}
             &=
             \begin{bmatrix}
-            \frac{\tau_{\alpha} - \dot\gamma\dot\beta(I_{\alpha} - I_{\beta})}{I_{\alpha}} \\
-            \frac{\tau_{\beta} - \dot\gamma\dot\alpha(I_{\alpha} - I_{\gamma})}{I_{\beta}} \\
-            \frac{\tau_{\gamma} - \dot\alpha\dot\beta(I_{\beta} - I_{\alpha})}{I_{\gamma}}
+            \frac{\tau_{\theta'} - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})}{I_{\theta'}} \\
+            \frac{\tau_{\phi'} - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})}{I_{\phi'}} \\
+            \frac{\tau_{\psi'} - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'})}{I_{\psi'}}
             \end{bmatrix}
             =
             \begin{bmatrix}
-            \frac{L((F_3 + F_4) - (F_2 + F_1)) - \dot\gamma\dot\beta(I_{\alpha} - I_{\beta})}{I_{\alpha}} \\
-            \frac{k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\gamma\dot\alpha(I_{\alpha} - I_{\gamma})}{I_{\beta}} \\
-            \frac{L((F_2 + F_3) - (F_1 + F_4)) - \dot\alpha\dot\beta(I_{\beta} - I_{\alpha})}{I_{\gamma}}
+            \frac{L((F_3 + F_4) - (F_2 + F_1)) - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})}{I_{\theta'}} \\
+            \frac{k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})}{I_{\phi'}} \\
+            \frac{L((F_2 + F_3) - (F_1 + F_4)) - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'})}{I_{\psi'}}
             \end{bmatrix}
 
           \end{align*}
         \]
       </div>
+      By taking the time derivative of the rotation matrix we can map the
+      angular velocities within the drone's frame of reference to angular
+      velocities in the world's frame of reference.
       <!-- prettier-ignore -->
       <div class="equation">
         \[
           \begin{align*}
-          \begin{bmatrix}
+            \begin{bmatrix}
             \dot{\theta} \\
             \dot{\phi} \\
             \dot{\psi}
             \end{bmatrix}
-            =
+            &=
+            \frac{d}{dt}\left(
             \begin{bmatrix}
-            1 & \sin(\theta)\tan(\phi) & \cos(\theta)\tan(\phi) \\
-            0 & \cos(\theta) & -\sin(\theta) \\
-            0 & \sin(\theta)/\cos(\phi) & \cos(\theta)/\cos(\phi)
+              1 & 0 & 0 \\
+              0 & \cos(\theta) & \sin(\theta) \\
+              0 & -\sin(\theta) & \cos(\theta) \\
             \end{bmatrix}
             \begin{bmatrix}
-            \dot\alpha \\
-            \dot\beta \\
-            \dot\gamma
+              \cos(\phi) & 0 & -\sin(\phi) \\
+              0 & 1 & 0 \\
+              \sin(\phi) & 0 & \cos(\phi) \\
+            \end{bmatrix}
+            \begin{bmatrix}
+              \cos(\psi) & \sin(\psi) & 0 \\
+              -\sin(\psi) & \cos(\psi) & 0 \\
+              0 & 0 & 1 
+            \end{bmatrix}
+            \right)
+            \begin{bmatrix}
+            \dot\theta' \\
+            \dot\phi' \\
+            \dot\psi'
+            \end{bmatrix}
+            \\
+            \begin{bmatrix}
+              \dot{\theta} \\
+              \dot{\phi} \\
+              \dot{\psi}
+            \end{bmatrix}
+              &=
+            \begin{bmatrix}
+              1 & \sin(\theta)\tan(\phi) & \cos(\theta)\tan(\phi) \\
+              0 & \cos(\theta) & -\sin(\theta) \\
+              0 & \sin(\theta)/\cos(\phi) & \cos(\theta)/\cos(\phi)
+            \end{bmatrix}
+            \begin{bmatrix}
+              \dot\theta' \\
+              \dot\phi' \\
+              \dot\psi'
             \end{bmatrix}
           \end{align*}
         \]
@@ -521,7 +575,7 @@
       <cite id="archimedes250bc">
         Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν
       </cite>
-      <cite id="euclid300bc"> Euclid (ca. 300 BC). Στοιχεῖα</cite>
+      <cite id="hipparchus150bc"> Hipparchus (ca. 150 BC)</cite>
     </div>
   </body>
 </html>
