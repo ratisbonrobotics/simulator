@@ -250,7 +250,6 @@
       <div class="equation">
         \[
           X_{t + \Delta t} \approx
-          X_t + \Delta t \dot{X}_t =
           \begin{bmatrix}
             x \\
             y \\
@@ -264,25 +263,9 @@
             \dot{x} \\
             \dot{y} \\
             \dot{\psi} \\
-            \ddot{x} \\
-            \ddot{y} \\
-            \ddot{\psi}
-          \end{bmatrix}_t =
-          \begin{bmatrix}
-            x \\
-            y \\
-            \psi \\
-            \dot{x} \\
-            \dot{y} \\
-            \dot{\psi}
-          \end{bmatrix}_t +
-          \begin{bmatrix}
-            \Delta t\dot{x} \\
-            \Delta t\dot{y} \\
-            \Delta t\dot{\psi} \\
-            \frac{\Delta t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\
-            \Delta t(g - \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\
-            \frac{\Delta tLk_f(\omega_2^2 - \omega_1^2)}{I_{\psi}}
+            m^{-1}\sin(\psi)k_f(\omega_1^2 + \omega_2^2) \\
+            m^{-1}(g - \cos(\psi)k_f(\omega_1^2 + \omega_2^2)) \\
+            I_{\psi}^{-1}Lk_f(\omega_2^2 - \omega_1^2)
           \end{bmatrix}_t
         \]
       </div>
@@ -601,12 +584,12 @@
             \dot\theta' + \dot\phi'\sin(\theta)\tan(\phi) + \dot\psi'\cos(\theta)\tan(\phi) \\
             \dot\phi'\cos(\theta) - \dot\psi'\sin(\theta) \\
             \dot\phi'\sin(\theta)/\cos(\phi) + \dot\psi'\cos(\theta)/\cos(\phi) \\
-            m^{-1}(\sin(\psi)\cos(\phi))(\sum_i^4 F_i) \\
-            m^{-1}(\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta))(\sum_i^4 F_i) - g \\
-            m^{-1}(\sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi))(\sum_i^4 F_i) \\
-            I_{\theta'}^{-1}(L((F_3 + F_4) - (F_2 + F_1)) - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})) \\
+            m^{-1}(\sin(\psi)\cos(\phi))(k_f\sum_i^4 \omega_i^2) \\
+            m^{-1}(\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta))(k_f\sum_i^4 \omega_i^2) - g \\
+            m^{-1}(\sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi))(k_f\sum_i^4 \omega_i^2) \\
+            I_{\theta'}^{-1}(Lk_f((\omega_3^2 + \omega_4^2) - (\omega_2^2 + \omega_1^2)) - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})) \\
             I_{\phi'}^{-1}(k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})) \\
-            I_{\psi'}^{-1}(L((F_2 + F_3) - (F_1 + F_4)) - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'}))
+            I_{\psi'}^{-1}(L((\omega_2^2 + \omega_3^2) - (\omega_1^2 + \omega_4^2)) - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'}))
           \end{bmatrix}_t 
         \]
       </div>
