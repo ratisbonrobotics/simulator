@@ -1,5 +1,4 @@
 // --- SETUP ENVIRONMENT ---
-var running = true;
 var keys = {};
 var viewxz = 0;
 var viewy = 0;
@@ -10,9 +9,8 @@ resizeCanvas();
 // --- ADD EVENT LISTENERS ---
 window.addEventListener("orientationchange", resizeCanvas);
 window.addEventListener("resize", resizeCanvas);
-document.getElementById("startstop").addEventListener("click", toggle);
 canvas.addEventListener("mousemove", function (event) {
-    if (document.pointerLockElement === canvas && running) { updatePosition(event); }
+    if (document.pointerLockElement === canvas) { updatePosition(event); }
 });
 canvas.addEventListener("click", canvas.requestPointerLock);
 canvas.addEventListener("keydown", function (event) { keys[event.key] = true; });

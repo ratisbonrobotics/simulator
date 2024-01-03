@@ -14,18 +14,25 @@ const g = 9.81;
 const omega_min = 20
 const omega_max = 66
 
-var omega_1 = 45.0;
+var omega_1 = 46.0;
 var omega_2 = 45.0;
 var omega_3 = 45.0;
 var omega_4 = 45.0;
 
 var d = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-var dt = 0.0005;
+var dt = 0.001;
 
 var paused = false;
 
-droneDynamics();
-function droneDynamics() {
+setInterval(() => {
+	if (!paused) {
+		console.clear();
+		console.log("Console was cleared");
+	}
+}, 5000);
+
+
+setInterval(() => {
 	if (keys["p"]) {
 		paused = true;
 	}
@@ -33,7 +40,31 @@ function droneDynamics() {
 	if (keys["g"]) {
 		paused = false;
 	}
-	if (running && !paused) {
+
+	var factoromega = (keys["h"] ? 0.1 : keys["j"] ? -0.1 : 0.0);
+	var factoromega_1 = (keys["1"] ? 0.1 : keys["2"] ? -0.1 : 0.0);
+	var factoromega_2 = (keys["3"] ? 0.1 : keys["4"] ? -0.1 : 0.0);
+	var factoromega_3 = (keys["5"] ? 0.1 : keys["6"] ? -0.1 : 0.0);
+	var factoromega_4 = (keys["7"] ? 0.1 : keys["8"] ? -0.1 : 0.0);
+	omega_1 = Math.min(Math.max(20, omega_1 + factoromega + factoromega_1), omega_max);
+	omega_2 = Math.min(Math.max(20, omega_2 + factoromega + factoromega_2), omega_max);
+	omega_3 = Math.min(Math.max(20, omega_3 + factoromega + factoromega_3), omega_max);
+	omega_4 = Math.min(Math.max(20, omega_4 + factoromega + factoromega_4), omega_max);
+	if (keys["r"]) {
+		d = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		omega_1 = 50.0;
+		omega_2 = 50.0;
+		omega_3 = 50.0;
+		omega_4 = 50.0;
+
+	}
+
+}, 10);
+
+
+droneDynamics();
+function droneDynamics() {
+	if (!paused) {
 		droneModelMatrix = createModelMatrix(d[0], d[1], d[2], d[3], d[4], d[5], 1.0, 1.0, 1.0);
 		let ddot = [
 			d[6],  // \dot x
@@ -56,28 +87,16 @@ function droneDynamics() {
 
 		d = d.map((val, index) => val + dt * ddot[index]);
 
-
-		var factoromega = (keys["h"] ? 0.1 : keys["j"] ? -0.1 : 0.0);
-		var factoromega_1 = (keys["1"] ? 0.01 : keys["2"] ? -0.01 : 0.0);
-		var factoromega_2 = (keys["3"] ? 0.01 : keys["4"] ? -0.01 : 0.0);
-		var factoromega_3 = (keys["5"] ? 0.01 : keys["6"] ? -0.01 : 0.0);
-		var factoromega_4 = (keys["7"] ? 0.01 : keys["8"] ? -0.01 : 0.0);
-		omega_1 = Math.min(Math.max(20, omega_1 + factoromega + factoromega_1), omega_max);
-		omega_2 = Math.min(Math.max(20, omega_2 + factoromega + factoromega_2), omega_max);
-		omega_3 = Math.min(Math.max(20, omega_3 + factoromega + factoromega_3), omega_max);
-		omega_4 = Math.min(Math.max(20, omega_4 + factoromega + factoromega_4), omega_max);
-		console.log(d, omega_1, omega_2, omega_3, omega_4);
-
-
-
-		if (keys["r"]) {
-			d = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-			omega_1 = 50.0;
-			omega_2 = 50.0;
-			omega_3 = 50.0;
-			omega_4 = 50.0;
-		}
-
+		console.log("x: " + d[0].toFixed(1) +
+			" y: " + d[1].toFixed(1) +
+			" z: " + d[2].toFixed(1) +
+			" theta: " + d[3].toFixed(1) +
+			" phi: " + d[4].toFixed(1) +
+			" psi: " + d[5].toFixed(1));
+		console.log("omega_1: " + omega_1.toFixed(1) +
+			" omega_2: " + omega_2.toFixed(1) +
+			" omega_3: " + omega_3.toFixed(1) +
+			" omega_4: " + omega_4.toFixed(1));
 	}
-	setTimeout(droneDynamics, 10);
+	setTimeout(droneDynamics, 1000);
 }
