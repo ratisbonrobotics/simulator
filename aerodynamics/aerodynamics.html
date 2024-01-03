@@ -83,17 +83,18 @@
         state \(X\) for subsequent discrete time intervals.
       </p>
       <div class="equation">
-        \( X = [x, y, \psi, \dot{x}, \dot{y}, \dot{\psi}] \)
+        \( X = [x, y, \psi, \dot{x}, \dot{y}, \dot{\psi'}] \)
       </div>
       <p>
         Here, \(X\) encapsulates the drone's coordinates (\(x, y\)), rotational
         angle (\(\psi\)), and their corresponding velocities
         <span style="white-space: nowrap"
-          >(\(\dot{x}, \dot{y}, \dot{\psi}\))</span
-        >. The thrust forces (\(F_{1}\) and \(F_{2}\)) from the rotors, combined
-        with environmental factors, result in the alteration of the state vector
-        \(X\). The thrusts \(F_{1}\) and \(F_{2}\) are angled relative to the
-        y-axis by \(\psi\).
+          >(\(\dot{x}, \dot{y}, \dot{\psi'}\))</span
+        >, where \(\dot{\psi'}\) represents the angular velocity within the
+        drone's frame of reference. The thrust forces (\(F_{1}\) and \(F_{2}\))
+        from the rotors, combined with environmental factors, result in the
+        alteration of the state vector \(X\). The thrusts \(F_{1}\) and
+        \(F_{2}\) are angled relative to the y-axis by \(\psi\).
       </p>
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -129,18 +130,38 @@
       </p>
       <div class="equation">\( F_{i} = k_{f} \omega_{i}^2 \)</div>
       <p>
-        The thrust components \(F_{x}\) and \(F_{y}\), acting along the x-axis
-        and y-axis respectively, are determined by trigonometric relationships,
-        based on principles established in Euclid's work
-        <a href="#euclid300bc">4</a>, derived from the total thrust force in the
-        plane
-        <span style="white-space: nowrap"
-          >(\(F_{total} = F_1 + F_2 = F_{xy}\))</span
-        >
-        and the angle of orientation (\(\psi\)).
+        The thrust components \(F_{x}\) and \(F_{y}\), acting along the
+        \(x\)-axis and \(y\)-axis within the world's frame of reference, are
+        determined through the trigonometric relationships to the rotors thrusts
+        \(F_1\) and \(F_2\), based on principles established in Euclid's work
+        <a href="#euclid300bc">4</a>. The thrust of the rotors acts always along
+        the positive \(y\)-axis within the drone's frame of reference. But since
+        we ultimately care about the drones position and orientation within the
+        world's frame of reference, we seek an operation that maps any vector
+        from within the drone's frame of reference to the world's frame of
+        reference. Derived through step-by-step application of Euclid's
+        principles, a matrix can be constructed such that:
       </p>
+      <!-- prettier-ignore -->
       <div class="equation">
-        \[ F_{x} = \sin(\psi)F_{xy} \qquad F_{y} = \cos(\psi)F_{xy} \]
+        \[
+          \begin{bmatrix}
+            F_{x} \\
+            F_{y}
+          \end{bmatrix} =
+          \begin{bmatrix}
+            0 \\
+            F_1 + F_2
+          \end{bmatrix}
+          \begin{bmatrix}
+            \cos(\psi) & \sin(\psi) \\
+            -\sin(\psi) & \cos(\psi)
+          \end{bmatrix} = 
+          \begin{bmatrix}
+          \sin(\psi)(F_1 + F_2) \\
+          \cos(\psi)(F_1 + F_2)
+          \end{bmatrix}
+        \]
       </div>
 
       <figure>
@@ -224,16 +245,45 @@
         dynamics, which include the influence of forces and torques resulting
         from the rotor speeds and earth's gravity.
       </p>
+      <!-- prettier-ignore -->
       <div class="equation">
-        \[ X_{t + \Delta t} \approx X_t + \Delta t \dot{X}_t= \begin{bmatrix} x
-        \\ y \\ \psi \\ \dot{x} \\ \dot{y} \\ \dot{\psi} \end{bmatrix}_t +
-        \Delta t \begin{bmatrix} \dot{x} \\ \dot{y} \\ \dot{\psi} \\ \ddot{x} \\
-        \ddot{y} \\ \ddot{\psi} \end{bmatrix}_t = \begin{bmatrix} x \\ y \\ \psi
-        \\ \dot{x} \\ \dot{y} \\ \dot{\psi} \end{bmatrix}_t + \begin{bmatrix}
-        \Delta t\dot{x} \\ \Delta t\dot{y} \\ \Delta t\dot{\psi} \\ \frac{\Delta
-        t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\ \Delta t(g -
-        \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\ \frac{\Delta
-        tLk_f(\omega_2^2 - \omega_1^2)}{I_{\psi}} \end{bmatrix}_t \]
+        \[
+          X_{t + \Delta t} \approx
+          X_t + \Delta t \dot{X}_t =
+          \begin{bmatrix}
+            x \\
+            y \\
+            \psi \\
+            \dot{x} \\
+            \dot{y} \\
+            \dot{\psi}
+          \end{bmatrix}_t +
+          \Delta t
+          \begin{bmatrix}
+            \dot{x} \\
+            \dot{y} \\
+            \dot{\psi} \\
+            \ddot{x} \\
+            \ddot{y} \\
+            \ddot{\psi}
+          \end{bmatrix}_t =
+          \begin{bmatrix}
+            x \\
+            y \\
+            \psi \\
+            \dot{x} \\
+            \dot{y} \\
+            \dot{\psi}
+          \end{bmatrix}_t +
+          \begin{bmatrix}
+            \Delta t\dot{x} \\
+            \Delta t\dot{y} \\
+            \Delta t\dot{\psi} \\
+            \frac{\Delta t\sin(\psi)k_f(\omega_1^2 + \omega_2^2)}{m} \\
+            \Delta t(g - \frac{\cos(\psi)k_f(\omega_1^2 + \omega_2^2)}{m}) \\
+            \frac{\Delta tLk_f(\omega_2^2 - \omega_1^2)}{I_{\psi}}
+          \end{bmatrix}_t
+        \]
       </div>
       <h2>Mechanical Constants</h2>
       <p>
@@ -257,7 +307,7 @@
         a mathematical correlation can be constructed.
       </p>
     </section>
-    <!--
+
     <h1>Spatial Dynamics</h1>
     <section>
       <h2>State Representation</h2>
@@ -375,8 +425,8 @@
           the world's frame of reference are perfectly aligned.
         </figcaption>
       </figure>
--->
-    <!-- prettier-ignore 
+
+      <!-- prettier-ignore 
       <div class="equation">
         \[
           \begin{align*}
@@ -458,9 +508,9 @@
             \end{bmatrix}
           \end{align*}
         \]
-      </div>
+      </div>-->
     </section>
--->
+
     <h5 class="references">References</h5>
     <div class="references">
       <cite id="euler1768">
