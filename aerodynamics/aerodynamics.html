@@ -373,11 +373,12 @@
       <!-- prettier-ignore -->
       <div class="equation">
         \[
+        \begin{align*}
           \begin{bmatrix}
             F_{x} \\
             F_{y} \\
             F_{z}
-          \end{bmatrix} =
+          \end{bmatrix} &=
           \begin{bmatrix}
             1 & 0 & 0 \\
             0 & \cos(\theta) & \sin(\theta) \\
@@ -398,6 +399,26 @@
           \sum_i^4 F_i \\
           0
         \end{bmatrix}
+        \\
+        \begin{bmatrix}
+            F_{x} \\
+            F_{y} \\
+            F_{z}
+          \end{bmatrix} &=
+          \begin{bmatrix}
+          \cos(\phi)\cos(\psi) & \sin(\psi)\cos(\phi) & -\sin(\phi) \\
+          \sin(\phi)\sin(\theta)\cos(\psi) - \sin(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\theta)\cos(\phi) \\
+          \sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi) & \cos(\phi)\cos(\theta)
+          \end{bmatrix}
+          \begin{bmatrix}
+          0 \\
+          \sum_i^4 F_i \\
+          0
+        \end{bmatrix}
+        \\
+
+
+        \end{align*}
         \]
       </div>
 
@@ -521,21 +542,11 @@
             \end{bmatrix}
             &=
             \frac{d}{dt}\left(
-            \begin{bmatrix}
-              1 & 0 & 0 \\
-              0 & \cos(\theta) & \sin(\theta) \\
-              0 & -\sin(\theta) & \cos(\theta) \\
-            \end{bmatrix}
-            \begin{bmatrix}
-              \cos(\phi) & 0 & -\sin(\phi) \\
-              0 & 1 & 0 \\
-              \sin(\phi) & 0 & \cos(\phi) \\
-            \end{bmatrix}
-            \begin{bmatrix}
-              \cos(\psi) & \sin(\psi) & 0 \\
-              -\sin(\psi) & \cos(\psi) & 0 \\
-              0 & 0 & 1 
-            \end{bmatrix}
+              \begin{bmatrix}
+              \cos(\phi)\cos(\psi) & \sin(\psi)\cos(\phi) & -\sin(\phi) \\
+              \sin(\phi)\sin(\theta)\cos(\psi) - \sin(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\theta)\cos(\phi) \\
+              \sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi) & \cos(\phi)\cos(\theta)
+              \end{bmatrix}
             \right)
             \begin{bmatrix}
             \dot\theta' \\
@@ -560,6 +571,43 @@
               \dot\psi'
             \end{bmatrix}
           \end{align*}
+        \]
+      </div>
+      <h2>State Evolution</h2>
+      <p>We conclude with</p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          X_{t + \Delta t} \approx
+          \begin{bmatrix}
+            x \\
+            y \\
+            z \\
+            \theta \\
+            \phi \\
+            \psi \\
+            \dot{x} \\
+            \dot{y} \\
+            \dot{z} \\
+            \dot\theta' \\
+            \dot\phi' \\
+            \dot\psi'
+          \end{bmatrix}_t +
+          \Delta t
+          \begin{bmatrix}
+            \dot x \\
+            \dot y \\
+            \dot z \\
+            \dot\theta' + \dot\phi'\sin(\theta)\tan(\phi) + \dot\psi'\cos(\theta)\tan(\phi) \\
+            \dot\phi'\cos(\theta) - \dot\psi'\sin(\theta) \\
+            \dot\phi'\sin(\theta)/\cos(\phi) + \dot\psi'\cos(\theta)/\cos(\phi) \\
+            m^{-1}(\sin(\psi)\cos(\phi))(\sum_i^4 F_i) \\
+            m^{-1}(\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta))(\sum_i^4 F_i) - g \\
+            m^{-1}(\sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi))(\sum_i^4 F_i) \\
+            I_{\theta'}^{-1}(L((F_3 + F_4) - (F_2 + F_1)) - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})) \\
+            I_{\phi'}^{-1}(k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})) \\
+            I_{\psi'}^{-1}(L((F_2 + F_3) - (F_1 + F_4)) - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'}))
+          \end{bmatrix}_t 
         \]
       </div>
     </section>
