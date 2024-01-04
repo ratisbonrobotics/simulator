@@ -35,15 +35,15 @@ function droneDynamics() {
 		let M4 = k_m * omega_4 * omega_4;
 
 		let thrust = [0, F1 + F2 + F3 + F4, 0, 1];
-		thrust = multMat(createXRotationMatrix(degToRad(X[3])), thrust);
-		thrust = multMat(createYRotationMatrix(degToRad(X[4])), thrust);
-		thrust = multMat(createZRotationMatrix(degToRad(X[5])), thrust);
+		thrust = multMat4f(xRotMat4f(degToRad(X[3])), thrust);
+		thrust = multMat4f(yRotMat4f(degToRad(X[4])), thrust);
+		thrust = multMat4f(zRotMat4f(degToRad(X[5])), thrust);
 		let global_linear_accelerations = [thrust[0] / m, thrust[1] / m - g, thrust[2] / m, 1];
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4)), 1];
 		let local_rotational_velocities = [Xdot[9], Xdot[10], Xdot[11], 1];
-		let local_inerta_matrix = multMat(createIdentityMatrix(), [i_theta, i_phi, i_psi, 1]);
-		let local_rotational_accelerations = multMat(invMat(local_inerta_matrix), subVec(torque, crossVec(local_rotational_velocities, multMat(local_inerta_matrix, local_rotational_velocities))));
+		let local_inerta_matrix = multMat4f(identMat4f(), [i_theta, i_phi, i_psi, 1]);
+		let local_rotational_accelerations = multMat4f(invMat4f(local_inerta_matrix), subVec3f(torque, crossVec3f(local_rotational_velocities, multMat4f(local_inerta_matrix, local_rotational_velocities))));
 
 		// we need to continue here
 

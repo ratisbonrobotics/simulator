@@ -61,23 +61,18 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
-// --- SETUP PROJECTION MATRIX ---
-var projectionmatrix = createPerspectiveMatrix(
-    degToRad(46.0),
-    gl.canvas.clientWidth / gl.canvas.clientHeight,
-    0.01,
-    100
-);
-gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
-
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // --- SETUP PROJECTION MATRIX ---
+    var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
+    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
+
     // --- SETUP LOOKAT MATRIX ---
     var lookatmatrix =
-        createTranslationMatrix(
+        transMat4f(
             camerapos[0] + Math.sin(degToRad(viewxz)),
             camerapos[1] + Math.sin(degToRad(viewy)),
             camerapos[2] + Math.cos(degToRad(viewxz))
@@ -95,7 +90,7 @@ function drawScene() {
     camerapos[2] += Math.cos(degToRad(viewxz)) * movementspeed * factorws;
 
     var factorad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
-    var movcamvector = crossVec(
+    var movcamvector = crossVec3f(
         [
             Math.sin(degToRad(viewxz)),
             Math.sin(degToRad(viewy)),
@@ -113,7 +108,7 @@ function drawScene() {
 
     // --- SETUP VIEWMATRIX ---
     var cameramatrix = lookAt(camerapos, lookatposition);
-    var viewmatrix = invMat(cameramatrix);
+    var viewmatrix = invMat4f(cameramatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
     // --- DRAW TERRAIN ---
