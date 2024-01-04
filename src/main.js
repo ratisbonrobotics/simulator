@@ -1,4 +1,4 @@
-// --- DRAWING CODE ---
+// --- SHADER CODE ---
 const vertexshadersource = `
     precision highp float;
 
@@ -63,13 +63,14 @@ async function loadDrone() {
 
 // --- SETUP PROJECTION MATRIX ---
 var projectionmatrix = createPerspectiveMatrix(
-    degreeToRadians(46.0),
+    degToRad(46.0),
     gl.canvas.clientWidth / gl.canvas.clientHeight,
     0.01,
-    200000
+    100
 );
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
+// --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -77,28 +78,28 @@ function drawScene() {
     // --- SETUP LOOKAT MATRIX ---
     var lookatmatrix =
         createTranslationMatrix(
-            camerapos[0] + Math.sin(degreeToRadians(viewxz)),
-            camerapos[1] + Math.sin(degreeToRadians(viewy)),
-            camerapos[2] + Math.cos(degreeToRadians(viewxz))
+            camerapos[0] + Math.sin(degToRad(viewxz)),
+            camerapos[1] + Math.sin(degToRad(viewy)),
+            camerapos[2] + Math.cos(degToRad(viewxz))
         );
     var lookatposition = [lookatmatrix[12], lookatmatrix[13], lookatmatrix[14]];
 
     // --- FIRST PERSON CAMERA ---
     var movementspeed = 0.0125;
     var factorws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
-    lookatposition[0] += Math.sin(degreeToRadians(viewxz)) * movementspeed * factorws;
-    lookatposition[1] += Math.sin(degreeToRadians(viewy)) * movementspeed * factorws;
-    lookatposition[2] += Math.cos(degreeToRadians(viewxz)) * movementspeed * factorws;
-    camerapos[0] += Math.sin(degreeToRadians(viewxz)) * movementspeed * factorws;
-    camerapos[1] += Math.sin(degreeToRadians(viewy)) * movementspeed * factorws;
-    camerapos[2] += Math.cos(degreeToRadians(viewxz)) * movementspeed * factorws;
+    lookatposition[0] += Math.sin(degToRad(viewxz)) * movementspeed * factorws;
+    lookatposition[1] += Math.sin(degToRad(viewy)) * movementspeed * factorws;
+    lookatposition[2] += Math.cos(degToRad(viewxz)) * movementspeed * factorws;
+    camerapos[0] += Math.sin(degToRad(viewxz)) * movementspeed * factorws;
+    camerapos[1] += Math.sin(degToRad(viewy)) * movementspeed * factorws;
+    camerapos[2] += Math.cos(degToRad(viewxz)) * movementspeed * factorws;
 
     var factorad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
-    var movcamvector = cross3D(
+    var movcamvector = crossVec(
         [
-            Math.sin(degreeToRadians(viewxz)),
-            Math.sin(degreeToRadians(viewy)),
-            Math.cos(degreeToRadians(viewxz))
+            Math.sin(degToRad(viewxz)),
+            Math.sin(degToRad(viewy)),
+            Math.cos(degToRad(viewxz))
         ],
         [0, 1, 0]);
     lookatposition[0] += movcamvector[0] * movementspeed * factorad;
@@ -112,7 +113,7 @@ function drawScene() {
 
     // --- SETUP VIEWMATRIX ---
     var cameramatrix = lookAt(camerapos, lookatposition);
-    var viewmatrix = inverse(cameramatrix);
+    var viewmatrix = invMat(cameramatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
     // --- DRAW TERRAIN ---
@@ -122,7 +123,7 @@ function drawScene() {
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-    // -- DRAW DRONE ---
+    // --- DRAW DRONE ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2);
     gl.uniform1i(uniformLocations["texture"], drone_texture);
