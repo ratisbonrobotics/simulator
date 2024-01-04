@@ -31,7 +31,7 @@ const fragmentshadersource = `
 // --- MAKE SHADERS AND PROGRAM ---
 const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource);
 
-// --- GET ALL ATTRIBUTE AND UNIFORM LOCATIONS ---
+// --- GET ATTRIBUTE AND UNIFORM LOCATIONS ---
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate"]);
 const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture"]);
 
