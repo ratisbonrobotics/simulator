@@ -90,32 +90,14 @@ function droneDynamics() {
 		thrust = mult(createXRotationMatrix(degreeToRadians(X[3])), thrust);
 		thrust = mult(createYRotationMatrix(degreeToRadians(X[4])), thrust);
 		thrust = mult(createZRotationMatrix(degreeToRadians(X[5])), thrust);
-
-		let acc = [thrust[0] / m, thrust[1] / m - g, thrust[2] / m, 1];
+		let global_linear_accelerations = [thrust[0] / m, thrust[1] / m - g, thrust[2] / m, 1];
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4)), 1];
+		let local_rotational_velocities = [Xdot[9], Xdot[10], Xdot[11], 1];
+		let local_inerta_matrix = mult(createIdentityMatrix(), [i_theta, i_phi, i_psi, 1]);
+		let local_rotational_accelerations = mult(inverse(local_inerta_matrix), sub(torque, cross(local_rotational_velocities, mult(local_inerta_matrix, local_rotational_velocities))));
 
-
-		let local_orientation = [Xdot[9], Xdot[10], Xdot[11], 1];
-		let local_inertia = [i_theta, i_phi, i_psi, 1];
-		let local_inerta_matrix = mult(createIdentityMatrix(), local_inertia);
-
-
-		let omega = [Xdot[6], Xdot[7], Xdot[8], 1];
-
-		// Cross product term
-		let omega_cross = crossProduct(
-			omega,
-			[i_theta * omega[0], i_phi * omega[1], i_psi * omega[2], 1]
-		);
-
-		// Rearranged Euler's rotation equation to solve for angular accelerations
-		let angularAcc = [
-			1 / i_theta * (torque[0] - omega_cross[0]),
-			1 / i_phi * (torque[1] - omega_cross[1]),
-			1 / i_psi * (torque[2] - omega_cross[2]),
-			1
-		];
+		// we need to continue here
 
 		X = X.map((val, index) => val + dt * Xdot[index]);
 	}
