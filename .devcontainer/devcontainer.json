@@ -4,7 +4,6 @@
     "vscode": {
       "extensions": [
         "GitHub.copilot",
-        "mathematic.vscode-pdf",
         "ms-vscode.live-server",
         "esbenp.prettier-vscode"
       ]
