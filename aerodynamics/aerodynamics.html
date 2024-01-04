@@ -159,11 +159,12 @@
       <!-- prettier-ignore -->
       <div class="equation">
         \[
+        \begin{align*}
           \begin{bmatrix}
             F_{x} \\
             F_{y} \\
             F_{z}
-          \end{bmatrix} =
+          \end{bmatrix} &=
           \begin{bmatrix}
             \cos(\psi) & \sin(\psi) & 0 \\
             -\sin(\psi) & \cos(\psi) & 0 \\
@@ -184,7 +185,25 @@
             \sum_i^4 F_i \\
             0
           \end{bmatrix}
-        \]
+          \\
+          \begin{bmatrix}
+            F_{x} \\
+            F_{y} \\
+            F_{z}
+          \end{bmatrix} &=
+          \begin{bmatrix}
+            \cos(\phi)\cos(\psi) & \sin(\phi)\sin(\theta)\cos(\psi) + \sin(\psi)\cos(\theta) & -\sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) \\
+            -\sin(\psi)\cos(\phi) & -\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) + \sin(\theta)\cos(\psi) \\
+            \sin(\phi) & -\sin(\theta)\cos(\phi) & \cos(\phi)\cos(\theta)
+          \end{bmatrix}
+        
+          \begin{bmatrix}
+            0 \\
+            \sum_i^4 F_i \\
+            0
+          \end{bmatrix}
+        \end{align*}
+        \]        
       </div>
 
       <p>
@@ -314,7 +333,6 @@
           \right)
         \end{align*}
       \]
-      
       </div>
       <p>
         By taking the time derivative of each rotation matrix we can map the
@@ -324,33 +342,38 @@
       <!-- prettier-ignore -->
       <div class="equation">
         \[
+        \begin{align*}
           \begin{bmatrix}
             \dot{\theta} \\
             \dot{\phi} \\
             \dot{\psi}
           \end{bmatrix}
-          =
+          &=
           \begin{bmatrix}
-            -\sin(\psi)\dot\psi & \cos(\psi)\dot\psi & 0 \\
-            -\cos(\psi)\dot\psi & \sin(\psi)\dot\psi & 0 \\
-            0 & 0 & 0 
-          \end{bmatrix}
-          \begin{bmatrix}
-            -\sin(\phi)\dot\phi & 0 & -\cos(\phi)\dot\phi \\
-            0 & 0 & 0 \\
-            \cos(\phi)\dot\phi & 0 & -\sin(\phi)\dot\phi \\
-          \end{bmatrix}
-          \begin{bmatrix}
-            0 & 0 & 0 \\
-            0 & -\sin(\theta)\dot\theta & \cos(\theta)\dot\theta \\
-            0 & -\cos(\theta)\dot\theta & -\sin(\theta)\dot\theta \\
+            -\dot{\phi} \sin(\phi) \cos(\psi) - \dot{\psi} \sin(\psi) \cos(\phi) & \dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) + \dot{\psi} (-\sin(\phi) \sin(\psi) \sin(\theta) + \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) & -\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) \\
+            \dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi) & -\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (-\sin(\phi) \sin(\theta) \cos(\psi) - \sin(\psi) \cos(\theta)) + \dot{\theta} (-\sin(\phi) \sin(\psi) \cos(\theta) - \sin(\theta) \cos(\psi)) & \dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) + \dot{\theta} (-\sin(\phi) \sin(\psi) \sin(\theta) + \cos(\psi) \cos(\theta)) \\
+            \dot{\phi} \cos(\phi) & \dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta) & -\dot{\phi} \sin(\phi) \cos(\theta) - \dot{\theta} \sin(\theta) \cos(\phi)
           \end{bmatrix}
           \begin{bmatrix}
             \dot\theta' \\
             \dot\phi' \\
             \dot\psi'
           \end{bmatrix}
+          \\
+          \begin{bmatrix}
+            \dot{\theta} \\
+            \dot{\phi} \\
+            \dot{\psi}
+          \end{bmatrix}
+          &=
+          \begin{bmatrix}
+            \dot{\phi}' (\dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) - \dot{\psi} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta))) + \dot{\psi}' (-\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta))) - \dot{\theta}' (\dot{\phi} \sin(\phi) \cos(\psi) + \dot{\psi} \sin(\psi) \cos(\phi)) \\
+            -\dot{\phi}' (\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi))) + \dot{\psi}' (\dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) - \dot{\theta} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta))) + \dot{\theta}' (\dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi)) \\
+            \dot{\phi} \dot{\theta}' \cos(\phi) + \dot{\phi}' (\dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta)) - \dot{\psi}' (\dot{\phi} \sin(\phi) \cos(\theta) + \dot{\theta} \sin(\theta) \cos(\phi))
+          \end{bmatrix}
+        \end{align*}
         \]
+        
       </div>
 
       <h2>State Evolution</h2>
