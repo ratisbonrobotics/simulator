@@ -61,24 +61,23 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
-var camerapos = [0.0, 0.1, -1.0];
-
 // --- SETUP PROJECTION MATRIX ---
-var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
+var projectionmatrix = createPerspectiveMatrix(
+    degreeToRadians(46.0),
+    gl.canvas.clientWidth / gl.canvas.clientHeight,
+    0.01,
+    200000
+);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-
 requestAnimationFrame(drawScene);
-
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
 
     // --- SETUP LOOKAT MATRIX ---
     var lookatmatrix = createIdentityMatrix();
     lookatmatrix = mult(createTranslationMatrix(camerapos[0] + Math.sin(degreeToRadians(viewxz)), camerapos[1] + Math.sin(degreeToRadians(viewy)), camerapos[2] + Math.cos(degreeToRadians(viewxz))), lookatmatrix);
     var lookatposition = [lookatmatrix[12], lookatmatrix[13], lookatmatrix[14]];
-
 
     // --- FIRST PERSON CAMERA ---
     var movementspeed = 0.0125;
@@ -101,12 +100,10 @@ function drawScene() {
     lookatposition[1] += factoreq;
     camerapos[1] += factoreq;
 
-
     // --- SETUP VIEWMATRIX ---
     var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
     var viewmatrix = inverse(cameramatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
-
 
     // --- DRAW TERRAIN ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3);
@@ -114,7 +111,6 @@ function drawScene() {
     gl.uniform1i(uniformLocations["texture"], terrain_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-
 
     // -- DRAW DRONE ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);

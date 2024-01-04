@@ -2,6 +2,7 @@
 var keys = {};
 var viewxz = 0;
 var viewy = 0;
+var camerapos = [0.0, 0.1, -1.0];
 var canvas = document.getElementById("canvas");
 var gl = canvas.getContext("webgl");
 resizeCanvas();
