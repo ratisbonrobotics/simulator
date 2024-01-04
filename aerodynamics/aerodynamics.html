@@ -139,9 +139,8 @@
         orientation within the world's frame of reference, we seek an operation
         that maps any vector from within the drone's frame of reference to the
         world's frame of reference. Derived through step-by-step application of
-        trigonometric principles, chosing positive rotation to be
-        counterclockwise and the \(x\)-axis to grow positively leftwards, a
-        matrix can be constructed such that:
+        trigonometric principles, chosing a right handed coordinate system and
+        positive rotation to be counterclockwise.
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
@@ -151,12 +150,12 @@
             F_{y}
           \end{bmatrix} =
           \begin{bmatrix}
-            0 \\
-            F_1 + F_2
-          \end{bmatrix}
-          \begin{bmatrix}
             \cos(\psi) & \sin(\psi) \\
             -\sin(\psi) & \cos(\psi)
+          \end{bmatrix}
+          \begin{bmatrix}
+            0 \\
+            F_1 + F_2
           \end{bmatrix} = 
           \begin{bmatrix}
           \sin(\psi)(F_1 + F_2) \\
