@@ -75,8 +75,12 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // --- SETUP LOOKAT MATRIX ---
-    var lookatmatrix = createIdentityMatrix();
-    lookatmatrix = mult(createTranslationMatrix(camerapos[0] + Math.sin(degreeToRadians(viewxz)), camerapos[1] + Math.sin(degreeToRadians(viewy)), camerapos[2] + Math.cos(degreeToRadians(viewxz))), lookatmatrix);
+    var lookatmatrix =
+        createTranslationMatrix(
+            camerapos[0] + Math.sin(degreeToRadians(viewxz)),
+            camerapos[1] + Math.sin(degreeToRadians(viewy)),
+            camerapos[2] + Math.cos(degreeToRadians(viewxz))
+        );
     var lookatposition = [lookatmatrix[12], lookatmatrix[13], lookatmatrix[14]];
 
     // --- FIRST PERSON CAMERA ---
@@ -90,7 +94,13 @@ function drawScene() {
     camerapos[2] += Math.cos(degreeToRadians(viewxz)) * movementspeed * factorws;
 
     var factorad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
-    var movcamvector = cross([Math.sin(degreeToRadians(viewxz)), Math.sin(degreeToRadians(viewy)), Math.cos(degreeToRadians(viewxz))], [0, 1, 0]);
+    var movcamvector = cross3D(
+        [
+            Math.sin(degreeToRadians(viewxz)),
+            Math.sin(degreeToRadians(viewy)),
+            Math.cos(degreeToRadians(viewxz))
+        ],
+        [0, 1, 0]);
     lookatposition[0] += movcamvector[0] * movementspeed * factorad;
     lookatposition[2] += movcamvector[2] * movementspeed * factorad;
     camerapos[0] += movcamvector[0] * movementspeed * factorad;
@@ -101,7 +111,7 @@ function drawScene() {
     camerapos[1] += factoreq;
 
     // --- SETUP VIEWMATRIX ---
-    var cameramatrix = lookAt(camerapos, lookatposition, [0, 1, 0]);
+    var cameramatrix = lookAt(camerapos, lookatposition);
     var viewmatrix = inverse(cameramatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
