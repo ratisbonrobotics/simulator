@@ -117,7 +117,7 @@
         </li>
         <li>
           \(\dot{\theta'}, \dot{\phi'}, \dot{\psi'}\) indicate rotational
-          velocities inside the drones frame of reference.
+          velocities inside the drone's frame of reference.
         </li>
       </ul>
 
@@ -143,9 +143,10 @@
       <h2>Dynamics Formulation</h2>
       <p>
         The dynamics of the drone are characterized by how its state \(X\)
-        evolves under the influence of the all forces acting on it. The thrusts
-        and moments follow a quadratic relationship with rotor velocities
-        (\(\omega_{i}\)) that is derived from the principles of fluid dynamics.
+        evolves through time under the influence of forces. The thrusts and
+        moments follow a quadratic relationship with rotor velocities
+        (\(\omega_{i}\)), which is derived from the principles of fluid
+        dynamics.
       </p>
       <div class="equation">
         \[ F_{i} = k_{f} \omega_{i}^2 \qquad M_{i} = k_{m} \omega_{i}^2 \]
@@ -164,9 +165,9 @@
             F_{z}
           \end{bmatrix} =
           \begin{bmatrix}
-            1 & 0 & 0 \\
-            0 & \cos(\theta) & \sin(\theta) \\
-            0 & -\sin(\theta) & \cos(\theta) \\
+            \cos(\psi) & \sin(\psi) & 0 \\
+            -\sin(\psi) & \cos(\psi) & 0 \\
+            0 & 0 & 1 
           \end{bmatrix}
           \begin{bmatrix}
             \cos(\phi) & 0 & -\sin(\phi) \\
@@ -174,9 +175,9 @@
             \sin(\phi) & 0 & \cos(\phi) \\
           \end{bmatrix}
           \begin{bmatrix}
-            \cos(\psi) & \sin(\psi) & 0 \\
-            -\sin(\psi) & \cos(\psi) & 0 \\
-            0 & 0 & 1 
+            1 & 0 & 0 \\
+            0 & \cos(\theta) & \sin(\theta) \\
+            0 & -\sin(\theta) & \cos(\theta) \\
           \end{bmatrix}
           \begin{bmatrix}
             0 \\
@@ -242,99 +243,113 @@
       <!-- prettier-ignore -->
       <div class="equation">
         \[
-          \begin{align*}
-            \begin{bmatrix}
+        \begin{align*}
+          \begin{bmatrix}
             \tau_{\theta'} \\
             \tau_{\phi'} \\
             \tau_{\psi'}
-            \end{bmatrix} &=
-            \begin{bmatrix}
+          \end{bmatrix} &=
+          \begin{bmatrix}
             I_{\theta'} & 0 & 0 \\
             0 & I_{\phi'} & 0 \\
             0 & 0 & I_{\psi'}
-            \end{bmatrix}
-            \begin{bmatrix}
+          \end{bmatrix}
+          \begin{bmatrix}
             \ddot{\theta'} \\
             \ddot{\phi'} \\
             \ddot{\psi'}
-            \end{bmatrix}
-            +
-            \begin{bmatrix}
+          \end{bmatrix}
+          +
+          \begin{bmatrix}
             \dot{\theta'} \\
-            \dot\phi' \\
-            \dot\psi'
-            \end{bmatrix}
-            \times
-            \left(
+            \dot{\phi'} \\
+            \dot{\psi'}
+          \end{bmatrix}
+          \times
+          \left(
             \begin{bmatrix}
-            I_{\theta'} & 0 & 0 \\
-            0 & I_{\phi'} & 0 \\
-            0 & 0 & I_{\psi'}
+              I_{\theta'} & 0 & 0 \\
+              0 & I_{\phi'} & 0 \\
+              0 & 0 & I_{\psi'}
             \end{bmatrix}
             \begin{bmatrix}
-            \dot\theta' \\
-            \dot\phi' \\
-            \dot\psi'
+              \dot{\theta'} \\
+              \dot{\phi'} \\
+              \dot{\psi'}
             \end{bmatrix}
-            \right)
-            \\
-            \begin{bmatrix} \ddot{\theta'} \\ \ddot{\phi'} \\ \ddot{\psi'}
-
- \end{bmatrix} &=
-\begin{bmatrix} \frac{1}{I_{\theta'}} & 0 & 0 \\ 0 & \frac{1}{I_{\phi'}} & 0 \\ 0 & 0 & \frac{1}{I_{\psi'}} \end{bmatrix}
-\left( \begin{bmatrix} \tau_{\theta'} \\ \tau_{\phi'} \\ \tau_{\psi'} \end{bmatrix} - 
-\begin{bmatrix} \dot{\theta'} \\ \dot{\phi'} \\ \dot{\psi'} \end{bmatrix} \times 
-\left( \begin{bmatrix} I_{\theta'} & 0 & 0 \\ 0 & I_{\phi'} & 0 \\ 0 & 0 & I_{\psi'} \end{bmatrix} 
-\begin{bmatrix} \dot{\theta'} \\ \dot{\phi'} \\ \dot{\psi'} \end{bmatrix} \right) \right)
-
-          \end{align*}
-        \]
+          \right) \\
+          \begin{bmatrix} 
+            \ddot{\theta'} \\ 
+            \ddot{\phi'} \\ 
+            \ddot{\psi'}
+          \end{bmatrix} &=
+          \begin{bmatrix} 
+            \frac{1}{I_{\theta'}} & 0 & 0 \\ 
+            0 & \frac{1}{I_{\phi'}} & 0 \\ 
+            0 & 0 & \frac{1}{I_{\psi'}} 
+          \end{bmatrix}
+          \left( 
+            \begin{bmatrix} 
+              \tau_{\theta'} \\ 
+              \tau_{\phi'} \\ 
+              \tau_{\psi'} 
+            \end{bmatrix} - 
+            \begin{bmatrix} 
+              \dot{\theta'} \\ 
+              \dot{\phi'} \\ 
+              \dot{\psi'} 
+            \end{bmatrix} \times 
+            \left( 
+              \begin{bmatrix} 
+                I_{\theta'} & 0 & 0 \\ 
+                0 & I_{\phi'} & 0 \\ 
+                0 & 0 & I_{\psi'} 
+              \end{bmatrix} 
+              \begin{bmatrix} 
+                \dot{\theta'} \\ 
+                \dot{\phi'} \\ 
+                \dot{\psi'} 
+              \end{bmatrix} 
+            \right) 
+          \right)
+        \end{align*}
+      \]
+      
       </div>
       <p>
-        By taking the time derivative of the rotation matrix we can map the
+        By taking the time derivative of each rotation matrix we can map the
         angular velocities within the drone's frame of reference to angular
         velocities in the world's frame of reference.
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
         \[
-          \begin{align*}
-            \begin{bmatrix}
+          \begin{bmatrix}
             \dot{\theta} \\
             \dot{\phi} \\
             \dot{\psi}
-            \end{bmatrix}
-            &=
-            \frac{d}{dt}\left(
-              \begin{bmatrix}
-              \cos(\phi)\cos(\psi) & \sin(\psi)\cos(\phi) & -\sin(\phi) \\
-              \sin(\phi)\sin(\theta)\cos(\psi) - \sin(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\theta)\cos(\phi) \\
-              \sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) - \sin(\theta)\cos(\psi) & \cos(\phi)\cos(\theta)
-              \end{bmatrix}
-            \right)
-            \begin{bmatrix}
+          \end{bmatrix}
+          =
+          \begin{bmatrix}
+            -\sin(\psi)\dot\psi & \cos(\psi)\dot\psi & 0 \\
+            -\cos(\psi)\dot\psi & \sin(\psi)\dot\psi & 0 \\
+            0 & 0 & 0 
+          \end{bmatrix}
+          \begin{bmatrix}
+            -\sin(\phi)\dot\phi & 0 & -\cos(\phi)\dot\phi \\
+            0 & 0 & 0 \\
+            \cos(\phi)\dot\phi & 0 & -\sin(\phi)\dot\phi \\
+          \end{bmatrix}
+          \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & -\sin(\theta)\dot\theta & \cos(\theta)\dot\theta \\
+            0 & -\cos(\theta)\dot\theta & -\sin(\theta)\dot\theta \\
+          \end{bmatrix}
+          \begin{bmatrix}
             \dot\theta' \\
             \dot\phi' \\
             \dot\psi'
-            \end{bmatrix}
-            \\
-            \begin{bmatrix}
-              \dot{\theta} \\
-              \dot{\phi} \\
-              \dot{\psi}
-            \end{bmatrix}
-              &=
-            \begin{bmatrix}
-              1 & \sin(\theta)\tan(\phi) & \cos(\theta)\tan(\phi) \\
-              0 & \cos(\theta) & -\sin(\theta) \\
-              0 & \sin(\theta)/\cos(\phi) & \cos(\theta)/\cos(\phi)
-            \end{bmatrix}
-            \begin{bmatrix}
-              \dot\theta' \\
-              \dot\phi' \\
-              \dot\psi'
-            \end{bmatrix}
-          \end{align*}
+          \end{bmatrix}
         \]
       </div>
 
@@ -348,38 +363,13 @@
         by Leonhard Euler <a href="#euler1768">1</a>. His method approximates
         the future state by assuming a constant rate of change (\( \dot{X}_t \))
         over a small interval
-        <span style="white-space: nowrap">(\( \Delta t \approx 0.01\))</span>,
-        simplifying the integral to a product of the rate of change and the time
-        interval.
+        <span style="white-space: nowrap">(\(\Delta t\))</span>, simplifying the
+        integral to a product of the rate of change and the time interval.
       </p>
       <div class="equation">
         \[ X_{t + \Delta t} = X_{t} + \int_{t}^{t+\Delta t} \dot{X}_{\tau} d\tau
         \approx X_t + \Delta t\dot{X}_t \]
       </div>
-
-      <h2>Mechanical Constants</h2>
-      <p>
-        To determine \(I_{\psi}\), we consider the drone's geometry and mass
-        distribution through the formula
-      </p>
-      <div class="equation">\[I_{\psi} = \sum_i(m_i r_i^2)\]</div>
-      <p>
-        where the masses (\(m_i\)) of small segments at different radii
-        (\(r_i\)) from the center are summed. For continuous bodies, this
-        summation transforms into an integral, taking into account the
-        continuous radial mass distribution.
-      </p>
-      <p>
-        The calculation of the thrust coefficient (\(k_f\)) is influenced by
-        both physical and operational specifics of the rotor. The rotor's design
-        parameters such as the size, arrangement, and the number of blades have
-        a significant impact on \(k_f\). Crucially, the individual rotor blades
-        are typically curved and tilted to create an airfoil shape, which moves
-        air downwards (Imagine holding your hand out of a moving car's window at
-        a tilt.). The magnitude of the generated thrust varies with rotor speed,
-        and by investigating this via computational fluid dynamics simulations,
-        a mathematical correlation can be constructed.
-      </p>
     </section>
 
     <h5 class="references">References</h5>
