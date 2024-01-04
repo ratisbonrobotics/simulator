@@ -3,9 +3,9 @@ const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const m = 1.0;
 const L = 0.23;
-const i_x = 0.0121;
-const i_y = 0.0119;
-const i_z = 0.0223;
+const i_theta = 0.0121;
+const i_phi = 0.0119;
+const i_psi = 0.0223;
 const g = 9.81;
 const omega_min = 20
 const omega_max = 66
@@ -96,6 +96,26 @@ function droneDynamics() {
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4)), 1];
 
 
+		let local_orientation = [Xdot[9], Xdot[10], Xdot[11], 1];
+		let local_inertia = [i_theta, i_phi, i_psi, 1];
+		let local_inerta_matrix = mult(createIdentityMatrix(), local_inertia);
+
+
+		let omega = [Xdot[6], Xdot[7], Xdot[8], 1];
+
+		// Cross product term
+		let omega_cross = crossProduct(
+			omega,
+			[i_theta * omega[0], i_phi * omega[1], i_psi * omega[2], 1]
+		);
+
+		// Rearranged Euler's rotation equation to solve for angular accelerations
+		let angularAcc = [
+			1 / i_theta * (torque[0] - omega_cross[0]),
+			1 / i_phi * (torque[1] - omega_cross[1]),
+			1 / i_psi * (torque[2] - omega_cross[2]),
+			1
+		];
 
 		X = X.map((val, index) => val + dt * Xdot[index]);
 	}

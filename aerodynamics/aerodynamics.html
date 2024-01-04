@@ -489,23 +489,14 @@
             \end{bmatrix}
             \right)
             \\
-            \begin{bmatrix}
-            \ddot\theta' \\
-            \ddot\phi' \\
-            \ddot\psi'
-            \end{bmatrix}
-            &=
-            \begin{bmatrix}
-            \frac{\tau_{\theta'} - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})}{I_{\theta'}} \\
-            \frac{\tau_{\phi'} - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})}{I_{\phi'}} \\
-            \frac{\tau_{\psi'} - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'})}{I_{\psi'}}
-            \end{bmatrix}
-            =
-            \begin{bmatrix}
-            \frac{L((F_3 + F_4) - (F_2 + F_1)) - \dot\psi'\dot\phi'(I_{\theta'} - I_{\phi'})}{I_{\theta'}} \\
-            \frac{k_m((\omega_1^2 + \omega_3^2) - (\omega_2^2 + \omega_4^2))  - \dot\psi'\dot\theta'(I_{\theta'} - I_{\psi'})}{I_{\phi'}} \\
-            \frac{L((F_2 + F_3) - (F_1 + F_4)) - \dot\theta'\dot\phi'(I_{\phi'} - I_{\theta'})}{I_{\psi'}}
-            \end{bmatrix}
+            \begin{bmatrix} \ddot{\theta'} \\ \ddot{\phi'} \\ \ddot{\psi'}
+
+ \end{bmatrix} &=
+\begin{bmatrix} \frac{1}{I_{\theta'}} & 0 & 0 \\ 0 & \frac{1}{I_{\phi'}} & 0 \\ 0 & 0 & \frac{1}{I_{\psi'}} \end{bmatrix}
+\left( \begin{bmatrix} \tau_{\theta'} \\ \tau_{\phi'} \\ \tau_{\psi'} \end{bmatrix} - 
+\begin{bmatrix} \dot{\theta'} \\ \dot{\phi'} \\ \dot{\psi'} \end{bmatrix} \times 
+\left( \begin{bmatrix} I_{\theta'} & 0 & 0 \\ 0 & I_{\phi'} & 0 \\ 0 & 0 & I_{\psi'} \end{bmatrix} 
+\begin{bmatrix} \dot{\theta'} \\ \dot{\phi'} \\ \dot{\psi'} \end{bmatrix} \right) \right)
 
           \end{align*}
         \]
