@@ -61,13 +61,6 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
-function getKeyboardInput() {
-    var ws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
-    var ad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
-    var eq = (keys["e"] ? 1 : keys["q"] ? -1 : 0);
-    return [ws, ad, eq];
-}
-
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
@@ -87,7 +80,6 @@ function drawScene() {
     camerapos = addVec3f(camerapos, multScalarVec3f(viewvec, inputVector[0]));
 
     var movcamvector = crossVec3f(viewvec, [0, 1, 0]);
-    movcamvector[1] = 0;
     lookatvector = addVec3f(lookatvector, multScalarVec3f(movcamvector, inputVector[1]));
     camerapos = addVec3f(camerapos, multScalarVec3f(movcamvector, inputVector[1]));
 
