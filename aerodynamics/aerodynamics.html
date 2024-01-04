@@ -102,7 +102,7 @@
       </p>
       <div class="equation">
         \( X = [x, y, z, \theta, \phi, \psi, \dot{x}, \dot{y}, \dot{z},
-        \dot{\theta_{l}}, \dot{\phi_{l}}, \dot{\psi_{l}}] \)
+        \dot{\alpha}, \dot{\beta}, \dot{\gamma}] \)
       </div>
       <p>where</p>
       <ul>
@@ -116,9 +116,9 @@
           and z axes,
         </li>
         <li>
-          \(\dot{\theta_{l}}, \dot{\phi_{l}}, \dot{\psi_{l}}\) indicate
-          rotational velocities inside the drone's frame of reference, i.e.
-          inside the local frame of reference.
+          \(\dot{\alpha}, \dot{\beta}, \dot{\gamma}\) indicate rotational
+          velocities inside the drone's frame of reference, i.e. inside the
+          local frame of reference.
         </li>
       </ul>
 
@@ -250,9 +250,9 @@
       <div class="equation">
         \[
           \begin{align*}
-            \tau_{\theta_{l}} &= L((F_3 + F_4) - (F_2 + F_1)) \\
-            \tau_{\phi_{l}} &= (M_1 + M_3) - (M_2 + M_4) \\
-            \tau_{\psi_{l}} &= L((F_2 + F_3) - (F_1 + F_4))
+            \tau_{\alpha} &= L((F_3 + F_4) - (F_2 + F_1)) \\
+            \tau_{\beta} &= (M_1 + M_3) - (M_2 + M_4) \\
+            \tau_{\gamma} &= L((F_2 + F_3) - (F_1 + F_4))
           \end{align*}
         \]
       </div>
@@ -265,70 +265,70 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \tau_{\theta_{l}} \\
-            \tau_{\phi_{l}} \\
-            \tau_{\psi_{l}}
+            \tau_{\alpha} \\
+            \tau_{\beta} \\
+            \tau_{\gamma}
           \end{bmatrix} &=
           \begin{bmatrix}
-            I_{\theta_{l}} & 0 & 0 \\
-            0 & I_{\phi_{l}} & 0 \\
-            0 & 0 & I_{\psi_{l}}
+            I_{\alpha} & 0 & 0 \\
+            0 & I_{\beta} & 0 \\
+            0 & 0 & I_{\gamma}
           \end{bmatrix}
           \begin{bmatrix}
-            \ddot{\theta_{l}} \\
-            \ddot{\phi_{l}} \\
-            \ddot{\psi_{l}}
+            \ddot{\alpha} \\
+            \ddot{\beta} \\
+            \ddot{\gamma}
           \end{bmatrix}
           +
           \begin{bmatrix}
-            \dot{\theta_{l}} \\
-            \dot{\phi_{l}} \\
-            \dot{\psi_{l}}
+            \dot{\alpha} \\
+            \dot{\beta} \\
+            \dot{\gamma}
           \end{bmatrix}
           \times
           \left(
             \begin{bmatrix}
-              I_{\theta_{l}} & 0 & 0 \\
-              0 & I_{\phi_{l}} & 0 \\
-              0 & 0 & I_{\psi_{l}}
+              I_{\alpha} & 0 & 0 \\
+              0 & I_{\beta} & 0 \\
+              0 & 0 & I_{\gamma}
             \end{bmatrix}
             \begin{bmatrix}
-              \dot{\theta_{l}} \\
-              \dot{\phi_{l}} \\
-              \dot{\psi_{l}}
+              \dot{\alpha} \\
+              \dot{\beta} \\
+              \dot{\gamma}
             \end{bmatrix}
           \right) \\
           \begin{bmatrix} 
-            \ddot{\theta_{l}} \\ 
-            \ddot{\phi_{l}} \\ 
-            \ddot{\psi_{l}}
+            \ddot{\alpha} \\ 
+            \ddot{\beta} \\ 
+            \ddot{\gamma}
           \end{bmatrix} &=
           \begin{bmatrix} 
-            \frac{1}{I_{\theta_{l}}} & 0 & 0 \\ 
-            0 & \frac{1}{I_{\phi_{l}}} & 0 \\ 
-            0 & 0 & \frac{1}{I_{\psi_{l}}} 
+            \frac{1}{I_{\alpha}} & 0 & 0 \\ 
+            0 & \frac{1}{I_{\beta}} & 0 \\ 
+            0 & 0 & \frac{1}{I_{\gamma}} 
           \end{bmatrix}
           \left( 
             \begin{bmatrix} 
-              \tau_{\theta_{l}} \\ 
-              \tau_{\phi_{l}} \\ 
-              \tau_{\psi_{l}} 
+              \tau_{\alpha} \\ 
+              \tau_{\beta} \\ 
+              \tau_{\gamma} 
             \end{bmatrix} - 
             \begin{bmatrix} 
-              \dot{\theta_{l}} \\ 
-              \dot{\phi_{l}} \\ 
-              \dot{\psi_{l}} 
+              \dot{\alpha} \\ 
+              \dot{\beta} \\ 
+              \dot{\gamma} 
             \end{bmatrix} \times 
             \left( 
               \begin{bmatrix} 
-                I_{\theta_{l}} & 0 & 0 \\ 
-                0 & I_{\phi_{l}} & 0 \\ 
-                0 & 0 & I_{\psi_{l}} 
+                I_{\alpha} & 0 & 0 \\ 
+                0 & I_{\beta} & 0 \\ 
+                0 & 0 & I_{\gamma} 
               \end{bmatrix} 
               \begin{bmatrix} 
-                \dot{\theta_{l}} \\ 
-                \dot{\phi_{l}} \\ 
-                \dot{\psi_{l}} 
+                \dot{\alpha} \\ 
+                \dot{\beta} \\ 
+                \dot{\gamma} 
               \end{bmatrix} 
             \right) 
           \right)
@@ -356,9 +356,9 @@
             \dot{\phi} \cos(\phi) & \dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta) & -\dot{\phi} \sin(\phi) \cos(\theta) - \dot{\theta} \sin(\theta) \cos(\phi)
           \end{bmatrix}
           \begin{bmatrix}
-            \dot\theta_{l} \\
-            \dot\phi_{l} \\
-            \dot\psi_{l}
+            \dot\alpha \\
+            \dot\beta \\
+            \dot\gamma
           \end{bmatrix}
           \\
           \begin{bmatrix}
@@ -368,9 +368,9 @@
           \end{bmatrix}
           &=
           \begin{bmatrix}
-            \dot{\phi_{l}} (\dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) - \dot{\psi} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta))) + \dot{\psi_{l}} (-\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta))) - \dot{\theta_{l}} (\dot{\phi} \sin(\phi) \cos(\psi) + \dot{\psi} \sin(\psi) \cos(\phi)) \\
-            -\dot{\phi_{l}} (\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi))) + \dot{\psi_{l}} (\dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) - \dot{\theta} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta))) + \dot{\theta_{l}} (\dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi)) \\
-            \dot{\phi} \dot{\theta_{l}} \cos(\phi) + \dot{\phi_{l}} (\dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta)) - \dot{\psi_{l}} (\dot{\phi} \sin(\phi) \cos(\theta) + \dot{\theta} \sin(\theta) \cos(\phi))
+            \dot{\beta} (\dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) - \dot{\psi} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta))) + \dot{\gamma} (-\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta))) - \dot{\alpha} (\dot{\phi} \sin(\phi) \cos(\psi) + \dot{\psi} \sin(\psi) \cos(\phi)) \\
+            -\dot{\beta} (\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi))) + \dot{\gamma} (\dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) - \dot{\theta} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta))) + \dot{\alpha} (\dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi)) \\
+            \dot{\phi} \dot{\alpha} \cos(\phi) + \dot{\beta} (\dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta)) - \dot{\gamma} (\dot{\phi} \sin(\phi) \cos(\theta) + \dot{\theta} \sin(\theta) \cos(\phi))
           \end{bmatrix}
         \end{align*}
         \]
