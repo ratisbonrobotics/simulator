@@ -5,8 +5,8 @@ const vertexshadersource = `
     attribute vec4 vertexposition;
     attribute vec2 texturecoordinate;
     uniform mat4 modelmatrix;
-    uniform mat4 projectionmatrix;
     uniform mat4 viewmatrix;
+    uniform mat4 projectionmatrix;
 
     varying vec2 o_texturecoordinate;
 
@@ -63,14 +63,15 @@ async function loadDrone() {
 
 var camerapos = [0.0, 0.1, -1.0];
 
+// --- SETUP PROJECTION MATRIX ---
+var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
+gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
+
+
 requestAnimationFrame(drawScene);
 
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    // --- SETUP PROJECTION MATRIX ---
-    var projectionmatrix = createPerspectiveMatrix(degreeToRadians(46.0), gl.canvas.clientWidth / gl.canvas.clientHeight, 0.01, 200000);
-    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 
     // --- SETUP LOOKAT MATRIX ---
