@@ -70,25 +70,17 @@ function drawScene() {
     var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-    // --- SETUP LOOKAT VECTOR --- --- FIRST PERSON CAMERA ---
-    var movementspeed = 0.0125;
-    var inputVector = getKeyboardInput();
-    inputVector = multScalarVec3f(inputVector, movementspeed);
+    // --- SETUP VIEWMATRIX ---
+    var inputVector = multScalarVec3f(getKeyboardInput(), 0.0125);
     var viewvec = [Math.sin(degToRad(viewxz)), Math.sin(degToRad(viewy)), Math.cos(degToRad(viewxz))];
     var lookatvector = addVec3f(camerapos, viewvec);
     lookatvector = addVec3f(lookatvector, multScalarVec3f(viewvec, inputVector[0]));
     camerapos = addVec3f(camerapos, multScalarVec3f(viewvec, inputVector[0]));
-
-    var movcamvector = crossVec3f(viewvec, [0, 1, 0]);
-    lookatvector = addVec3f(lookatvector, multScalarVec3f(movcamvector, inputVector[1]));
-    camerapos = addVec3f(camerapos, multScalarVec3f(movcamvector, inputVector[1]));
-
+    lookatvector = addVec3f(lookatvector, multScalarVec3f(crossVec3f(viewvec, [0, 1, 0]), inputVector[1]));
+    camerapos = addVec3f(camerapos, multScalarVec3f(crossVec3f(viewvec, [0, 1, 0]), inputVector[1]));
     lookatvector = addVec3f(lookatvector, multScalarVec3f([0, 1, 0], inputVector[2]));
     camerapos = addVec3f(camerapos, multScalarVec3f([0, 1, 0], inputVector[2]));
-
-    // --- SETUP VIEWMATRIX ---
-    var cameramatrix = lookAt(camerapos, lookatvector);
-    var viewmatrix = invMat4f(cameramatrix);
+    var viewmatrix = invMat4f(lookAt(camerapos, lookatvector));
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
     // --- DRAW TERRAIN ---

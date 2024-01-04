@@ -34,7 +34,7 @@ function droneDynamics() {
 		let M3 = k_m * omega_3 * omega_3;
 		let M4 = k_m * omega_4 * omega_4;
 
-		let thrust = [0, F1 + F2 + F3 + F4, 0, 1];
+		let thrust = [0, F1 + F2 + F3 + F4, 0];
 		thrust = multMat4f(xRotMat4f(degToRad(X[3])), thrust);
 		thrust = multMat4f(yRotMat4f(degToRad(X[4])), thrust);
 		thrust = multMat4f(zRotMat4f(degToRad(X[5])), thrust);
