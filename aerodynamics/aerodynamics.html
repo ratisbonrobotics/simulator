@@ -193,9 +193,9 @@
             F_{z}
           \end{bmatrix} &=
           \begin{bmatrix}
-            \cos(\phi)\cos(\psi) & \sin(\phi)\sin(\theta)\cos(\psi) + \sin(\psi)\cos(\theta) & -\sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) \\
-            -\sin(\psi)\cos(\phi) & -\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) + \sin(\theta)\cos(\psi) \\
-            \sin(\phi) & -\sin(\theta)\cos(\phi) & \cos(\phi)\cos(\theta)
+          \cos(\phi)\cos(\psi) & \sin(\phi)\sin(\theta)\cos(\psi) + \sin(\psi)\cos(\theta) & -\sin(\phi)\cos(\psi)\cos(\theta) + \sin(\psi)\sin(\theta) \\
+          -\sin(\psi)\cos(\phi) & -\sin(\phi)\sin(\psi)\sin(\theta) + \cos(\psi)\cos(\theta) & \sin(\phi)\sin(\psi)\cos(\theta) + \sin(\theta)\cos(\psi) \\
+          \sin(\phi) & -\sin(\theta)\cos(\phi) & \cos(\phi)\cos(\theta) \\
           \end{bmatrix}
         
           \begin{bmatrix}
@@ -345,33 +345,31 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \dot{\theta} \\
-            \dot{\phi} \\
-            \dot{\psi}
+            \dot\theta \\
+            \dot\phi \\
+            \dot\psi
           \end{bmatrix}
-          &=
+          &= 
+          \left[\begin{matrix}- \dot\phi \sin{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\phi \right)} & \dot\phi \sin{\left(\theta \right)} \cos{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\psi \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\psi \right)} \sin{\left(\theta \right)} & - \dot\phi \cos{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\psi \right)} \cos{\left(\theta \right)}\\\dot\phi \sin{\left(\phi \right)} \sin{\left(\psi \right)} - \dot\psi \cos{\left(\phi \right)} \cos{\left(\psi \right)} & - \dot\phi \sin{\left(\psi \right)} \sin{\left(\theta \right)} \cos{\left(\phi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\psi \right)} & \dot\phi \sin{\left(\psi \right)} \cos{\left(\phi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\psi \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\theta \cos{\left(\psi \right)} \cos{\left(\theta \right)}\\\dot\phi \cos{\left(\phi \right)} & \dot\phi \sin{\left(\phi \right)} \sin{\left(\theta \right)} - \dot\theta \cos{\left(\phi \right)} \cos{\left(\theta \right)} & - \dot\phi \sin{\left(\phi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\phi \right)}\end{matrix}\right]
           \begin{bmatrix}
-            -\dot{\phi} \sin(\phi) \cos(\psi) - \dot{\psi} \sin(\psi) \cos(\phi) & \dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) + \dot{\psi} (-\sin(\phi) \sin(\psi) \sin(\theta) + \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) & -\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) \\
-            \dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi) & -\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (-\sin(\phi) \sin(\theta) \cos(\psi) - \sin(\psi) \cos(\theta)) + \dot{\theta} (-\sin(\phi) \sin(\psi) \cos(\theta) - \sin(\theta) \cos(\psi)) & \dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) + \dot{\theta} (-\sin(\phi) \sin(\psi) \sin(\theta) + \cos(\psi) \cos(\theta)) \\
-            \dot{\phi} \cos(\phi) & \dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta) & -\dot{\phi} \sin(\phi) \cos(\theta) - \dot{\theta} \sin(\theta) \cos(\phi)
-          \end{bmatrix}
-          \begin{bmatrix}
-            \dot\alpha \\
-            \dot\beta \\
-            \dot\gamma
+            \dot{\alpha} \\
+            \dot{\beta} \\
+            \dot{\gamma}
           \end{bmatrix}
           \\
           \begin{bmatrix}
-            \dot{\theta} \\
-            \dot{\phi} \\
-            \dot{\psi}
+            \dot\theta \\
+            \dot\phi \\
+            \dot\psi
           \end{bmatrix}
           &=
-          \begin{bmatrix}
-            \dot{\beta} (\dot{\phi} \sin(\theta) \cos(\phi) \cos(\psi) - \dot{\psi} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta))) + \dot{\gamma} (-\dot{\phi} \cos(\phi) \cos(\psi) \cos(\theta) + \dot{\psi} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi)) + \dot{\theta} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta))) - \dot{\alpha} (\dot{\phi} \sin(\phi) \cos(\psi) + \dot{\psi} \sin(\psi) \cos(\phi)) \\
-            -\dot{\beta} (\dot{\phi} \sin(\psi) \sin(\theta) \cos(\phi) + \dot{\psi} (\sin(\phi) \sin(\theta) \cos(\psi) + \sin(\psi) \cos(\theta)) + \dot{\theta} (\sin(\phi) \sin(\psi) \cos(\theta) + \sin(\theta) \cos(\psi))) + \dot{\gamma} (\dot{\phi} \sin(\psi) \cos(\phi) \cos(\theta) + \dot{\psi} (\sin(\phi) \cos(\psi) \cos(\theta) - \sin(\psi) \sin(\theta)) - \dot{\theta} (\sin(\phi) \sin(\psi) \sin(\theta) - \cos(\psi) \cos(\theta))) + \dot{\alpha} (\dot{\phi} \sin(\phi) \sin(\psi) - \dot{\psi} \cos(\phi) \cos(\psi)) \\
-            \dot{\phi} \dot{\alpha} \cos(\phi) + \dot{\beta} (\dot{\phi} \sin(\phi) \sin(\theta) - \dot{\theta} \cos(\phi) \cos(\theta)) - \dot{\gamma} (\dot{\phi} \sin(\phi) \cos(\theta) + \dot{\theta} \sin(\theta) \cos(\phi))
-          \end{bmatrix}
+          \left[\begin{matrix}\dot\alpha \left(- \dot\phi \sin{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\phi \right)}\right) + \dot\beta \left(\dot\phi \sin{\left(\theta \right)} \cos{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\psi \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\psi \right)} \sin{\left(\theta \right)}\right) + \dot\gamma \left(- \dot\phi \cos{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\psi \right)} \cos{\left(\theta \right)}\right)\\\dot\alpha \left(\dot\phi \sin{\left(\phi \right)} \sin{\left(\psi \right)} - \dot\psi \cos{\left(\phi \right)} \cos{\left(\psi \right)}\right) + \dot\beta \left(- \dot\phi \sin{\left(\psi \right)} \sin{\left(\theta \right)} \cos{\left(\phi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\psi \right)}\right) + \dot\gamma \left(\dot\phi \sin{\left(\psi \right)} \cos{\left(\phi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\psi \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\theta \cos{\left(\psi \right)} \cos{\left(\theta \right)}\right)\\\dot\alpha \dot\phi \cos{\left(\phi \right)} + \dot\beta \left(\dot\phi \sin{\left(\phi \right)} \sin{\left(\theta \right)} - \dot\theta \cos{\left(\phi \right)} \cos{\left(\theta \right)}\right) + \dot\gamma \left(- \dot\phi \sin{\left(\phi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\phi \right)}\right)\end{matrix}\right]
+
+          \\
+
+          \dot\theta &= - \dot\alpha \left(\dot\phi \sin{\left(\phi \right)} \cos{\left(\psi \right)} + \dot\psi \sin{\left(\psi \right)} \cos{\left(\phi \right)}\right) + \dot\beta \left(\dot\phi \sin{\left(\theta \right)} \cos{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\psi \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\psi \right)} \sin{\left(\theta \right)}\right) + \dot\gamma \left(- \dot\phi \cos{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\psi \right)} \cos{\left(\theta \right)}\right) \\
+            \dot\phi &= \dot\alpha \left(\dot\phi \sin{\left(\phi \right)} \sin{\left(\psi \right)} - \dot\psi \cos{\left(\phi \right)} \cos{\left(\psi \right)}\right) - \dot\beta \left(\dot\phi \sin{\left(\psi \right)} \sin{\left(\theta \right)} \cos{\left(\phi \right)} + \dot\psi \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\psi \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\theta \right)} \cos{\left(\psi \right)}\right) + \dot\gamma \left(\dot\phi \sin{\left(\psi \right)} \cos{\left(\phi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\psi \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\theta \cos{\left(\psi \right)} \cos{\left(\theta \right)}\right) \\
+\dot\psi &= \dot\alpha \dot\phi \cos{\left(\phi \right)} + \dot\beta \left(\dot\phi \sin{\left(\phi \right)} \sin{\left(\theta \right)} - \dot\theta \cos{\left(\phi \right)} \cos{\left(\theta \right)}\right) - \dot\gamma \left(\dot\phi \sin{\left(\phi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\theta \right)} \cos{\left(\phi \right)}\right)
         \end{align*}
         \]
         
