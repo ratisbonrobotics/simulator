@@ -61,6 +61,13 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
+function getKeyboardInput() {
+    var ws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
+    var ad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
+    var eq = (keys["e"] ? 1 : keys["q"] ? -1 : 0);
+    return [ws, ad, eq];
+}
+
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
@@ -70,44 +77,25 @@ function drawScene() {
     var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-    // --- SETUP LOOKAT MATRIX ---
-    var lookatmatrix =
-        transMat4f(
-            camerapos[0] + Math.sin(degToRad(viewxz)),
-            camerapos[1] + Math.sin(degToRad(viewy)),
-            camerapos[2] + Math.cos(degToRad(viewxz))
-        );
-    var lookatposition = [lookatmatrix[12], lookatmatrix[13], lookatmatrix[14]];
-
-    // --- FIRST PERSON CAMERA ---
+    // --- SETUP LOOKAT VECTOR --- --- FIRST PERSON CAMERA ---
     var movementspeed = 0.0125;
-    var factorws = (keys["w"] ? 1 : keys["s"] ? -1 : 0);
-    lookatposition[0] += Math.sin(degToRad(viewxz)) * movementspeed * factorws;
-    lookatposition[1] += Math.sin(degToRad(viewy)) * movementspeed * factorws;
-    lookatposition[2] += Math.cos(degToRad(viewxz)) * movementspeed * factorws;
-    camerapos[0] += Math.sin(degToRad(viewxz)) * movementspeed * factorws;
-    camerapos[1] += Math.sin(degToRad(viewy)) * movementspeed * factorws;
-    camerapos[2] += Math.cos(degToRad(viewxz)) * movementspeed * factorws;
+    var inputVector = getKeyboardInput();
+    inputVector = multScalarVec3f(inputVector, movementspeed);
+    var viewvec = [Math.sin(degToRad(viewxz)), Math.sin(degToRad(viewy)), Math.cos(degToRad(viewxz))];
+    var lookatvector = addVec3f(camerapos, viewvec);
+    lookatvector = addVec3f(lookatvector, multScalarVec3f(viewvec, inputVector[0]));
+    camerapos = addVec3f(camerapos, multScalarVec3f(viewvec, inputVector[0]));
 
-    var factorad = (keys["d"] ? 1 : keys["a"] ? -1 : 0);
-    var movcamvector = crossVec3f(
-        [
-            Math.sin(degToRad(viewxz)),
-            Math.sin(degToRad(viewy)),
-            Math.cos(degToRad(viewxz))
-        ],
-        [0, 1, 0]);
-    lookatposition[0] += movcamvector[0] * movementspeed * factorad;
-    lookatposition[2] += movcamvector[2] * movementspeed * factorad;
-    camerapos[0] += movcamvector[0] * movementspeed * factorad;
-    camerapos[2] += movcamvector[2] * movementspeed * factorad;
+    var movcamvector = crossVec3f(viewvec, [0, 1, 0]);
+    movcamvector[1] = 0;
+    lookatvector = addVec3f(lookatvector, multScalarVec3f(movcamvector, inputVector[1]));
+    camerapos = addVec3f(camerapos, multScalarVec3f(movcamvector, inputVector[1]));
 
-    var factoreq = (keys["e"] ? movementspeed : keys["q"] ? -movementspeed : 0);
-    lookatposition[1] += factoreq;
-    camerapos[1] += factoreq;
+    lookatvector = addVec3f(lookatvector, multScalarVec3f([0, 1, 0], inputVector[2]));
+    camerapos = addVec3f(camerapos, multScalarVec3f([0, 1, 0], inputVector[2]));
 
     // --- SETUP VIEWMATRIX ---
-    var cameramatrix = lookAt(camerapos, lookatposition);
+    var cameramatrix = lookAt(camerapos, lookatvector);
     var viewmatrix = invMat4f(cameramatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
