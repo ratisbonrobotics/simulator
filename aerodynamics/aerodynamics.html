@@ -336,9 +336,9 @@
       \]
       </div>
       <p>
-        By taking the time derivative of each rotation matrix we can map the
-        angular velocities within the drone's frame of reference to angular
-        velocities in the world's frame of reference.
+        We now need to relate the angular acceleration within the drone's frame
+        of reference to the angular acceleration within the world's frame of
+        reference.
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
@@ -350,7 +350,7 @@
             \dot\psi
           \end{bmatrix}
           &= 
-          \left[\begin{matrix}- \dot\phi \sin{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\phi \right)} & \dot\phi \sin{\left(\theta \right)} \cos{\left(\phi \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\psi \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\theta \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\psi \right)} \sin{\left(\theta \right)} & - \dot\phi \cos{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\theta \sin{\left(\psi \right)} \cos{\left(\theta \right)}\\\dot\phi \sin{\left(\phi \right)} \sin{\left(\psi \right)} - \dot\psi \cos{\left(\phi \right)} \cos{\left(\psi \right)} & - \dot\phi \sin{\left(\psi \right)} \sin{\left(\theta \right)} \cos{\left(\phi \right)} - \dot\psi \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} - \dot\psi \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\psi \right)} & \dot\phi \sin{\left(\psi \right)} \cos{\left(\phi \right)} \cos{\left(\theta \right)} + \dot\psi \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\psi \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\theta \cos{\left(\psi \right)} \cos{\left(\theta \right)}\\\dot\phi \cos{\left(\phi \right)} & \dot\phi \sin{\left(\phi \right)} \sin{\left(\theta \right)} - \dot\theta \cos{\left(\phi \right)} \cos{\left(\theta \right)} & - \dot\phi \sin{\left(\phi \right)} \cos{\left(\theta \right)} - \dot\theta \sin{\left(\theta \right)} \cos{\left(\phi \right)}\end{matrix}\right]
+          X
           \begin{bmatrix}
             \dot{\alpha} \\
             \dot{\beta} \\
@@ -359,8 +359,6 @@
         \end{align*}
         \]
       </div>
-
-      <p>This system of equations has unfortunately no closed-form solution.</p>
 
       <h2>State Evolution</h2>
       <p>
