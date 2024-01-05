@@ -412,6 +412,36 @@
         \sin{\left(\theta \right)} \cos{\left(\phi \right)}\right) - \dot\psi
         \end{align*} \]
       </div>
+      <p>
+        First we define a the angles of rotation and the angular velocities as
+        random variables.
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[ 
+        \begin{align*}
+          \theta &\sim \text{Uniform}(0, 2\pi) \\
+          \phi &\sim \text{Uniform}(0, 2\pi) \\
+          \psi &\sim \text{Uniform}(0, 2\pi) \\
+          \dot\alpha &\sim \text{Uniform}(0, 10000) \\
+          \dot\beta &\sim \text{Uniform}(0, 10000) \\
+          \dot\gamma &\sim \text{Uniform}(0, 10000) \\
+        \end{align*}
+        \]
+      </div>
+      <p>And a linear regression model.</p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[ 
+        \begin{align*}
+          y_1(\theta, \phi, \psi, \dot\alpha, \dot\beta, \dot\gamma, \omega_1, \omega_2, \omega_3, \omega_4, \omega_5, \omega_6) &= \omega_1\theta, \omega_2\phi, \omega_3\psi, \omega_4\dot\alpha, \omega_5\dot\beta, \omega_6\dot\gamma \\
+          y_2(\theta, \phi, \psi, \dot\alpha, \dot\beta, \dot\gamma, \omega_1, \omega_2, \omega_3, \omega_4, \omega_5, \omega_6) &= \omega_1\theta, \omega_2\phi, \omega_3\psi, \omega_4\dot\alpha, \omega_5\dot\beta, \omega_6\dot\gamma 
+          \\
+          y_3(\theta, \phi, \psi, \dot\alpha, \dot\beta, \dot\gamma, \omega_1, \omega_2, \omega_3, \omega_4, \omega_5, \omega_6) &= \omega_1\theta, \omega_2\phi, \omega_3\psi, \omega_4\dot\alpha, \omega_5\dot\beta, \omega_6\dot\gamma 
+
+        \end{align*}
+        \]
+      </div>
 
       <h2>State Evolution</h2>
       <p>
