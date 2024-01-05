@@ -208,11 +208,11 @@
       </div>
 
       <p>
-        Changes in the drone's position (\(x, y\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}\)), which in turn stem
-        from the integration of accelerations (\(\ddot{x}, \ddot{y}\)). These
-        accelerations are calculated using Newton's second law
-        <a href="#newton1687">2</a>, with \(g\) being earth's gravitational
+        Changes in the drone's position (\(x, y, z\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}, \dot{z}\)), which in turn
+        stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
+        \ddot{z}\)). These accelerations are calculated using Newton's second
+        law <a href="#newton1687">2</a>, with \(g\) being earth's gravitational
         constant \( 9.81 \frac{m}{s^2} \).
       </p>
 
@@ -245,7 +245,7 @@
       </figure>
 
       We define the torques within the drones frame of reference according to
-      the principles of Archimedes.
+      the principles of Archimedes <a href="#archimedes250bc">3</a>.
       <!-- prettier-ignore -->
       <div class="equation">
         \[
