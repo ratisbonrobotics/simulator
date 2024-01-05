@@ -360,53 +360,7 @@
         \]
       </div>
 
-      <p>
-        This system of equations has unfortunately no closed-form solution.
-        However, we can approximate the solution by using a numerical
-        approximation method. First we represent the system of equations in
-        terms of equating zero.
-      </p>
-      <!-- prettier-ignore -->
-      <div class="equation">
-        \[ \begin{align*}
-        
-        \dot\theta &=  \frac{\dot\alpha \dot\phi \sin{\left(\phi \right)} \cos{\left(\psi \right)} + \dot\alpha \dot\psi \sin{\left(\psi \right)} \cos{\left(\phi \right)} - \dot\beta \dot\phi \sin{\left(\theta \right)} \cos{\left(\phi \right)} \cos{\left(\psi \right)} + \dot\beta \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\beta \dot\psi \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\gamma \dot\phi \cos{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\gamma \dot\psi \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\gamma \dot\psi \sin{\left(\theta \right)} \cos{\left(\psi \right)}}{\dot\beta \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} - \dot\beta \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\gamma \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\gamma \sin{\left(\psi \right)} \cos{\left(\theta \right)} - 1}
-        \\
-\dot\phi &=  \frac{\dot\alpha \dot\psi \cos{\left(\phi \right)} \cos{\left(\psi \right)} + \dot\beta \dot\psi \sin{\left(\phi \right)} \sin{\left(\theta \right)} \cos{\left(\psi \right)} + \dot\beta \dot\psi \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\beta \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\beta \dot\theta \sin{\left(\theta \right)} \cos{\left(\psi \right)} - \dot\gamma \dot\psi \sin{\left(\phi \right)} \cos{\left(\psi \right)} \cos{\left(\theta \right)} + \dot\gamma \dot\psi \sin{\left(\psi \right)} \sin{\left(\theta \right)} + \dot\gamma \dot\theta \sin{\left(\phi \right)} \sin{\left(\psi \right)} \sin{\left(\theta \right)} - \dot\gamma \dot\theta \cos{\left(\psi \right)} \cos{\left(\theta \right)}}{\dot\alpha \sin{\left(\phi \right)} \sin{\left(\psi \right)} - \dot\beta \sin{\left(\psi \right)} \sin{\left(\theta \right)} \cos{\left(\phi \right)} + \dot\gamma \sin{\left(\psi \right)} \cos{\left(\phi \right)} \cos{\left(\theta \right)} - 1}
-\\
-\dot\psi &=  \dot\alpha \dot\phi \cos{\left(\phi \right)} + \dot\beta \dot\phi \sin{\left(\phi \right)} \sin{\left(\theta \right)} - \dot\beta \dot\theta \cos{\left(\phi \right)} \cos{\left(\theta \right)} - \dot\gamma \dot\phi \sin{\left(\phi \right)} \cos{\left(\theta \right)} - \dot\gamma \dot\theta \sin{\left(\theta \right)} \cos{\left(\phi \right)}
-        \end{align*} \]
-      </div>
-      <p>
-        First we define a the angles of rotation and the angular velocities as
-        random variables. These distributions represent our prior beliefs about
-        the angles and angular velocities.
-      </p>
-      <!-- prettier-ignore -->
-      <div class="equation">
-        \[ 
-        \begin{align*}
-          \theta &\sim \text{Uniform}(0, 2\pi) \\
-          \phi &\sim \text{Uniform}(0, 2\pi) \\
-          \psi &\sim \text{Uniform}(0, 2\pi) \\
-          \dot\alpha &\sim \text{Uniform}(0, 10000) \\
-          \dot\beta &\sim \text{Uniform}(0, 10000) \\
-          \dot\gamma &\sim \text{Uniform}(0, 10000) \\
-          \dot\theta &\sim \text{Uniform}(0, 10000) \\
-          \dot\phi &\sim \text{Uniform}(0, 10000) \\
-          \dot\psi &\sim \text{Uniform}(0, 10000) \\
-        \end{align*}
-        \]
-      </div>
-      <p>And a linear regression model.</p>
-      <!-- prettier-ignore -->
-      <div class="equation">
-        \[ 
-        \begin{align*}
-          \dot\theta(\theta, \phi, \psi, \dot\alpha, \dot\beta, \dot\gamma, \dot\phi, \dot\psi, \omega_1, \omega_2, \omega_3, \omega_4, \omega_5, \omega_6) &\approx \omega_1\theta + \omega_2\phi + \omega_3\psi + \omega_4\dot\alpha + \omega_5\dot\beta + \omega_6\dot\gamma 
-        \end{align*}
-        \]
-      </div>
+      <p>This system of equations has unfortunately no closed-form solution.</p>
 
       <h2>State Evolution</h2>
       <p>
