@@ -102,7 +102,7 @@
       </p>
       <div class="equation">
         \( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z},
-        \dot{\alpha}, \dot{\beta}, \dot{\gamma}] \)
+        \dot{\hat\phi}, \dot{\hat\theta}, \dot{\hat\psi}] \)
       </div>
       <p>where</p>
       <ul>
@@ -116,8 +116,8 @@
           and z axes,
         </li>
         <li>
-          \(\dot{\alpha}, \dot{\beta}, \dot{\gamma}\) indicate rotational
-          velocities inside the drone's frame of reference.
+          \(\dot{\hat\phi}, \dot{\hat\theta}, \dot{\hat\psi}\) indicate
+          rotational velocities inside the drone's frame of reference.
         </li>
       </ul>
 
@@ -198,8 +198,8 @@
             F_{z}
           \end{bmatrix} &=
           \left(
-          R_x(\theta)
-          R_y(\phi)
+          R_x(\phi)
+          R_y(\theta)
           R_z(\psi)\right)^T
           \begin{bmatrix}
             0 \\
@@ -254,9 +254,9 @@
       <div class="equation">
         \[
           \begin{align*}
-            \tau_{\alpha} &= L((F_3 + F_4) - (F_2 + F_1)) \\
-            \tau_{\beta} &= (M_1 + M_3) - (M_2 + M_4) \\
-            \tau_{\gamma} &= L((F_2 + F_3) - (F_1 + F_4))
+            \tau_{\hat\phi} &= L((F_3 + F_4) - (F_2 + F_1)) \\
+            \tau_{\hat\theta} &= (M_1 + M_3) - (M_2 + M_4) \\
+            \tau_{\hat\psi} &= L((F_2 + F_3) - (F_1 + F_4))
           \end{align*}
         \]
       </div>
@@ -269,70 +269,70 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \tau_{\alpha} \\
-            \tau_{\beta} \\
-            \tau_{\gamma}
+            \tau_{\hat\phi} \\
+            \tau_{\hat\theta} \\
+            \tau_{\hat\psi}
           \end{bmatrix} &=
           \begin{bmatrix}
-            I_{\alpha} & 0 & 0 \\
-            0 & I_{\beta} & 0 \\
-            0 & 0 & I_{\gamma}
+            I_{\hat\phi} & 0 & 0 \\
+            0 & I_{\hat\theta} & 0 \\
+            0 & 0 & I_{\hat\psi}
           \end{bmatrix}
           \begin{bmatrix}
-            \ddot{\alpha} \\
-            \ddot{\beta} \\
-            \ddot{\gamma}
+            \ddot{\hat\phi} \\
+            \ddot{\hat\theta} \\
+            \ddot{\hat\psi}
           \end{bmatrix}
           +
           \begin{bmatrix}
-            \dot{\alpha} \\
-            \dot{\beta} \\
-            \dot{\gamma}
+            \dot{\hat\phi} \\
+            \dot{\hat\theta} \\
+            \dot{\hat\psi}
           \end{bmatrix}
           \times
           \left(
             \begin{bmatrix}
-              I_{\alpha} & 0 & 0 \\
-              0 & I_{\beta} & 0 \\
-              0 & 0 & I_{\gamma}
+              I_{\hat\phi} & 0 & 0 \\
+              0 & I_{\hat\theta} & 0 \\
+              0 & 0 & I_{\hat\psi}
             \end{bmatrix}
             \begin{bmatrix}
-              \dot{\alpha} \\
-              \dot{\beta} \\
-              \dot{\gamma}
+              \dot{\hat\phi} \\
+              \dot{\hat\theta} \\
+              \dot{\hat\psi}
             \end{bmatrix}
           \right) \\
           \begin{bmatrix} 
-            \ddot{\alpha} \\ 
-            \ddot{\beta} \\ 
-            \ddot{\gamma}
+            \ddot{\hat\phi} \\ 
+            \ddot{\hat\theta} \\ 
+            \ddot{\hat\psi}
           \end{bmatrix} &=
           \begin{bmatrix} 
-            \frac{1}{I_{\alpha}} & 0 & 0 \\ 
-            0 & \frac{1}{I_{\beta}} & 0 \\ 
-            0 & 0 & \frac{1}{I_{\gamma}} 
+            \frac{1}{I_{\hat\phi}} & 0 & 0 \\ 
+            0 & \frac{1}{I_{\hat\theta}} & 0 \\ 
+            0 & 0 & \frac{1}{I_{\hat\psi}} 
           \end{bmatrix}
           \left( 
             \begin{bmatrix} 
-              \tau_{\alpha} \\ 
-              \tau_{\beta} \\ 
-              \tau_{\gamma} 
+              \tau_{\hat\phi} \\ 
+              \tau_{\hat\theta} \\ 
+              \tau_{\hat\psi} 
             \end{bmatrix} - 
             \begin{bmatrix} 
-              \dot{\alpha} \\ 
-              \dot{\beta} \\ 
-              \dot{\gamma} 
+              \dot{\hat\phi} \\ 
+              \dot{\hat\theta} \\ 
+              \dot{\hat\psi} 
             \end{bmatrix} \times 
             \left( 
               \begin{bmatrix} 
-                I_{\alpha} & 0 & 0 \\ 
-                0 & I_{\beta} & 0 \\ 
-                0 & 0 & I_{\gamma} 
+                I_{\hat\phi} & 0 & 0 \\ 
+                0 & I_{\hat\theta} & 0 \\ 
+                0 & 0 & I_{\hat\psi} 
               \end{bmatrix} 
               \begin{bmatrix} 
-                \dot{\alpha} \\ 
-                \dot{\beta} \\ 
-                \dot{\gamma} 
+                \dot{\hat\phi} \\ 
+                \dot{\hat\theta} \\ 
+                \dot{\hat\psi} 
               \end{bmatrix} 
             \right) 
           \right)
@@ -349,19 +349,19 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \dot\theta \\
             \dot\phi \\
+            \dot\theta \\
             \dot\psi
           \end{bmatrix}
           &= 
           \left(
-            R_x(\theta)
-            R_y(\phi)
+            R_x(\phi)
+            R_y(\theta)
             R_z(\psi)\right)^T
           \begin{bmatrix}
-            \dot{\alpha} \\
-            \dot{\beta} \\
-            \dot{\gamma}
+            \dot{\hat\phi} \\
+            \dot{\hat\theta} \\
+            \dot{\hat\psi}
           \end{bmatrix}
         \end{align*}
         \]

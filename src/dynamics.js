@@ -3,9 +3,9 @@ const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const m = 1.0;
 const L = 0.23;
-const i_alpha = 0.0121;
-const i_beta = 0.0119;
-const i_gamma = 0.0223;
+const i_phi_hat = 0.0121;
+const i_theta_hat = 0.0223;
+const i_psi_hat = 0.0119;
 const g = 9.81;
 const omega_min = 20
 const omega_max = 66
@@ -31,9 +31,9 @@ function reset() {
 		x_dot: 0.0,
 		y_dot: 0.0,
 		z_dot: 0.0,
-		alpha_dot: 0.0,
-		beta_dot: 0.0,
-		gamma_dot: 0.0
+		phi_hat_dot: 0.0,
+		theta_hat_dot: 0.0,
+		psi_hat_dot: 0.0
 	};
 
 	X_dot = {
@@ -46,13 +46,13 @@ function reset() {
 		x_dot_dot: 0.0,
 		y_dot_dot: 0.0,
 		z_dot_dot: 0.0,
-		alpha_dot_dot: 0.0,
-		beta_dot_dot: 0.0,
-		gamma_dot_dot: 0.0
+		phi_hat_dot_dot: 0.0,
+		theta_hat_dot_dot: 0.0,
+		psi_hat_dot_dot: 0.0
 	};
 }
 
-var dt = 0.001;
+var dt = 0.01;
 
 reset();
 droneDynamics();
@@ -71,12 +71,12 @@ function droneDynamics() {
 		let local_thrust = [0, F1 + F2 + F3 + F4, 0];
 		let R = transposeMat3f(multMat3f(xRotMat3f(X["phi"]), multMat3f(yRotMat3f(X["theta"]), zRotMat3f(X["psi"]))));
 		let global_thrust = multMatVec3f(R, local_thrust);
-		let global_linear_accelerations = [-global_thrust[0] / m, global_thrust[1] / m - g, -global_thrust[2] / m];
+		let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))];
 
-		let local_rotational_velocities = [X["alpha_dot"], X["beta_dot"], X["gamma_dot"]];
-		let local_inerta_matrix = vecToDiagMat3f([i_alpha, i_beta, i_gamma]);
+		let local_rotational_velocities = [X["phi_hat_dot"], X["theta_hat_dot"], X["psi_hat_dot"]];
+		let local_inerta_matrix = vecToDiagMat3f([i_phi_hat, i_theta_hat, i_psi_hat]);
 		let local_rotational_accelerations =
 			multMatVec3f(invMat3f(local_inerta_matrix),
 				subVec3f(torque, crossVec3f(local_rotational_velocities,
@@ -95,16 +95,15 @@ function droneDynamics() {
 		X_dot["y_dot_dot"] = global_linear_accelerations[1];
 		X_dot["z_dot_dot"] = global_linear_accelerations[2];
 
-		X_dot["alpha_dot_dot"] = local_rotational_accelerations[0];
-		X_dot["beta_dot_dot"] = local_rotational_accelerations[1];
-		X_dot["gamma_dot_dot"] = local_rotational_accelerations[2];
+		X_dot["phi_hat_dot_dot"] = local_rotational_accelerations[0];
+		X_dot["theta_hat_dot_dot"] = local_rotational_accelerations[1];
+		X_dot["psi_hat_dot_dot"] = local_rotational_accelerations[2];
 
 		for (let key in X) {
 			X[key] += X_dot[key + "_dot"] * dt;
 		}
 
 		droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
-		//droneModelMatrix = modelMat4f(0.0, 0.2, 0.0, 0, 0, degToRad(20), 1.0, 1.0, 1.0);
 
 		if (X["y"] < 0.0 || X["x"] > 1.0 || X["x"] < -1.0 || X["z"] > 1.0 || X["z"] < -1.0) {
 			reset();
