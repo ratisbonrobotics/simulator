@@ -370,20 +370,16 @@
 
       <h2>State Evolution</h2>
       <p>
-        The state of the drone at time \( t + \Delta t \) is determined by the
-        sum of its current state \( X_t \) and the integral of the state's time
-        derivative \( \dot{X} \) over the interval \( \Delta t \). This integral
-        represents a precise calculation of the state change. However, for
-        computational simplicity, we often use an approximation method developed
-        by Leonhard Euler <a href="#euler1768">1</a>. His method approximates
-        the future state by assuming a constant rate of change (\( \dot{X}_t \))
-        over a small interval
-        <span style="white-space: nowrap">(\(\Delta t\))</span>, simplifying the
-        integral to a product of the rate of change and the time interval.
+        The state of the drone at time \( t_2 \) is determined by the sum of its
+        current state \( X_{t_1} \) and the integral of the state's time
+        derivative \( \dot{X_{t_1}} \) over the interval \( t_2 - t_1 \). This
+        integral represents a precise calculation of the state change. However,
+        for small intervals, we assume a constant rate of change, simplifying
+        the integral to a product.
       </p>
       <div class="equation">
-        \[ X_{t + \Delta t} = X_{t} + \int_{t}^{t+\Delta t} \dot{X}_{\tau} d\tau
-        \approx X_t + \Delta t\dot{X}_t \]
+        \[ X_{t_2} = X_{t_1} + \int_{t_1}^{t_2} \dot{X}_{t} dt \approx X_{t_1} +
+        (t_2 - t_1)\dot{X}_{t_1} \]
       </div>
     </section>
 
