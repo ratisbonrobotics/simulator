@@ -71,7 +71,7 @@ function droneDynamics() {
 		let local_thrust = [0, F1 + F2 + F3 + F4, 0];
 		let R = transposeMat3f(multMat3f(xRotMat3f(X["phi"]), multMat3f(yRotMat3f(X["theta"]), zRotMat3f(X["psi"]))));
 		let global_thrust = multMatVec3f(R, local_thrust);
-		let global_linear_accelerations = [-global_thrust[0] / m, global_thrust[1] / m - g, -global_thrust[2] / m];
+		let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))];
 
