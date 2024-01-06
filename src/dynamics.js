@@ -3,9 +3,9 @@ const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const m = 1.0;
 const L = 0.23;
-const i_theta = 0.0121;
-const i_phi = 0.0119;
-const i_psi = 0.0223;
+const i_alpha = 0.0121;
+const i_beta = 0.0119;
+const i_gamma = 0.0223;
 const g = 9.81;
 const omega_min = 20
 const omega_max = 66
@@ -17,8 +17,36 @@ var omega_2 = 45.0;
 var omega_3 = 45.0;
 var omega_4 = 45.0;
 
-var X = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-var Xdot = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var X = {
+	x: 0.0,
+	y: 0.0,
+	z: 0.0,
+	phi: 0.0,
+	theta: 0.0,
+	psi: 0.0,
+	x_dot: 0.0,
+	y_dot: 0.0,
+	z_dot: 0.0,
+	alpha_dot: 0.0,
+	beta_dot: 0.0,
+	gamma_dot: 0.0
+};
+
+var X_dot = {
+	x_dot: 0.0,
+	y_dot: 0.0,
+	z_dot: 0.0,
+	phi_dot: 0.0,
+	theta_dot: 0.0,
+	psi_dot: 0.0,
+	x_dot_dot: 0.0,
+	y_dot_dot: 0.0,
+	z_dot_dot: 0.0,
+	alpha_dot_dot: 0.0,
+	beta_dot_dot: 0.0,
+	gamma_dot_dot: 0.0
+};
+
 var dt = 0.001;
 
 droneDynamics();
@@ -35,19 +63,39 @@ function droneDynamics() {
 		let M4 = k_m * omega_4 * omega_4;
 
 		let local_thrust = [0, F1 + F2 + F3 + F4, 0];
-		let global_thrust = multMat3f(xRotMat3f(degToRad(X[3])), local_thrust);
-		global_thrust = multMat3f(yRotMat3f(degToRad(X[4])), global_thrust);
-		global_thrust = multMat3f(zRotMat3f(degToRad(X[5])), global_thrust);
+		let R = transposeMat3f(multMat3f(xRotMat3f(X["phi"]), multMat3f(yRotMat3f(X["theta"]), zRotMat3f(X["psi"]))));
+		let global_thrust = multMatVec3f(R, local_thrust);
 		let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))];
-		let local_rotational_velocities = [Xdot[9], Xdot[10], Xdot[11]];
-		let local_inerta_matrix = multMat3f(identMat3f(), [i_theta, i_phi, i_psi]);
-		let local_rotational_accelerations = multMat3f(invMat3f(local_inerta_matrix), subVec3f(torque, crossVec3f(local_rotational_velocities, multMatVec3f(local_inerta_matrix, local_rotational_velocities))));
 
-		// we need to continue here
+		let local_rotational_velocities = [X_dot["alpha_dot_dot"], X_dot["beta_dot_dot"], X_dot["gamma_dot_dot"]];
+		let local_inerta_matrix = multMat3f(identMat3f(), [i_alpha, i_beta, i_gamma]);
+		let local_rotational_accelerations =
+			multMat3f(invMat3f(local_inerta_matrix),
+				subVec3f(torque, crossVec3f(local_rotational_velocities,
+					multMatVec3f(local_inerta_matrix, local_rotational_velocities))));
+		let global_rotational_accelerations = multMatVec3f(R, local_rotational_accelerations);
 
-		X = X.map((val, index) => val + dt * Xdot[index]);
+		X_dot["x_dot"] = X["x_dot"];
+		X_dot["y_dot"] = X["y_dot"];
+		X_dot["z_dot"] = X["z_dot"];
+
+		X_dot["phi_dot"] = global_rotational_accelerations[0];
+		X_dot["theta_dot"] = global_rotational_accelerations[1];
+		X_dot["psi_dot"] = global_rotational_accelerations[2];
+
+		X_dot["x_dot_dot"] = global_linear_accelerations[0];
+		X_dot["y_dot_dot"] = global_linear_accelerations[1];
+		X_dot["z_dot_dot"] = global_linear_accelerations[2];
+
+		X_dot["alpha_dot_dot"] = local_rotational_accelerations[0];
+		X_dot["beta_dot_dot"] = local_rotational_accelerations[1];
+		X_dot["gamma_dot_dot"] = local_rotational_accelerations[2];
+
+		for (let key in X) {
+			X[key] += X_dot[key + "_dot"] * dt;
+		}
 	}
 	setTimeout(droneDynamics, dt);
 }
