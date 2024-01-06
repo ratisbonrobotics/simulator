@@ -12,43 +12,49 @@ const omega_max = 66
 var paused = false;
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 45.0;
-var omega_2 = 45.0;
-var omega_3 = 45.0;
-var omega_4 = 45.0;
+var omega_1 = 41.7;
+var omega_2 = 41.7;
+var omega_3 = 41.7;
+var omega_4 = 41.7;
 
-var X = {
-	x: 0.0,
-	y: 0.2,
-	z: 0.0,
-	phi: 0.0,
-	theta: 0.0,
-	psi: 0.0,
-	x_dot: 0.0,
-	y_dot: 0.0,
-	z_dot: 0.0,
-	alpha_dot: 0.0,
-	beta_dot: 0.0,
-	gamma_dot: 0.0
-};
+var X;
+var X_dot;
 
-var X_dot = {
-	x_dot: 0.0,
-	y_dot: 0.0,
-	z_dot: 0.0,
-	phi_dot: 0.0,
-	theta_dot: 0.0,
-	psi_dot: 0.0,
-	x_dot_dot: 0.0,
-	y_dot_dot: 0.0,
-	z_dot_dot: 0.0,
-	alpha_dot_dot: 0.0,
-	beta_dot_dot: 0.0,
-	gamma_dot_dot: 0.0
-};
+function reset() {
+	X = {
+		x: 0.0,
+		y: 0.2,
+		z: 0.0,
+		phi: 0.0,
+		theta: 0.0,
+		psi: 0.0,
+		x_dot: 0.0,
+		y_dot: 0.0,
+		z_dot: 0.0,
+		alpha_dot: 0.0,
+		beta_dot: 0.0,
+		gamma_dot: 0.0
+	};
+
+	X_dot = {
+		x_dot: 0.0,
+		y_dot: 0.0,
+		z_dot: 0.0,
+		phi_dot: 0.0,
+		theta_dot: 0.0,
+		psi_dot: 0.0,
+		x_dot_dot: 0.0,
+		y_dot_dot: 0.0,
+		z_dot_dot: 0.0,
+		alpha_dot_dot: 0.0,
+		beta_dot_dot: 0.0,
+		gamma_dot_dot: 0.0
+	};
+}
 
 var dt = 0.001;
 
+reset();
 droneDynamics();
 function droneDynamics() {
 	if (!paused) {
@@ -99,6 +105,10 @@ function droneDynamics() {
 
 		droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
 
+		if (X["y"] < 0.0) {
+			reset();
+		}
+
 	}
-	setTimeout(droneDynamics, dt);
+	setTimeout(droneDynamics, dt * 1000);
 }
