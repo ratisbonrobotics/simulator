@@ -19,7 +19,7 @@ var omega_4 = 45.0;
 
 var X = {
 	x: 0.0,
-	y: 0.0,
+	y: 0.2,
 	z: 0.0,
 	phi: 0.0,
 	theta: 0.0,
@@ -69,10 +69,10 @@ function droneDynamics() {
 
 		let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))];
 
-		let local_rotational_velocities = [X_dot["alpha_dot_dot"], X_dot["beta_dot_dot"], X_dot["gamma_dot_dot"]];
-		let local_inerta_matrix = multMat3f(identMat3f(), [i_alpha, i_beta, i_gamma]);
+		let local_rotational_velocities = [X["alpha_dot"], X["beta_dot"], X["gamma_dot"]];
+		let local_inerta_matrix = diagVecToMat3f([i_alpha, i_beta, i_gamma]);
 		let local_rotational_accelerations =
-			multMat3f(invMat3f(local_inerta_matrix),
+			multMatVec3f(invMat3f(local_inerta_matrix),
 				subVec3f(torque, crossVec3f(local_rotational_velocities,
 					multMatVec3f(local_inerta_matrix, local_rotational_velocities))));
 		let global_rotational_accelerations = multMatVec3f(R, local_rotational_accelerations);
@@ -98,6 +98,7 @@ function droneDynamics() {
 		}
 
 		droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
+
 	}
 	setTimeout(droneDynamics, dt);
 }
