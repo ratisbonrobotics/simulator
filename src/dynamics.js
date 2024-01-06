@@ -12,8 +12,8 @@ const omega_max = 66
 var paused = false;
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.7;
-var omega_2 = 41.8;
+var omega_1 = 41.8;
+var omega_2 = 41.7;
 var omega_3 = 41.7;
 var omega_4 = 41.7;
 
@@ -52,7 +52,7 @@ function reset() {
 	};
 }
 
-var dt = 0.01;
+const dt = 0.01;
 
 reset();
 droneDynamics();
@@ -81,9 +81,21 @@ function droneDynamics() {
 		let local_rotational_velocities = [X["phi_hat_dot"], X["theta_hat_dot"], X["psi_hat_dot"]];
 		let local_inerta_matrix = vecToDiagMat3f([i_phi_hat, i_theta_hat, i_psi_hat]);
 		let local_rotational_accelerations =
-			multMatVec3f(invMat3f(local_inerta_matrix),
-				subVec3f(torque, crossVec3f(local_rotational_velocities,
-					multMatVec3f(local_inerta_matrix, local_rotational_velocities))));
+			multMatVec3f(
+				invMat3f(
+					local_inerta_matrix
+				),
+				subVec3f(
+					torque,
+					crossVec3f(
+						local_rotational_velocities,
+						multMatVec3f(
+							local_inerta_matrix,
+							local_rotational_velocities)
+					)
+				)
+			);
+
 		let global_rotational_accelerations = multMatVec3f(R, local_rotational_accelerations);
 
 		X_dot["x_dot"] = X["x_dot"];
@@ -102,11 +114,13 @@ function droneDynamics() {
 		X_dot["theta_hat_dot_dot"] = local_rotational_accelerations[1];
 		X_dot["psi_hat_dot_dot"] = local_rotational_accelerations[2];
 
-		for (let key in X) {
-			X[key] += X_dot[key + "_dot"] * dt;
-		}
+		Object.keys(X).forEach(key => {
+			if (X_dot.hasOwnProperty(key + "_dot")) {
+				X[key] += X_dot[key + "_dot"] * dt;
+			}
+		});
 
-		//droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
+		droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
 
 		if (X["y"] < 0.0 || X["x"] > 1.0 || X["x"] < -1.0 || X["z"] > 1.0 || X["z"] < -1.0) {
 			reset();
