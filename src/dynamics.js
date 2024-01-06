@@ -68,15 +68,31 @@ function droneDynamics() {
 		let M3 = k_m * omega_3 * omega_3;
 		let M4 = k_m * omega_4 * omega_4;
 
-		let R = transposeMat3f(multMat3f(xRotMat3f(X["phi"]), multMat3f(yRotMat3f(X["theta"]), zRotMat3f(X["psi"]))));
-		console.log(R[6], Math.sin(X["theta"]));
+		let R =
+			transposeMat3f(
+				multMat3f(
+					xRotMat3f(
+						X["phi"]
+					),
+					multMat3f(
+						yRotMat3f(
+							X["theta"]
+						),
+						zRotMat3f(
+							X["psi"]
+						)
+					)
+				)
+			);
 		let global_thrust = multMatVec3f(R, [0, F1 + F2 + F3 + F4, 0]);
 		let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
 
-		let torque = [
-			L * ((F3 + F4) - (F2 + F1)),
-			(M1 + M3) - (M2 + M4),
-			L * ((F2 + F3) - (F1 + F4))];
+		let torque =
+			[
+				L * ((F3 + F4) - (F2 + F1)),
+				(M1 + M3) - (M2 + M4),
+				L * ((F2 + F3) - (F1 + F4))
+			];
 
 		let local_rotational_velocities = [X["phi_hat_dot"], X["theta_hat_dot"], X["psi_hat_dot"]];
 		let local_inerta_matrix = vecToDiagMat3f([i_phi_hat, i_theta_hat, i_psi_hat]);
