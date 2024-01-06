@@ -61,6 +61,15 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
+var camera = {
+    x: 0.0,
+    y: 0.2,
+    z: 1.0,
+    rx: 0.1,
+    ry: 0.0,
+    rz: 0.0
+};
+
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
@@ -71,16 +80,14 @@ function drawScene() {
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
     // --- SETUP VIEWMATRIX ---
-    var inputVector = multScalarVec3f(getKeyboardInput(), 0.0125);
-    var viewvec = [Math.sin(degToRad(viewxz)), Math.sin(degToRad(viewy)), Math.cos(degToRad(viewxz))];
-    var lookatvector = addVec3f(camerapos, viewvec);
-    lookatvector = addVec3f(lookatvector, multScalarVec3f(viewvec, inputVector[0]));
-    camerapos = addVec3f(camerapos, multScalarVec3f(viewvec, inputVector[0]));
-    lookatvector = addVec3f(lookatvector, multScalarVec3f(crossVec3f(viewvec, [0, 1, 0]), inputVector[1]));
-    camerapos = addVec3f(camerapos, multScalarVec3f(crossVec3f(viewvec, [0, 1, 0]), inputVector[1]));
-    lookatvector = addVec3f(lookatvector, multScalarVec3f([0, 1, 0], inputVector[2]));
-    camerapos = addVec3f(camerapos, multScalarVec3f([0, 1, 0], inputVector[2]));
-    var viewmatrix = invMat4f(lookAt(camerapos, lookatvector));
+    var inp = getKeyboardInput(0.01);
+    camera.x += inp[0];
+    camera.y += inp[1];
+    camera.z += inp[2];
+    var viewmatrix = identMat4f();
+    viewmatrix = multMat4f(multMat4f(xRotMat4f(camera.rx), multMat4f(yRotMat4f(camera.ry), zRotMat4f(camera.rz))), viewmatrix);
+    viewmatrix = multMat4f(transMat4f(camera.x, camera.y, camera.z), viewmatrix);
+    viewmatrix = inv4Mat4f(viewmatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
     // --- DRAW TERRAIN ---
