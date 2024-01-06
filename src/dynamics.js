@@ -96,6 +96,8 @@ function droneDynamics() {
 		for (let key in X) {
 			X[key] += X_dot[key + "_dot"] * dt;
 		}
+
+		droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 1.0, 1.0, 1.0);
 	}
 	setTimeout(droneDynamics, dt);
 }
