@@ -2,7 +2,7 @@
 var keys = {};
 var viewxz = -180.0;
 var viewy = 0;
-var camerapos = [0.0, 0.1, 1.0];
+var camerapos = [0.0, 0.2, 1.0];
 var droneModelMatrix = modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 var terrainModelMatrix = modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 var canvas = document.getElementById("canvas");
