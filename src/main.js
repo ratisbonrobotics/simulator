@@ -61,15 +61,6 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
-var camera = {
-    x: 0.0,
-    y: 0.2,
-    z: 1.0,
-    rx: 0.1,
-    ry: 0.0,
-    rz: 0.0
-};
-
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
@@ -80,14 +71,7 @@ function drawScene() {
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
     // --- SETUP VIEWMATRIX ---
-    var inp = getKeyboardInput(0.01);
-    camera.x += inp[0];
-    camera.y += inp[1];
-    camera.z += inp[2];
-    var viewmatrix = identMat4f();
-    viewmatrix = multMat4f(multMat4f(xRotMat4f(camera.rx), multMat4f(yRotMat4f(camera.ry), zRotMat4f(camera.rz))), viewmatrix);
-    viewmatrix = multMat4f(transMat4f(camera.x, camera.y, camera.z), viewmatrix);
-    viewmatrix = inv4Mat4f(viewmatrix);
+    viewmatrix = inv4Mat4f(cameraModelMatrix);
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
 
     // --- DRAW TERRAIN ---

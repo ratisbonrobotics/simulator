@@ -53,8 +53,7 @@ function resetState() {
 }
 
 resetState();
-droneDynamics();
-function droneDynamics() {
+setInterval(function () {
 
 	let F1 = k_f * omega_1 * omega_1;
 	let F2 = k_f * omega_2 * omega_2;
@@ -140,5 +139,4 @@ function droneDynamics() {
 		resetState();
 	}
 
-	setTimeout(droneDynamics, dt * 1000);
-}
+}, dt * 1000);
