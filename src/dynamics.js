@@ -10,7 +10,7 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.68;
+var omega_1 = 41.66;
 var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
@@ -44,7 +44,6 @@ setInterval(function () {
 
 	// --- TORQUE AND ROTATION ---
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f([L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))], crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))));
-	R = transpMat3f(R);
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, multMatVec3f(R, loc_rot_vel)));
 
 
