@@ -10,7 +10,7 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.66;
+var omega_1 = 41.8;
 var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
@@ -33,9 +33,7 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * omega_3;
 	let M4 = k_m * omega_4 * omega_4;
 
-	let R = xRotMat3f(glob_rot_pos[0]);
-	R = multMat3f(R, yRotMat3f(glob_rot_pos[1]));
-	R = multMat3f(R, zRotMat3f(glob_rot_pos[2]));
+	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
 	//R = transpMat3f(R);
 
 	// --- THRUST AND POSITION ---
@@ -50,14 +48,8 @@ setInterval(function () {
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = identMat4f();
 	droneModelMatrix = multMat4f(translMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2]), droneModelMatrix);
-	let R2 = xRotMat4f(glob_rot_pos[0]);
-	R2 = multMat4f(R2, yRotMat4f(glob_rot_pos[1]));
-	R2 = multMat4f(R2, zRotMat4f(glob_rot_pos[2]));
-	R2 = transp3Mat4f(R2);
-	droneModelMatrix = multMat4f(R2, droneModelMatrix);
+	droneModelMatrix = multMat4f(transp3Mat4f(multMat4f(multMat4f(xRotMat4f(glob_rot_pos[0]), yRotMat4f(glob_rot_pos[1])), zRotMat4f(glob_rot_pos[2]))), droneModelMatrix);
 	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
-
-
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		loc_rot_vel = [0.0, 0.0, 0.0];
