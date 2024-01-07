@@ -17,7 +17,6 @@ cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 
 setInterval(function () {
-
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
     rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);

@@ -64,22 +64,11 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * omega_3;
 	let M4 = k_m * omega_4 * omega_4;
 
-	let R =
-		transposeMat3f(
-			multMat3f(
-				xRotMat3f(
-					X["phi"]
-				),
-				multMat3f(
-					yRotMat3f(
-						X["theta"]
-					),
-					zRotMat3f(
-						X["psi"]
-					)
-				)
-			)
-		);
+	let R = xRotMat3f(X["phi"]);
+	R = multMat3f(R, yRotMat3f(X["theta"]));
+	R = multMat3f(R, zRotMat3f(X["psi"]));
+	R = transposeMat3f(R);
+
 	let global_thrust = multMatVec3f(R, [0, F1 + F2 + F3 + F4, 0]);
 	let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
 
