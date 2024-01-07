@@ -6,9 +6,25 @@ function getKeyboardInput(s) {
     return [x, y, z];
 }
 
+function getMouseInput(s) {
+    var x = mouse["x"] * s;
+    var y = mouse["y"] * s;
+
+    return [x, y];
+}
+
+function resetMouseInput() {
+    mouse["x"] = 0;
+    mouse["y"] = 0;
+}
+
 setInterval(function () {
 
     var movementVector = getKeyboardInput(0.01);
-    cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
+    var rotationVector = getMouseInput(0.01);
 
+    cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
+    cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
+    //cameraModelMatrix = multMat4f(xRotMat4f(rotationVector[1]), cameraModelMatrix);
+    resetMouseInput();
 }, 10);
