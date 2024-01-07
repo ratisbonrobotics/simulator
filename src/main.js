@@ -42,7 +42,6 @@ init3D(gl);
 var terrain_vertexbuffer;
 var terrain_texcoordbuffer;
 var terrain_texture;
-loadTerrain();
 async function loadTerrain() {
     let [obj, mtl] = await parseOBJ('data/terrain.obj');
     terrain_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["terrain"]["v"]);
@@ -59,6 +58,7 @@ async function loadDrone() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+    await loadTerrain();
     requestAnimationFrame(drawScene);
 }
 
