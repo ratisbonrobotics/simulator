@@ -62,7 +62,7 @@ async function loadDrone() {
 }
 
 // --- SETUP PROJECTION MATRIX ---
-var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
+let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 // --- DRAW ---
@@ -71,8 +71,7 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // --- SETUP VIEWMATRIX ---
-    viewmatrix = inv4Mat4f(cameraModelMatrix);
-    gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, viewmatrix);
+    gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
 
     // --- DRAW TERRAIN ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3);

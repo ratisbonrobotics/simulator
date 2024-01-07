@@ -6,22 +6,9 @@ function getKeyboardInput(s) {
     return [x, y, z];
 }
 
-var camera = {
-    x: 0.0,
-    y: 0.2,
-    z: 0.0,
-    rx: 0.0,
-    ry: 0.0,
-    rz: 0.0
-};
-
 setInterval(function () {
 
     var movementVector = getKeyboardInput(0.01);
+    cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
 
-    camera.x += movementVector[0];
-    camera.y += movementVector[1];
-    camera.z += movementVector[2];
-
-    cameraModelMatrix = multMat4f(transMat4f(camera["x"], camera["y"], camera["z"]), identMat4f());
 }, 10);
