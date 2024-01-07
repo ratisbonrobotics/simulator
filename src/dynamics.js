@@ -41,7 +41,7 @@ setInterval(function () {
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f([L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))], crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))));
+	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f([L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))], crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, multMatVec3f(R, loc_rot_vel)));
 
 
