@@ -3,55 +3,21 @@ const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const m = 1.0;
 const L = 0.23;
-const i_phi_hat = 0.0121;
-const i_theta_hat = 0.0223;
-const i_psi_hat = 0.0119;
+const I_hat = vecToDiagMat3f([0.0121, 0.0223, 0.0119]);
 const g = 9.81;
 const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.8;
-var omega_2 = 41.7;
-var omega_3 = 41.7;
-var omega_4 = 41.7;
+var omega_1 = 41.66;
+var omega_2 = 41.65;
+var omega_3 = 41.65;
+var omega_4 = 41.65;
 
-var X;
-var X_dot;
+var glob_lin_vel = [0.0, 0.0, 0.0];
+var loc_rot_vel = [0.0, 0.0, 0.0];
+var glob_rot_pos = [0.0, 0.0, 0.0];
 
-function resetState() {
-	X = {
-		x: 0.0,
-		y: 0.2,
-		z: 0.0,
-		phi: 0.0,
-		theta: 0.0,
-		psi: 0.0,
-		x_dot: 0.0,
-		y_dot: 0.0,
-		z_dot: 0.0,
-		phi_hat_dot: 0.0,
-		theta_hat_dot: 0.0,
-		psi_hat_dot: 0.0
-	};
-
-	X_dot = {
-		x_dot: 0.0,
-		y_dot: 0.0,
-		z_dot: 0.0,
-		phi_dot: 0.0,
-		theta_dot: 0.0,
-		psi_dot: 0.0,
-		x_dot_dot: 0.0,
-		y_dot_dot: 0.0,
-		z_dot_dot: 0.0,
-		phi_hat_dot_dot: 0.0,
-		theta_hat_dot_dot: 0.0,
-		psi_hat_dot_dot: 0.0
-	};
-}
-
-resetState();
 setInterval(function () {
 
 	let F1 = k_f * omega_1 * omega_1;
@@ -64,42 +30,25 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * omega_3;
 	let M4 = k_m * omega_4 * omega_4;
 
-	let R = transposeMat3f(multMat3f(xRotMat3f(X["phi"]), multMat3f(yRotMat3f(X["theta"]), zRotMat3f(X["psi"]))));
+	let R = transpMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), multMat3f(yRotMat3f(glob_rot_pos[1]), zRotMat3f(glob_rot_pos[2]))));
 
-	let global_thrust = multMatVec3f(R, [0, F1 + F2 + F3 + F4, 0]);
-	let global_linear_accelerations = [global_thrust[0] / m, global_thrust[1] / m - g, global_thrust[2] / m];
+	// --- THRUST AND POSITION ---
+	let glob_thrust = multMatVec3f(R, [0, F1 + F2 + F3 + F4, 0]);
+	let glob_lin_acc = [glob_thrust[0] / m, glob_thrust[1] / m - g, glob_thrust[2] / m];
+	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 
+	// --- TORQUE AND ROTATION ---
 	let torque = [L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))];
-	let local_rotational_velocities = [X["phi_hat_dot"], X["theta_hat_dot"], X["psi_hat_dot"]];
-	let local_inerta_matrix = vecToDiagMat3f([i_phi_hat, i_theta_hat, i_psi_hat]);
-	let local_rotational_accelerations = multMatVec3f(invMat3f(local_inerta_matrix), subVec3f(torque, crossVec3f(local_rotational_velocities, multMatVec3f(local_inerta_matrix, local_rotational_velocities))));
+	let loc_rot_acc = multMatVec3f(invMat3f(I_hat), subVec3f(torque, crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))));
+	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
+	let glob_rot_vel = multMatVec3f(R, loc_rot_vel);
+	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
 
-	let global_rotational_velocities = multMatVec3f(R, local_rotational_velocities);
 
-	X_dot["x_dot"] = X["x_dot"];
-	X_dot["y_dot"] = X["y_dot"];
-	X_dot["z_dot"] = X["z_dot"];
-
-	X_dot["phi_dot"] = global_rotational_velocities[0];
-	X_dot["theta_dot"] = global_rotational_velocities[1];
-	X_dot["psi_dot"] = global_rotational_velocities[2];
-
-	X_dot["x_dot_dot"] = global_linear_accelerations[0];
-	X_dot["y_dot_dot"] = global_linear_accelerations[1];
-	X_dot["z_dot_dot"] = global_linear_accelerations[2];
-
-	X_dot["phi_hat_dot_dot"] = local_rotational_accelerations[0];
-	X_dot["theta_hat_dot_dot"] = local_rotational_accelerations[1];
-	X_dot["psi_hat_dot_dot"] = local_rotational_accelerations[2];
-
-	for (key in X) {
-		X[key] += X_dot[key + "_dot"] * dt;
-	}
-
-	droneModelMatrix = modelMat4f(X["x"], X["y"], X["z"], X["phi"], X["theta"], X["psi"], 0.01, 0.01, 0.01);
-
-	if (X["y"] < 0.0 || X["x"] > 1.0 || X["x"] < -1.0 || X["z"] > 1.0 || X["z"] < -1.0) {
-		resetState();
-	}
+	// --- UPDATE MODEL MATRIX ---
+	//droneModelMatrix = multMat4f(transMat4f(glob_lin_vel[0], glob_lin_vel[1], glob_lin_vel[2]), droneModelMatrix);
+	/*droneModelMatrix = multMat4f(xRotMat4f(glob_rot_vel[0]), droneModelMatrix);
+	droneModelMatrix = multMat4f(yRotMat4f(glob_rot_vel[1]), droneModelMatrix);
+	droneModelMatrix = multMat4f(zRotMat4f(glob_rot_vel[2]), droneModelMatrix);*/
 
 }, dt * 1000);

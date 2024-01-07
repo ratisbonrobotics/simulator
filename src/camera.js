@@ -18,5 +18,5 @@ setInterval(function () {
     var rotationVector = getMouseInput(0.01);
 
     cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
-    cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
+    cameraModelMatrix = multMat4f(translMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
 }, 10);
