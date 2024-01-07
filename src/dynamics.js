@@ -109,15 +109,15 @@ setInterval(function () {
 			)
 		);
 
-	let global_rotational_accelerations = multMatVec3f(R, local_rotational_accelerations);
+	let global_rotational_velocities = multMatVec3f(R, local_rotational_velocities);
 
 	X_dot["x_dot"] = X["x_dot"];
 	X_dot["y_dot"] = X["y_dot"];
 	X_dot["z_dot"] = X["z_dot"];
 
-	X_dot["phi_dot"] = global_rotational_accelerations[0];
-	X_dot["theta_dot"] = global_rotational_accelerations[1];
-	X_dot["psi_dot"] = global_rotational_accelerations[2];
+	X_dot["phi_dot"] = global_rotational_velocities[0];
+	X_dot["theta_dot"] = global_rotational_velocities[1];
+	X_dot["psi_dot"] = global_rotational_velocities[2];
 
 	X_dot["x_dot_dot"] = global_linear_accelerations[0];
 	X_dot["y_dot_dot"] = global_linear_accelerations[1];
