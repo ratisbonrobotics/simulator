@@ -33,8 +33,7 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * omega_3;
 	let M4 = k_m * omega_4 * omega_4;
 
-	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
-	//R = transpMat3f(R);
+	let R = transpMat3f(multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2])));
 
 	// --- THRUST AND POSITION ---
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, subVec3f(multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0])), [0, g, 0])));
@@ -44,12 +43,8 @@ setInterval(function () {
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f([L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))], crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, multMatVec3f(R, loc_rot_vel)));
 
-
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = identMat4f();
-	droneModelMatrix = multMat4f(translMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2]), droneModelMatrix);
-	droneModelMatrix = multMat4f(transp3Mat4f(multMat4f(multMat4f(xRotMat4f(glob_rot_pos[0]), yRotMat4f(glob_rot_pos[1])), zRotMat4f(glob_rot_pos[2]))), droneModelMatrix);
-	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
+	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		loc_rot_vel = [0.0, 0.0, 0.0];
