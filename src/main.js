@@ -59,6 +59,7 @@ async function loadDrone() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+    requestAnimationFrame(drawScene);
 }
 
 // --- SETUP PROJECTION MATRIX ---
@@ -66,7 +67,6 @@ let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 // --- DRAW ---
-requestAnimationFrame(drawScene);
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
