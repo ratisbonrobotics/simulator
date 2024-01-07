@@ -18,13 +18,21 @@ function resetMouseInput() {
     mouse["y"] = 0;
 }
 
+let yrot = 0;
+
 setInterval(function () {
+
+    if (keys["r"]) {
+        cameraModelMatrix = multMat4f(yRotMat4f(-yrot), cameraModelMatrix);
+        yrot = 0;
+    }
 
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
+    yrot += rotationVector[0];
 
     cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
     cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
-    //cameraModelMatrix = multMat4f(xRotMat4f(rotationVector[1]), cameraModelMatrix);
+
     resetMouseInput();
 }, 10);
