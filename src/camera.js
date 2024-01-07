@@ -13,17 +13,10 @@ function getMouseInput(s) {
     return inp;
 }
 
-cameraModelMatrixOld = cameraModelMatrix;
-let rotx = 0.0;
-
 setInterval(function () {
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
-    rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
 
-    cameraModelMatrix = cameraModelMatrixOld;
     cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
     cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
-    cameraModelMatrixOld = cameraModelMatrix;
-    cameraModelMatrix = multMat4f(xRotMat4f(rotx), cameraModelMatrix);
 }, 10);
