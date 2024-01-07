@@ -7,12 +7,10 @@ function getKeyboardInput(s) {
 }
 
 function getMouseInput(s) {
-    return [mouse["horizontal"] * s, mouse["vertical"] * s];
-}
-
-function resetMouseInput() {
-    mouse["0"] = 0;
-    mouse["1"] = 0;
+    let inp = [mouse["horizontal"] * s, mouse["vertical"] * s];
+    mouse["horizontal"] = 0;
+    mouse["vertical"] = 0;
+    return inp;
 }
 
 setInterval(function () {
@@ -20,8 +18,6 @@ setInterval(function () {
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
 
-    //cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[1]), cameraModelMatrix);
+    cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
     cameraModelMatrix = multMat4f(transMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
-
-    resetMouseInput();
 }, 10);

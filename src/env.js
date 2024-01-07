@@ -1,8 +1,8 @@
 // --- SETUP ENVIRONMENT ---
 var keys = {};
 var mouse = {
-    x: 0,
-    y: 0
+    horizontal: 0,
+    vertical: 0
 };
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext("webgl");
