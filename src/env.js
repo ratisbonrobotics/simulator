@@ -1,6 +1,9 @@
 // --- SETUP ENVIRONMENT ---
 var keys = {};
-var mouse = {};
+var mouse = {
+    x: 0,
+    y: 0
+};
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext("webgl");
 resizeCanvas();
