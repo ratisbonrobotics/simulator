@@ -13,8 +13,8 @@ window.addEventListener("orientationchange", resizeCanvas);
 window.addEventListener("resize", resizeCanvas);
 canvas.addEventListener("mousemove", function (event) {
     if (document.pointerLockElement === canvas) {
-        mouse["x"] = event.movementX;
-        mouse["y"] = event.movementY;
+        mouse["horizontal"] = event.movementX;
+        mouse["vertical"] = event.movementY;
     }
 });
 canvas.addEventListener("click", canvas.requestPointerLock);
