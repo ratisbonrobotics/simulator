@@ -20,7 +20,7 @@ setInterval(function () {
 
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
-    rotx = Math.min(Math.max((rotx + rotationVector[1]), -1.0), 1.0);
+    rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
 
     cameraModelMatrix = cameraModelMatrixOld;
     cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
