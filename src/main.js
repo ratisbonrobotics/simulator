@@ -61,14 +61,14 @@ async function loadDrone() {
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
+// --- SETUP PROJECTION MATRIX ---
+var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
+gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
+
 // --- DRAW ---
 requestAnimationFrame(drawScene);
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    // --- SETUP PROJECTION MATRIX ---
-    var projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
-    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
     // --- SETUP VIEWMATRIX ---
     viewmatrix = inv4Mat4f(cameraModelMatrix);
