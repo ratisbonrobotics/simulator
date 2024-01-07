@@ -9,7 +9,6 @@ const i_psi_hat = 0.0119;
 const g = 9.81;
 const omega_min = 20
 const omega_max = 66
-const dt = 0.01;
 
 // ----------------------------------- DYNAMICS -----------------------------------
 var omega_1 = 41.8;
