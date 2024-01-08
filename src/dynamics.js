@@ -44,10 +44,10 @@ setInterval(function () {
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	let tau_1 = crossVec3f([-l, 0, l], [M1, F1, 0]);
-	let tau_2 = crossVec3f([l, 0, l], [-M2, F2, 0]);
-	let tau_3 = crossVec3f([l, 0, -l], [M3, F3, 0]);
-	let tau_4 = crossVec3f([-l, 0, -l], [-M4, F4, 0]);
+	let tau_1 = crossVec3f([-l, 0.2 * l, l], [M1 / 2, F1, M1 / 2]);
+	let tau_2 = crossVec3f([l, 0.2 * l, l], [M2 / 2, F2, -M2 / 2]);
+	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-M3 / 2, F3, -M3 / 2]);
+	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-M4 / 2, F4, M4 / 2]);
 
 	// Sum up all the torques
 	let loc_torque = [0, 0, 0];
