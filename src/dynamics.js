@@ -63,7 +63,7 @@ setInterval(function () {
 	loc_torque = addVec3f(loc_torque, tau_3m);
 	loc_torque = addVec3f(loc_torque, tau_4f);
 	loc_torque = addVec3f(loc_torque, tau_4m);
-	//loc_torque = multScalVec3f(-1, loc_torque);
+	loc_torque = multScalVec3f(-1, loc_torque);
 
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
