@@ -43,16 +43,13 @@ setInterval(function () {
 	// --- TORQUE AND ROTATION ---
 	let torque = [0, 0, 0];
 	// Individual torques
-	let tau1 = crossVec3f([-l, 0, l], [0, F1, 0]);
-	let tau2 = crossVec3f([l, 0, l], [0, F2, 0]);
-	let tau3 = crossVec3f([l, 0, -l], [0, F3, 0]);
-	let tau4 = crossVec3f([-l, 0, -l], [0, F4, 0]);
+	let tau_phi = crossVec3f([0, 0, -l], [0, (F3 + F4) - (F2 + F1), 0]);
+	let tau_theta = crossVec3f([0, 0, 0], [(M1 + M3) - (M2 + M4), 0, 0]);
+	let tau_psi = crossVec3f([l, 0, 0], [0, (F2 + F3) - (F1 + F4), 0]);
+	torque = addVec3f(torque, tau_phi);
+	torque = addVec3f(torque, tau_theta);
+	torque = addVec3f(torque, tau_psi);
 
-	// Net torques
-	torque = addVec3f(torque, tau1);
-	torque = addVec3f(torque, tau2);
-	torque = addVec3f(torque, tau3);
-	torque = addVec3f(torque, tau4);
 
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f(torque, crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, multMatVec3f(R, loc_rot_vel)));
