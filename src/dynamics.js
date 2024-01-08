@@ -35,8 +35,7 @@ setInterval(function () {
 	let R = transpMat3f(multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2])));
 
 	// --- THRUST AND POSITION ---
-	let glob_f = multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0]));
-	let glob_lin_acc = addVec3f(glob_f, [0, -g, 0]);
+	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0])), [0, -g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
@@ -51,8 +50,7 @@ setInterval(function () {
 	let tau_4m = crossVec3f(multMatVec3f(R, [-l, 0, -l]), multMatVec3f(R, [M4, 0, 0]));
 
 	// Sum up all the torques
-	let glob_torque = multMatVec3f(R, addVec3f(addVec3f(addVec3f(tau_1f, tau_1m), addVec3f(tau_2f, tau_2m)), addVec3f(addVec3f(tau_3f, tau_3m), addVec3f(tau_4f, tau_4m))));
-
+	let glob_torque = addVec3f(addVec3f(addVec3f(tau_1f, tau_1m), addVec3f(tau_2f, tau_2m)), addVec3f(addVec3f(tau_3f, tau_3m), addVec3f(tau_4f, tau_4m)));
 	let glob_I = multMatVec3f(R, I);
 	let glob_I_mat = vecToDiagMat3f(glob_I);
 	let glob_I_mat_inv = invMat3f(glob_I_mat);
