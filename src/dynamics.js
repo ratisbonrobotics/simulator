@@ -2,6 +2,7 @@
 const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const L = 0.23;
+const l = L / Math.sqrt(2)
 const I_hat = vecToDiagMat3f([0.0121, 0.0223, 0.0119]);
 const inv_I_hat = invMat3f(I_hat);
 const g = 9.81;
@@ -10,7 +11,7 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.8;
+var omega_1 = 41.66;
 var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
@@ -40,7 +41,20 @@ setInterval(function () {
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f([L * ((F3 + F4) - (F2 + F1)), (M1 + M3) - (M2 + M4), L * ((F2 + F3) - (F1 + F4))], crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
+	let torque = [0, 0, 0];
+	// Individual torques
+	let tau1 = crossVec3f([-l, 0, l], [0, F1, 0]);
+	let tau2 = crossVec3f([l, 0, l], [0, F2, 0]);
+	let tau3 = crossVec3f([l, 0, -l], [0, F3, 0]);
+	let tau4 = crossVec3f([-l, 0, -l], [0, F4, 0]);
+
+	// Net torques
+	torque = addVec3f(torque, tau1);
+	torque = addVec3f(torque, tau2);
+	torque = addVec3f(torque, tau3);
+	torque = addVec3f(torque, tau4);
+
+	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f(torque, crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, multMatVec3f(R, loc_rot_vel)));
 
 	// --- UPDATE MODEL MATRIX ---

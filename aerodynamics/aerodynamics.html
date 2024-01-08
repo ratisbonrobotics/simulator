@@ -249,15 +249,77 @@
       </figure>
 
       We define the torques within the drones frame of reference according to
-      the principles of Archimedes <a href="#archimedes250bc">3</a>.
+      the principles of Archimedes \(\tau = L \times F\)<a
+        href="#archimedes250bc"
+        >3</a
+      >.
       <!-- prettier-ignore -->
       <div class="equation">
         \[
-          \begin{align*}
-            \tau_{\hat\phi} &= L((F_3 + F_4) - (F_2 + F_1)) \\
-            \tau_{\hat\theta} &= (M_1 + M_3) - (M_2 + M_4) \\
-            \tau_{\hat\psi} &= L((F_2 + F_3) - (F_1 + F_4))
-          \end{align*}
+        \begin{alignat*}{2}
+        \tau_{1}
+        &= 
+        \begin{bmatrix}
+          -\frac{L}{\sqrt 2} \\
+          0 \\
+          \frac{L}{\sqrt 2}
+        \end{bmatrix}
+        \times
+        \begin{bmatrix}
+          0 \\
+          F_1 \\
+          0
+        \end{bmatrix}
+        &\qquad
+        \tau_{\hat\phi} &= (\tau_3 + \tau_4) - (\tau_2 + \tau_1)
+        \\
+        \tau_{2}
+        &= 
+        \begin{bmatrix}
+          \frac{L}{\sqrt 2} \\
+          0 \\
+          \frac{L}{\sqrt 2}
+        \end{bmatrix}
+        \times
+        \begin{bmatrix}
+          0 \\
+          F_2 \\
+          0
+        \end{bmatrix}
+        &\qquad
+        \tau_{\hat\theta} &= (M_1 + M_3) - (M_2 + M_4)
+        \\
+        \tau_{3}
+        &= 
+        \begin{bmatrix}
+          \frac{L}{\sqrt 2} \\
+          0 \\
+          -\frac{L}{\sqrt 2}
+        \end{bmatrix}
+        \times
+        \begin{bmatrix}
+          0 \\
+          F_3 \\
+          0
+        \end{bmatrix}
+        &\qquad
+        \tau_{\hat\psi} &= (\tau_2 + \tau_3) - (\tau_1 + \tau_4)
+        \\
+        \tau_{4}
+        &= 
+        \begin{bmatrix}
+          -\frac{L}{\sqrt 2} \\
+          0 \\
+          -\frac{L}{\sqrt 2}
+        \end{bmatrix}
+        \times
+        \begin{bmatrix}
+          0 \\
+          F_4 \\
+          0
+        \end{bmatrix}
+      \end{alignat*}
+      
         \]
       </div>
 
@@ -340,8 +402,7 @@
       \]
       </div>
       <p>
-        We now need to relate the angular acceleration within the drone's frame
-        of reference to the angular acceleration within the world's frame of
+        We now need to express the angular velocities in the world's frame of
         reference.
       </p>
       <!-- prettier-ignore -->
