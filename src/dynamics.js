@@ -2,7 +2,7 @@
 const k_f = 0.00141446535;
 const k_m = 0.0004215641;
 const L = 0.23;
-const l = L / Math.sqrt(2)
+const l = (L / Math.sqrt(2));
 const I_hat = vecToDiagMat3f([0.0121, 0.0223, 0.0119]);
 const inv_I_hat = invMat3f(I_hat);
 const g = 9.81;
@@ -42,13 +42,22 @@ setInterval(function () {
 
 	// --- TORQUE AND ROTATION ---
 	let torque = [0, 0, 0];
-	// Individual torques
-	let tau_phi = crossVec3f([0, 0, -l], [0, (F3 + F4) - (F2 + F1), 0]);
-	let tau_theta = crossVec3f([0, 0, 0], [(M1 + M3) - (M2 + M4), 0, 0]);
-	let tau_psi = crossVec3f([l, 0, 0], [0, (F2 + F3) - (F1 + F4), 0]);
-	torque = addVec3f(torque, tau_phi);
-	torque = addVec3f(torque, tau_theta);
-	torque = addVec3f(torque, tau_psi);
+	let tau_1f = crossVec3f([-l, 0, l], [0, F1, 0]);
+	let tau_1m = crossVec3f([-l, 0, l], [M1, 0, 0]);
+	let tau_2f = crossVec3f([l, 0, l], [0, F2, 0]);
+	let tau_2m = crossVec3f([l, 0, l], [M2, 0, 0]);
+	let tau_3f = crossVec3f([l, 0, -l], [0, F3, 0]);
+	let tau_3m = crossVec3f([l, 0, -l], [M3, 0, 0]);
+	let tau_4f = crossVec3f([-l, 0, -l], [0, F4, 0]);
+	let tau_4m = crossVec3f([-l, 0, -l], [M4, 0, 0]);
+	torque = addVec3f(torque, tau_1f);
+	torque = addVec3f(torque, tau_1m);
+	torque = addVec3f(torque, tau_2f);
+	torque = addVec3f(torque, tau_2m);
+	torque = addVec3f(torque, tau_3f);
+	torque = addVec3f(torque, tau_3m);
+	torque = addVec3f(torque, tau_4f);
+	torque = addVec3f(torque, tau_4m);
 
 
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, addVec3f(loc_rot_vel, multScalVec3f(dt, multMatVec3f(inv_I_hat, subVec3f(torque, crossVec3f(loc_rot_vel, multMatVec3f(I_hat, loc_rot_vel))))))));
