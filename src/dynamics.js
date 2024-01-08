@@ -18,6 +18,7 @@ var omega_3 = 41.65;
 var omega_4 = 41.65;
 
 var loc_rot_vel = [0.0, 0.0, 0.0];
+var glob_rot_vel = [0.0, 0.0, 0.0];
 var glob_rot_pos = [0.0, 0.0, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_lin_pos = [0.0, 0.2, 0.0];
@@ -44,11 +45,11 @@ setInterval(function () {
 
 	// --- TORQUE AND ROTATION ---
 	let tau_1f = crossVec3f([-l, 0, l], [0, F1, 0]);
-	let tau_1m = crossVec3f([-l, 0, l], [M1, 0, 0]);
+	let tau_1m = crossVec3f([-l, 0, l], [0, 0, M1]);
 	let tau_2f = crossVec3f([l, 0, l], [0, F2, 0]);
 	let tau_2m = crossVec3f([l, 0, l], [-M2, 0, 0]);
 	let tau_3f = crossVec3f([l, 0, -l], [0, F3, 0]);
-	let tau_3m = crossVec3f([l, 0, -l], [M3, 0, 0]);
+	let tau_3m = crossVec3f([l, 0, -l], [0, 0, M3]);
 	let tau_4f = crossVec3f([-l, 0, -l], [0, F4, 0]);
 	let tau_4m = crossVec3f([-l, 0, -l], [-M4, 0, 0]);
 
@@ -68,7 +69,7 @@ setInterval(function () {
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 
 	let glob_rot_acc = multMatVec3f(R_T, loc_rot_acc);
-	let glob_rot_vel = addVec3f(glob_rot_vel, multScalVec3f(dt, glob_rot_acc));
+	glob_rot_vel = addVec3f(glob_rot_vel, multScalVec3f(dt, glob_rot_acc));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
 
 	// --- UPDATE MODEL MATRIX ---
@@ -76,6 +77,7 @@ setInterval(function () {
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		loc_rot_vel = [0.0, 0.0, 0.0];
+		glob_rot_vel = [0.0, 0.0, 0.0];
 		glob_rot_pos = [0.0, 0.0, 0.0];
 		glob_lin_vel = [0.0, 0.0, 0.0];
 		glob_lin_pos = [0.0, 0.2, 0.0];
