@@ -35,13 +35,24 @@ setInterval(function () {
 	let R = transpMat3f(multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2])));
 
 	// --- THRUST AND POSITION ---
-	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, subVec3f(multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0])), [0, g, 0])));
+	let glob_f = multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0]));
+	let glob_lin_acc = addVec3f(glob_f, [0, -g, 0]);
+	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	// Matrix([[l*(-F1 - F2 + F3 + F4)], [l*(-M1 + M2 + M3 - M4)], [l*(-F1 + F2 + F3 - F4)]])
-	let loc_torque = [l * (-F1 - F2 + F3 + F4), l * (-M1 + M2 + M3 - M4), l * (-F1 + F2 + F3 - F4)];
-	let glob_torque = multMatVec3f(R, loc_torque);
+	let tau_1f = crossVec3f(multMatVec3f(R, [-l, 0, l]), multMatVec3f(R, [0, F1, 0]));
+	let tau_1m = crossVec3f(multMatVec3f(R, [-l, 0, l]), multMatVec3f(R, [-M1, 0, 0]));
+	let tau_2f = crossVec3f(multMatVec3f(R, [l, 0, l]), multMatVec3f(R, [0, F2, 0]));
+	let tau_2m = crossVec3f(multMatVec3f(R, [l, 0, l]), multMatVec3f(R, [M2, 0, 0]));
+	let tau_3f = crossVec3f(multMatVec3f(R, [l, 0, -l]), multMatVec3f(R, [0, F3, 0]));
+	let tau_3m = crossVec3f(multMatVec3f(R, [l, 0, -l]), multMatVec3f(R, [-M3, 0, 0]));
+	let tau_4f = crossVec3f(multMatVec3f(R, [-l, 0, -l]), multMatVec3f(R, [0, F4, 0]));
+	let tau_4m = crossVec3f(multMatVec3f(R, [-l, 0, -l]), multMatVec3f(R, [M4, 0, 0]));
+
+	// Sum up all the torques
+	let glob_torque = multMatVec3f(R, addVec3f(addVec3f(addVec3f(tau_1f, tau_1m), addVec3f(tau_2f, tau_2m)), addVec3f(addVec3f(tau_3f, tau_3m), addVec3f(tau_4f, tau_4m))));
+
 	let glob_I = multMatVec3f(R, I);
 	let glob_I_mat = vecToDiagMat3f(glob_I);
 	let glob_I_mat_inv = invMat3f(glob_I_mat);
@@ -53,7 +64,7 @@ setInterval(function () {
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
-	console.log(Math.floor(glob_lin_pos[0] * 100) / 100, Math.floor(glob_lin_pos[1] * 100) / 100, Math.floor(glob_lin_pos[2] * 100) / 100);
+	//console.log(Math.floor(glob_lin_pos[0] * 100) / 100, Math.floor(glob_lin_pos[1] * 100) / 100, Math.floor(glob_lin_pos[2] * 100) / 100);
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		glob_rot_vel = [0.0, 0.0, 0.0];
