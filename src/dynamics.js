@@ -51,14 +51,15 @@ setInterval(function () {
 
 	// Sum up all the torques
 	let loc_torque = [0, 0, 0];
-	loc_torque = subVec3f(loc_torque, tau_1f);
-	loc_torque = subVec3f(loc_torque, tau_1m);
-	loc_torque = subVec3f(loc_torque, tau_2f);
-	loc_torque = subVec3f(loc_torque, tau_2m);
-	loc_torque = subVec3f(loc_torque, tau_3f);
-	loc_torque = subVec3f(loc_torque, tau_3m);
-	loc_torque = subVec3f(loc_torque, tau_4f);
-	loc_torque = subVec3f(loc_torque, tau_4m);
+	loc_torque = addVec3f(loc_torque, tau_1f);
+	loc_torque = addVec3f(loc_torque, tau_1m);
+	loc_torque = addVec3f(loc_torque, tau_2f);
+	loc_torque = addVec3f(loc_torque, tau_2m);
+	loc_torque = addVec3f(loc_torque, tau_3f);
+	loc_torque = addVec3f(loc_torque, tau_3m);
+	loc_torque = addVec3f(loc_torque, tau_4f);
+	loc_torque = addVec3f(loc_torque, tau_4m);
+	loc_torque = multScalVec3f(-1, loc_torque);
 
 	let glob_torque = multMatVec3f(R, loc_torque);
 
@@ -73,14 +74,11 @@ setInterval(function () {
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
-	//console.log(Math.floor(glob_lin_pos[0] * 100) / 100, Math.floor(glob_lin_pos[1] * 100) / 100, Math.floor(glob_lin_pos[2] * 100) / 100);
-
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		glob_rot_vel = [0.0, 0.0, 0.0];
 		glob_rot_pos = [0.0, 0.0, 0.0];
 		glob_lin_vel = [0.0, 0.0, 0.0];
 		glob_lin_pos = [0.0, 0.2, 0.0];
 	}
-
 
 }, dt * 1000);
