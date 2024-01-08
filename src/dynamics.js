@@ -4,6 +4,8 @@ const k_m = 0.0004215641;
 const L = 0.23;
 const l = (L / Math.sqrt(2));
 const I = [0.0121, 0.0223, 0.0119];
+const loc_I_mat = vecToDiagMat3f(I);
+const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 1.0;
 const omega_min = 20
@@ -32,10 +34,11 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * omega_3;
 	let M4 = k_m * omega_4 * omega_4;
 
-	let R = transpMat3f(multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2])));
+	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
+	let R_T = transpMat3f(R);
 
 	// --- THRUST AND POSITION ---
-	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, multMatVec3f(R, [0, (F1 + F2 + F3 + F4), 0])), [0, -g, 0]);
+	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, multMatVec3f(R_T, [0, (F1 + F2 + F3 + F4), 0])), [0, -g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
@@ -59,15 +62,12 @@ setInterval(function () {
 	loc_torque = addVec3f(loc_torque, tau_3m);
 	loc_torque = addVec3f(loc_torque, tau_4f);
 	loc_torque = addVec3f(loc_torque, tau_4m);
-	loc_torque = multScalVec3f(-1, loc_torque);
+	//loc_torque = multScalVec3f(-1, loc_torque);
 
-	let glob_torque = multMatVec3f(R, loc_torque);
 
-	let glob_I = multMatVec3f(R, I);
-	let glob_I_mat = vecToDiagMat3f(glob_I);
-	let glob_I_mat_inv = invMat3f(glob_I_mat);
-
-	let glob_rot_acc = multMatVec3f(glob_I_mat_inv, subVec3f(glob_torque, crossVec3f(glob_rot_vel, multMatVec3f(glob_I_mat, glob_rot_vel))));
+	let loc_rot_vel = multMatVec3f(R, glob_rot_vel);
+	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
+	let glob_rot_acc = multMatVec3f(R_T, loc_rot_acc);
 	glob_rot_vel = addVec3f(glob_rot_vel, multScalVec3f(dt, glob_rot_acc));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
 
