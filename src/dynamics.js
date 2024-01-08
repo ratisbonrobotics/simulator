@@ -76,6 +76,7 @@ setInterval(function () {
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
+		loc_rot_vel = [0.0, 0.0, 0.0];
 		glob_rot_vel = [0.0, 0.0, 0.0];
 		glob_rot_pos = [0.0, 0.0, 0.0];
 		glob_lin_vel = [0.0, 0.0, 0.0];
