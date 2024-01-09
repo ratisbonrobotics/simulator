@@ -12,9 +12,9 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.8;
+var omega_1 = 41.7;
 var omega_2 = 41.65;
-var omega_3 = 41.8;
+var omega_3 = 41.65;
 var omega_4 = 41.65;
 
 var loc_rot_vel = [0.0, 0.0, 0.0];
