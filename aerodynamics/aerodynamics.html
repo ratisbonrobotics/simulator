@@ -117,7 +117,7 @@
         </li>
         <li>
           \(\dot{\hat\phi}, \dot{\hat\theta}, \dot{\hat\psi}\) indicate
-          rotational velocities inside the drone's frame of reference.
+          rotational velocities within the drone's frame of reference.
         </li>
       </ul>
 
@@ -215,7 +215,7 @@
         integration of velocities (\(\dot{x}, \dot{y}, \dot{z}\)), which in turn
         stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
         \ddot{z}\)). These accelerations are calculated using Newton's second
-        law <a href="#newton1687">2</a> of motion, with \(g\) being earth's
+        law of motion <a href="#newton1687">2</a>, with \(g\) being earth's
         gravitational constant \( 9.81 \frac{m}{s^2} \).
       </p>
 
@@ -249,84 +249,24 @@
       </figure>
 
       We define the torques within the drones frame of reference according to
-      the principles of Archimedes \(\tau = L \times F\)<a
-        href="#archimedes250bc"
-        >3</a
-      >.
+      the principles of Archimedes <a href="#archimedes250bc">3</a>.
       <!-- prettier-ignore -->
       <div class="equation">
         \[
         \begin{align*}
-        \tau_{1} &= 
-        \left[
-          \begin{array}{c}
-            -\frac{L}{\sqrt 2} \\
-            0 \\
-            \frac{L}{\sqrt 2}
-          \end{array}
-        \right]
-        \times
-        \left[
-          \begin{array}{c}
-            0 \\
-            F_1 \\
-            0
-          \end{array}
-        \right] \\
-        \tau_{2} &= 
-        \left[
-          \begin{array}{c}
-            \frac{L}{\sqrt 2} \\
-            0 \\
-            \frac{L}{\sqrt 2}
-          \end{array}
-        \right]
-        \times
-        \left[
-          \begin{array}{c}
-            0 \\
-            F_2 \\
-            0
-          \end{array}
-        \right] \\
-        \tau_{3} &= 
-        \left[
-          \begin{array}{c}
-            \frac{L}{\sqrt 2} \\
-            0 \\
-            -\frac{L}{\sqrt 2}
-          \end{array}
-        \right]
-        \times
-        \left[
-          \begin{array}{c}
-            0 \\
-            F_3 \\
-            0
-          \end{array}
-        \right]\\
-        \tau_{4} &= 
-        \left[
-          \begin{array}{c}
-            -\frac{L}{\sqrt 2} \\
-            0 \\
-            -\frac{L}{\sqrt 2}
-          \end{array}
-        \right]
-        \times
-        \left[
-          \begin{array}{c}
-            0 \\
-            F_4 \\
-            0
-          \end{array}
-        \right]
+        \mathbf{\tau} &= \mathbf{r} \times \mathbf{F} \\
+        \tau_{\hat\phi} &= -l \cdot (F_3 + F_4 - F_2 - F_1) \\
+        \tau_{\hat\theta} &= -(M_1 + M_3 - M_2 - M_4) \\
+        \tau_{\hat\psi} &= -l \cdot (F_2 + F_3 - F_1 - F_4)
         \end{align*}
         \]
       </div>
 
-      Through application of Euler's rotation equations we obtain the angular
-      acceleration within the drone's frame of reference.
+      <p>
+        By rearranging Euler's equations of rotation
+        <a href="#euler1768">1</a> we obtain the angular acceleration within the
+        drone's frame of reference.
+      </p>
 
       <!-- prettier-ignore -->
       <div class="equation">
@@ -456,7 +396,6 @@
       <cite id="archimedes250bc">
         Archimedes (ca. 250 BC). Περὶ ἐπιπέδων ἰσορροπιῶν
       </cite>
-      <cite id="hipparchus150bc"> Hipparchus (ca. 150 BC)</cite>
     </div>
   </body>
 </html>
