@@ -38,7 +38,7 @@ setInterval(function () {
 
 	// --- THRUST AND POSITION ---
 	let loc_lin_acc = [0, (1 / m) * (F1 + F2 + F3 + F4), 0];
-	let glob_lin_acc = addVec3f(multMatVec3f(R_T, loc_lin_acc), [0, -g, 0]);
+	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 

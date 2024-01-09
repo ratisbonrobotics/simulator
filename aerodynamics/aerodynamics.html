@@ -200,9 +200,10 @@
         \begin{align*}
           \begin{bmatrix}
             \ddot x \\
-            \ddot y - g \\
+            \ddot y \\
             \ddot z
           \end{bmatrix} &=
+          \left(
           \left(
           R_x(\phi)
           R_y(\theta)
@@ -210,6 +211,13 @@
           \begin{bmatrix}
             0 \\
             \frac{1}{m}\sum_i^4 F_i \\
+            0
+          \end{bmatrix}
+          \right)
+          + 
+          \begin{bmatrix}
+            0 \\
+            -g \\
             0
           \end{bmatrix}
         \end{align*}
