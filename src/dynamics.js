@@ -1,21 +1,22 @@
 // ----------------------------------- CONSTANTS -----------------------------------
-const k_f = 0.00141446535;
-const k_m = 0.000001215641;
-const L = 0.23;
+const coff = 100;
+const k_f = 1.0;
+const k_m = k_f / coff;
+const L = 0.25;
 const l = (L / Math.sqrt(2));
-const I = [0.0121, 0.0223, 0.0119];
+const I = [0.01, 0.02, 0.01];
 const loc_I_mat = vecToDiagMat3f(I);
 const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 1.0;
 const omega_min = 20
-const omega_max = 66
+const omega_max = 60
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.7;
-var omega_2 = 41.65;
-var omega_3 = 41.65;
-var omega_4 = 41.65;
+var omega_1 = 40.0;
+var omega_2 = 40.0;
+var omega_3 = 40.0;
+var omega_4 = 40.0;
 
 var loc_rot_vel = [0.0, 0.0, 0.0];
 var glob_rot_vel = [0.0, 0.0, 0.0];
@@ -39,29 +40,27 @@ setInterval(function () {
 	let F3_perp = k_m * omega_3 * omega_3;
 	let F4_perp = k_m * omega_4 * omega_4;
 
-	let loc_F_x = F1_perp / 2 + F2_perp / 2 - F3_perp / 2 - F4_perp / 2;
-	let loc_F_y = F1_up + F2_up + F3_up + F4_up;
-	let loc_F_z = F1_perp / 2 - F2_perp / 2 - F3_perp / 2 + F4_perp / 2;
+	let loc_F1 = crossVec3f([-l, 0.2 * l, l], [F1_perp / 2, F1_up, F1_perp / 2]);
+	let loc_F2 = crossVec3f([l, 0.2 * l, l], [F2_perp / 2, F2_up, -F2_perp / 2]);
+	let loc_F3 = crossVec3f([l, 0.2 * l, -l], [-F3_perp / 2, F3_up, -F3_perp / 2]);
+	let loc_F4 = crossVec3f([-l, 0.2 * l, -l], [-F4_perp / 2, F4_up, F4_perp / 2]);
 
-	let glob_F = multMatVec3f(R_T, [loc_F_x, loc_F_y, loc_F_z]);
-	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, glob_F), [0, -g, 0]);
+	let loc_F = [0, 0, 0];
+	loc_F = addVec3f(loc_F, loc_F1);
+	loc_F = addVec3f(loc_F, loc_F2);
+	loc_F = addVec3f(loc_F, loc_F3);
+	loc_F = addVec3f(loc_F, loc_F4);
+	let loc_lin_acc = multScalVec3f(1 / m, loc_F);
+
+	console.log(loc_lin_acc);
+
+	let glob_lin_acc = addVec3f(multMatVec3f(R_T, loc_lin_acc), [0, -g, 0]);
+
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	let tau_1 = crossVec3f([-l, 0.2 * l, l], [F1_perp / 2, F1_up, F1_perp / 2]);
-	let tau_2 = crossVec3f([l, 0.2 * l, l], [F2_perp / 2, F2_up, -F2_perp / 2]);
-	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-F3_perp / 2, F3_up, -F3_perp / 2]);
-	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-F4_perp / 2, F4_up, F4_perp / 2]);
-
-	let loc_torque = [0, 0, 0];
-	loc_torque = addVec3f(loc_torque, tau_1);
-	loc_torque = addVec3f(loc_torque, tau_2);
-	loc_torque = addVec3f(loc_torque, tau_3);
-	loc_torque = addVec3f(loc_torque, tau_4);
-	//loc_torque = multScalVec3f(-1, loc_torque);
-
-	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
+	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_F, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 
 	let glob_rot_acc = multMatVec3f(R_T, loc_rot_acc);
