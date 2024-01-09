@@ -139,73 +139,63 @@
         \end{bmatrix}
         \]              
       </div>
-      <h2>
-        Comprehensive Control Formulation and Rotor Speed Update for Co-Axial
-        Rotored Drones
-      </h2>
-
-      <section>
-        <p>
-          Control of co-axial rotored drones encompasses various sophisticated
-          techniques, from basic PID controllers to advanced algorithms like
-          Model Predictive Control (MPC) and non-linear control theories. These
-          methods are essential in addressing the multi-variable nonlinear
-          problem of drone control, taking into account factors such as drone's
-          inertia, aerodynamics, external forces, and desired flight path.
-        </p>
-
-        <p>
-          The PID control mechanism, a common approach across different
-          versions, is defined as:
-        </p>
-        <div class="equation">
-          \( u(t) = K_p e(t) + K_i \int_{0}^{t} e(\tau) d\tau + K_d \frac{d}{dt}
-          e(t) \),
-        </div>
-        <p>
-          where \( u(t) \) is the control input, \( e(t) \) is the error signal,
-          and \( K_p, K_i, K_d \) are the proportional, integral, and derivative
-          gains, respectively. This control adjusts rotor speeds based on the
-          deviation from the desired state, considering proportional error,
-          accumulated error, and the rate of error change.
-        </p>
-
-        <p>
-          For more complex scenarios, MPC optimizes control inputs over a future
-          time horizon, expressed as:
-        </p>
-        <div class="equation">
-          \[ \begin{align*} \min_{U} \quad & \sum_{k=0}^{N-1} (X_k - X_{ref})^T
-          Q (X_k - X_{ref}) + U_k^T R U_k \\ \textrm{s.t.} \quad & X_{k+1} =
-          AX_k + BU_k, \\ & X_{min} \leq X_k \leq X_{max}, \\ & U_{min} \leq U_k
-          \leq U_{max}, \end{align*} \]
-        </div>
-
-        <p>
-          Rotor speed updates are crucial for achieving desired thrust and
-          torque. The process is governed by equations of motion for each rotor,
-          where the thrust \( F_i \) and torque \( M_i \) are a function of
-          rotor speed \( \omega_i \) and constants \( k_f \) and \( k_m \). The
-          control system computes the optimal rotor speeds by solving the
-          inverse dynamics problem, ensuring accurate and responsive changes to
-          external commands and environmental factors.
-        </p>
-        <div class="equation">
-          \( F_i = k_f \omega_i^2, \quad M_i = k_m \omega_i^2 \)
-        </div>
-
-        <p>
-          The integration of these advanced control and feedback mechanisms,
-          including state-space models and electronic speed controllers (ESCs),
-          allows the drone to perform complex tasks with high precision,
-          adapting fluidly to changing environmental conditions and operational
-          demands.
-        </p>
-      </section>
-
-      <h5 class="references">References</h5>
-      <div class="references">
-        <!-- Include relevant references from the provided versions. -->
+      <h2>Control Formulation</h2>
+      <p>
+        The control of co-axial rotored drones is a complex task that integrates
+        various advanced control theories and algorithms. These include the
+        Proportional-Integral-Derivative (PID) framework, state-space
+        representation, non-linear control theories, and Newton's laws of
+        motion. The PID controllers, forming the foundational layer of the
+        control strategy, dynamically adjust rotor speeds to maintain stability
+        and respond to control inputs, while also being complemented by advanced
+        Model Predictive Control (MPC) algorithms.
+      </p>
+      <div class="equation">
+        \( \mathbf{T} = \mathbf{K}_p \cdot \mathbf{e} + \mathbf{K}_i \int
+        \mathbf{e} \, dt + \mathbf{K}_d \frac{d\mathbf{e}}{dt} \)
       </div>
+      <p>
+        Where \( \mathbf{T} \) is the thrust vector, \( \mathbf{K}_p,
+        \mathbf{K}_i, \mathbf{K}_d \) are the PID coefficients, \( \mathbf{e} \)
+        is the error vector, and \( u(t) \) is the control signal.
+      </p>
+      <p>
+        Advanced scenarios may involve adaptive control techniques like Model
+        Predictive Control (MPC), or machine learning algorithms. These
+        approaches optimize control inputs by predicting future states and
+        adjusting for uncertainties and nonlinearities in real-time.
+      </p>
+      <div class="equation">\[ \dot{X} = AX + BU \] \[ Y = CX + DU \]</div>
+      <p>
+        Here, \(X\) is the state vector, \(U\) is the control input vector,
+        \(Y\) is the output vector, and \(A\), \(B\), \(C\), and \(D\) are the
+        system matrices defining the dynamics.
+      </p>
+
+      <h2>Rotor Speed Update</h2>
+      <p>
+        Rotor speed is a critical factor in maintaining the stability of a
+        co-axial rotored drone. The rotor speed update is a continuous process
+        and forms the core of the drone's flight control mechanism, ensuring
+        efficient, responsive, and stable maneuvering in three-dimensional
+        space. The thrust generated by each rotor is described by the following
+        equation:
+      </p>
+      <div class="equation">\( \omega_i = \sqrt{\frac{T_i}{k_f}} \)</div>
+      <p>
+        Here, \( \omega_i \) represents the angular velocity of the ith rotor,
+        \( T_i \) is the thrust produced by the ith rotor, and \( k_f \) is the
+        thrust coefficient.
+      </p>
+      <p>
+        Additionally, the torque generated by each rotor, which contributes to
+        the drone's yaw control, can be expressed as \( τ_i = k_m ω_i^2 \),
+        where \(τ_i\) is the torque generated by the ith rotor, and \(k_m\) is
+        the drag coefficient.
+      </p>
+    </section>
+
+    <h5 class="references">References</h5>
+    <div class="references"></div>
   </body>
 </html>
