@@ -143,9 +143,10 @@
       <!-- prettier-ignore -->
       <div class="equation">
         \[
-        \tilde{\dot x}(t) = K_p e(t) + K_d \dot e(t) \\
-        \tilde{\dot y}(t) = K_p e(t) + K_d \dot e(t) \\
-        \tilde{\dot z}(t) = K_p e(t) + K_d \dot e(t) \\
+        u_{\dot{\hat x}}(t) = K_p (\tilde{\dot{\hat x}} - {\dot{\hat x}}) + K_d (\tilde{\ddot{\hat x}} - {\ddot{\hat x}}) \\
+        u_{\dot{\hat y}}(t) = K_p (\tilde{\dot{\hat y}} - {\dot{\hat y}}) + K_d (\tilde{\ddot{\hat y}} - {\ddot{\hat y}}) \\
+        u_{\dot{\hat z}}(t) = K_p (\tilde{\dot{\hat z}} - {\dot{\hat z}}) + K_d (\tilde{\ddot{\hat z}} - {\ddot{\hat z}}) \\
+        u_{\dot{\hat \theta}}(t) = K_p (\tilde{\dot{\hat \theta}} - {\dot{\hat \theta}}) + K_d (\tilde{\ddot{\hat \theta}} - {\ddot{\hat \theta}})
         \]
       </div>
 
