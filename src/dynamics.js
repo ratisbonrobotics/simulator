@@ -1,6 +1,6 @@
 // ----------------------------------- CONSTANTS -----------------------------------
 const k_f = 0.00141446535;
-const k_m = 0.0004215641;
+const k_m = 0.000001215641;
 const L = 0.23;
 const l = (L / Math.sqrt(2));
 const I = [0.0121, 0.0223, 0.0119];
@@ -12,7 +12,7 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.67;
+var omega_1 = 41.7;
 var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
@@ -25,29 +25,34 @@ var glob_lin_pos = [0.0, 0.2, 0.0];
 
 setInterval(function () {
 
-	let F1 = k_f * omega_1 * omega_1;
-	let F2 = k_f * omega_2 * omega_2;
-	let F3 = k_f * omega_3 * omega_3;
-	let F4 = k_f * omega_4 * omega_4;
-
-	let M1 = k_m * omega_1 * omega_1;
-	let M2 = k_m * omega_2 * omega_2;
-	let M3 = k_m * omega_3 * omega_3;
-	let M4 = k_m * omega_4 * omega_4;
-
 	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
 	let R_T = transpMat3f(R);
 
 	// --- THRUST AND POSITION ---
-	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, multMatVec3f(R_T, [0, (F1 + F2 + F3 + F4), 0])), [0, -g, 0]);
+	let F1_up = k_f * omega_1 * omega_1;
+	let F2_up = k_f * omega_2 * omega_2;
+	let F3_up = k_f * omega_3 * omega_3;
+	let F4_up = k_f * omega_4 * omega_4;
+
+	let F1_perp = k_m * omega_1 * omega_1;
+	let F2_perp = k_m * omega_2 * omega_2;
+	let F3_perp = k_m * omega_3 * omega_3;
+	let F4_perp = k_m * omega_4 * omega_4;
+
+	let loc_F_x = F1_perp / 2 + F2_perp / 2 - F3_perp / 2 - F4_perp / 2;
+	let loc_F_y = F1_up + F2_up + F3_up + F4_up;
+	let loc_F_z = F1_perp / 2 - F2_perp / 2 - F3_perp / 2 + F4_perp / 2;
+
+	let glob_F = multMatVec3f(R_T, [loc_F_x, loc_F_y, loc_F_z]);
+	let glob_lin_acc = addVec3f(multScalVec3f(1 / m, glob_F), [0, -g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	let tau_1 = crossVec3f([-l, 0.2 * l, l], [M1 / 2, F1, M1 / 2]);
-	let tau_2 = crossVec3f([l, 0.2 * l, l], [M2 / 2, F2, -M2 / 2]);
-	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-M3 / 2, F3, -M3 / 2]);
-	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-M4 / 2, F4, M4 / 2]);
+	let tau_1 = crossVec3f([-l, 0.2 * l, l], [F1_perp / 2, F1_up, F1_perp / 2]);
+	let tau_2 = crossVec3f([l, 0.2 * l, l], [F2_perp / 2, F2_up, -F2_perp / 2]);
+	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-F3_perp / 2, F3_up, -F3_perp / 2]);
+	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-F4_perp / 2, F4_up, F4_perp / 2]);
 
 	// Sum up all the torques
 	let loc_torque = [0, 0, 0];
