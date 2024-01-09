@@ -35,14 +35,10 @@ setInterval(function () {
 	let F4_rot = k_m * omega_4 * omega_4;
 
 	// LIN
-	/*let tau_1 = crossVec3f([-l, 0.25 * l, l], [F1_rot / 2, F1_up, F1_rot / 2]);
+	let tau_1 = crossVec3f([-l, 0.25 * l, l], [F1_rot / 2, F1_up, F1_rot / 2]);
 	let tau_2 = crossVec3f([l, 0.25 * l, l], [F2_rot / 2, F2_up, -F2_rot / 2]);
 	let tau_3 = crossVec3f([l, 0.25 * l, -l], [-F3_rot / 2, F3_up, -F3_rot / 2]);
-	let tau_4 = crossVec3f([-l, 0.25 * l, -l], [-F4_rot / 2, F4_up, F4_rot / 2]);*/
-	let tau_1 = crossVec3f([F1_rot / 2, F1_up, F1_rot / 2], [-l, 0.25 * l, l]);
-	let tau_2 = crossVec3f([F2_rot / 2, F2_up, -F2_rot / 2], [l, 0.25 * l, l]);
-	let tau_3 = crossVec3f([-F3_rot / 2, F3_up, -F3_rot / 2], [l, 0.25 * l, -l]);
-	let tau_4 = crossVec3f([-F4_rot / 2, F4_up, F4_rot / 2], [-l, 0.25 * l, -l]);
+	let tau_4 = crossVec3f([-l, 0.25 * l, -l], [-F4_rot / 2, F4_up, F4_rot / 2]);
 
 	let loc_torque = [0, 0, 0];
 	loc_torque = addVec3f(loc_torque, tau_1);
@@ -58,19 +54,17 @@ setInterval(function () {
 	console.log(loc_lin_acc);
 
 	// ROT
-	/*let acc_1 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, l]);
-	let acc_2 = crossVec3f(glob_lin_acc, [l, 0.25 * l, l]);
-	let acc_3 = crossVec3f(glob_lin_acc, [l, 0.25 * l, -l]);
-	let acc_4 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, -l]);*/
-	let acc_1 = crossVec3f([-l, 0.25 * l, l], glob_lin_acc);
-	let acc_2 = crossVec3f([l, 0.25 * l, l], glob_lin_acc);
-	let acc_3 = crossVec3f([l, 0.25 * l, -l], glob_lin_acc);
-	let acc_4 = crossVec3f([-l, 0.25 * l, -l], glob_lin_acc);
-	let glob_rot_acc = [0, 0, 0];
-	glob_rot_acc = addVec3f(glob_rot_acc, acc_1);
-	glob_rot_acc = addVec3f(glob_rot_acc, acc_2);
-	glob_rot_acc = addVec3f(glob_rot_acc, acc_3);
-	glob_rot_acc = addVec3f(glob_rot_acc, acc_4);
+	let loc_rot_acc_1 = crossVec3f(loc_lin_acc, [-l, 0.25 * l, l]);
+	let loc_rot_acc_2 = crossVec3f(loc_lin_acc, [l, 0.25 * l, l]);
+	let loc_rot_acc_3 = crossVec3f(loc_lin_acc, [l, 0.25 * l, -l]);
+	let loc_rot_acc_4 = crossVec3f(loc_lin_acc, [-l, 0.25 * l, -l]);
+
+	let loc_rot_acc = [0, 0, 0];
+	loc_rot_acc = addVec3f(loc_rot_acc, loc_rot_acc_1);
+	loc_rot_acc = addVec3f(loc_rot_acc, loc_rot_acc_2);
+	loc_rot_acc = addVec3f(loc_rot_acc, loc_rot_acc_3);
+	loc_rot_acc = addVec3f(loc_rot_acc, loc_rot_acc_4);
+	let glob_rot_acc = multMatVec3f(R_T, loc_rot_acc);
 
 	glob_rot_vel = addVec3f(glob_rot_vel, multScalVec3f(dt, glob_rot_acc));
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
