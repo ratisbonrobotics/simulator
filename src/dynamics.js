@@ -14,7 +14,7 @@ const omega_max = 66
 // ----------------------------------- DYNAMICS -----------------------------------
 var omega_1 = 41.7;
 var omega_2 = 41.65;
-var omega_3 = 41.65;
+var omega_3 = 41.7;
 var omega_4 = 41.65;
 
 var loc_rot_vel = [0.0, 0.0, 0.0];
@@ -55,7 +55,7 @@ setInterval(function () {
 	loc_torque = addVec3f(loc_torque, tau_2);
 	loc_torque = addVec3f(loc_torque, tau_3);
 	loc_torque = addVec3f(loc_torque, tau_4);
-	//loc_torque = multScalVec3f(-1, loc_torque);
+	loc_torque = multScalVec3f(-1, loc_torque);
 
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
@@ -65,7 +65,7 @@ setInterval(function () {
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
 
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], degToRad(glob_rot_pos[0]), degToRad(glob_rot_pos[1]), degToRad(glob_rot_pos[2]), 0.01, 0.01, 0.01);
+	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 	if (glob_lin_pos[0] > 1 || glob_lin_pos[0] < -1 || glob_lin_pos[1] > 1 || glob_lin_pos[1] < -1 || glob_lin_pos[2] > 1 || glob_lin_pos[2] < -1) {
 		loc_rot_vel = [0.0, 0.0, 0.0];
