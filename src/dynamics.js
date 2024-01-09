@@ -1,6 +1,6 @@
 // ----------------------------------- CONSTANTS -----------------------------------
 const k_f = 0.00141446535;
-const k_m = 0.000001215641;
+const k_m = 0.0004215641;
 const L = 0.23;
 const l = (L / Math.sqrt(2));
 const I = [0.0121, 0.0223, 0.0119];
@@ -12,9 +12,9 @@ const omega_min = 20
 const omega_max = 66
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.7;
+var omega_1 = 41.65;
 var omega_2 = 41.65;
-var omega_3 = 41.7;
+var omega_3 = 41.65;
 var omega_4 = 41.65;
 
 var loc_rot_vel = [0.0, 0.0, 0.0];
@@ -24,7 +24,6 @@ var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_lin_pos = [0.0, 0.2, 0.0];
 
 setInterval(function () {
-
 	let F1 = k_f * omega_1 * omega_1;
 	let F2 = k_f * omega_2 * omega_2;
 	let F3 = k_f * omega_3 * omega_3;
@@ -44,18 +43,8 @@ setInterval(function () {
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
-	let tau_1 = crossVec3f([-l, 0.2 * l, l], [M1 / 2, F1, M1 / 2]);
-	let tau_2 = crossVec3f([l, 0.2 * l, l], [M2 / 2, F2, -M2 / 2]);
-	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-M3 / 2, F3, -M3 / 2]);
-	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-M4 / 2, F4, M4 / 2]);
-
-	// Sum up all the torques
-	let loc_torque = [0, 0, 0];
-	loc_torque = addVec3f(loc_torque, tau_1);
-	loc_torque = addVec3f(loc_torque, tau_2);
-	loc_torque = addVec3f(loc_torque, tau_3);
-	loc_torque = addVec3f(loc_torque, tau_4);
-	//loc_torque = multScalVec3f(-1, loc_torque);
+	let loc_torque = [l * (F3 + F4 - F2 - F1), (M1 - M2 + M3 - M4), l * (F2 + F3 - F1 - F4)];
+	loc_torque = multScalVec3f(-1, loc_torque);
 
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
