@@ -23,15 +23,15 @@ var glob_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
 
 setInterval(function () {
-	let F1 = k_f * omega_1 * omega_1;
-	let F2 = k_f * omega_2 * omega_2;
-	let F3 = k_f * omega_3 * omega_3;
-	let F4 = k_f * omega_4 * omega_4;
+	let F1 = k_f * omega_1 ** 2;
+	let F2 = k_f * omega_2 ** 2;
+	let F3 = k_f * omega_3 ** 2;
+	let F4 = k_f * omega_4 ** 2;
 
-	let M1 = k_m * omega_1 * omega_1;
-	let M2 = k_m * omega_2 * omega_2;
-	let M3 = k_m * omega_3 * omega_3;
-	let M4 = k_m * omega_4 * omega_4;
+	let M1 = k_m * omega_1 ** 2;
+	let M2 = k_m * omega_2 ** 2;
+	let M3 = k_m * omega_3 ** 2;
+	let M4 = k_m * omega_4 ** 2;
 
 	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
 	let R_T = transpMat3f(R);
