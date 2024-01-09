@@ -184,18 +184,24 @@
         \[ F_{i} = k_{f} \omega_{i}^2 \qquad M_{i} = k_{m} \omega_{i}^2 \]
       </div>
       <p>
-        Through a rotating the thrust vector from within the drone's frame of
-        reference by the angles \(\phi\), \(\theta\) and \(\psi\), we obtain the
-        thrust vector in the world's frame of reference.
+        Changes in the drone's position (\(x, y, z\)) are derived from the
+        integration of velocities (\(\dot{x}, \dot{y}, \dot{z}\)), which in turn
+        stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
+        \ddot{z}\)). These accelerations are calculated using Newton's second
+        law of motion <a href="#newton1687">2</a>, with \(g\) being earth's
+        gravitational constant \( 9.81 \frac{m}{s^2} \). Through a rotating the
+        vector of linear acceleration from within the drone's frame of reference
+        by the angles \(\phi\), \(\theta\) and \(\psi\), we obtain the vector of
+        linear acceleration in the world's frame of reference.
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
         \[
         \begin{align*}
           \begin{bmatrix}
-            F_{x} \\
-            F_{y} \\
-            F_{z}
+            \ddot x \\
+            \ddot y - g \\
+            \ddot z
           \end{bmatrix} &=
           \left(
           R_x(\phi)
@@ -203,29 +209,11 @@
           R_z(\psi)\right)^T
           \begin{bmatrix}
             0 \\
-            \sum_i^4 F_i \\
+            \frac{1}{m}\sum_i^4 F_i \\
             0
           \end{bmatrix}
         \end{align*}
         \]        
-      </div>
-
-      <p>
-        Changes in the drone's position (\(x, y, z\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}, \dot{z}\)), which in turn
-        stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{z}\)). These accelerations are calculated using Newton's second
-        law of motion <a href="#newton1687">2</a>, with \(g\) being earth's
-        gravitational constant \( 9.81 \frac{m}{s^2} \).
-      </p>
-
-      <!-- prettier-ignore -->
-      <div class="equation">
-        \[
-          \ddot{x} = \frac{F_{x}}{m} \qquad
-          \ddot{y} = \frac{(F_{y} - F_{g})}{m} = \frac{F_{y}}{m} - g \qquad
-          \ddot{z} = \frac{F_{z}}{m}
-        \]
       </div>
 
       <figure>
