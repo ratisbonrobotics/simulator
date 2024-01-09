@@ -54,7 +54,6 @@ setInterval(function () {
 	let tau_3 = crossVec3f([l, 0.2 * l, -l], [-F3_perp / 2, F3_up, -F3_perp / 2]);
 	let tau_4 = crossVec3f([-l, 0.2 * l, -l], [-F4_perp / 2, F4_up, F4_perp / 2]);
 
-	// Sum up all the torques
 	let loc_torque = [0, 0, 0];
 	loc_torque = addVec3f(loc_torque, tau_1);
 	loc_torque = addVec3f(loc_torque, tau_2);
