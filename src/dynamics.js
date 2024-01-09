@@ -17,10 +17,10 @@ var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
 
-var loc_rot_vel = [0.0, 0.0, 0.0];
-var glob_rot_pos = [0.0, 0.0, 0.0];
-var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_lin_pos = [0.0, 0.2, 0.0];
+var glob_lin_vel = [0.0, 0.0, 0.0];
+var glob_rot_pos = [0.0, 0.0, 0.0];
+var loc_rot_vel = [0.0, 0.0, 0.0];
 
 setInterval(function () {
 	let F1 = k_f * omega_1 * omega_1;
