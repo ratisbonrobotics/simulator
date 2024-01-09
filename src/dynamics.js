@@ -1,15 +1,15 @@
 // ----------------------------------- CONSTANTS -----------------------------------
-const k_f = 0.00141446535; // includes earth's gravitation already on the air molecules (?)
-const k_m = 0.000001215641; // includes earth's gravitation already
+const k_f = 0.00141446535;
+const k_m = 0.000001215641;
 const L = 0.23;
 const l = (L / Math.sqrt(2));
-const I = [0.0121, 0.0223, 0.0119]; // includes mass already
+const I = [0.0121, 0.0223, 0.0119]; // includes mass already [kg * m^2]
 const loc_I_mat = vecToDiagMat3f(I);
 const loc_I_mat_inv = invMat3f(loc_I_mat);
 const glob_g = [0.0, -9.81, 0.0];
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 525.96;
+var omega_1 = 525.961;
 var omega_2 = 525.96;
 var omega_3 = 525.96;
 var omega_4 = 525.96;
@@ -35,10 +35,14 @@ setInterval(function () {
 	let F4_rot = k_m * omega_4 * omega_4;
 
 	// LIN
-	let tau_1 = crossVec3f([-l, 0.25 * l, l], [F1_rot / 2, F1_up, F1_rot / 2]);
+	/*let tau_1 = crossVec3f([-l, 0.25 * l, l], [F1_rot / 2, F1_up, F1_rot / 2]);
 	let tau_2 = crossVec3f([l, 0.25 * l, l], [F2_rot / 2, F2_up, -F2_rot / 2]);
 	let tau_3 = crossVec3f([l, 0.25 * l, -l], [-F3_rot / 2, F3_up, -F3_rot / 2]);
-	let tau_4 = crossVec3f([-l, 0.25 * l, -l], [-F4_rot / 2, F4_up, F4_rot / 2]);
+	let tau_4 = crossVec3f([-l, 0.25 * l, -l], [-F4_rot / 2, F4_up, F4_rot / 2]);*/
+	let tau_1 = crossVec3f([F1_rot / 2, F1_up, F1_rot / 2], [-l, 0.25 * l, l]);
+	let tau_2 = crossVec3f([F2_rot / 2, F2_up, -F2_rot / 2], [l, 0.25 * l, l]);
+	let tau_3 = crossVec3f([-F3_rot / 2, F3_up, -F3_rot / 2], [l, 0.25 * l, -l]);
+	let tau_4 = crossVec3f([-F4_rot / 2, F4_up, F4_rot / 2], [-l, 0.25 * l, -l]);
 
 	let loc_torque = [0, 0, 0];
 	loc_torque = addVec3f(loc_torque, tau_1);
@@ -51,13 +55,17 @@ setInterval(function () {
 	glob_lin_acc = addVec3f(glob_lin_acc, glob_g);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
-	console.log(glob_lin_pos);
+	console.log(loc_lin_acc);
 
 	// ROT
-	let acc_1 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, l]);
+	/*let acc_1 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, l]);
 	let acc_2 = crossVec3f(glob_lin_acc, [l, 0.25 * l, l]);
 	let acc_3 = crossVec3f(glob_lin_acc, [l, 0.25 * l, -l]);
-	let acc_4 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, -l]);
+	let acc_4 = crossVec3f(glob_lin_acc, [-l, 0.25 * l, -l]);*/
+	let acc_1 = crossVec3f([-l, 0.25 * l, l], glob_lin_acc);
+	let acc_2 = crossVec3f([l, 0.25 * l, l], glob_lin_acc);
+	let acc_3 = crossVec3f([l, 0.25 * l, -l], glob_lin_acc);
+	let acc_4 = crossVec3f([-l, 0.25 * l, -l], glob_lin_acc);
 	let glob_rot_acc = [0, 0, 0];
 	glob_rot_acc = addVec3f(glob_rot_acc, acc_1);
 	glob_rot_acc = addVec3f(glob_rot_acc, acc_2);
