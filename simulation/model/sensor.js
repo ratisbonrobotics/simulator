@@ -13,7 +13,7 @@ var loc_rot_vel_measured = [0.0, 0.0, 0.0];
 setInterval(function () {
 
     for (var i = 0; i < 3; i++) {
-        loc_rot_vel_measured[i] = loc_rot_vel[i] + generateGaussianNoise(mean, stdDev);
+        loc_rot_vel_measured[i] = loc_rot_vel[i] + generateGaussianNoise(mean, loc_rot_vel[i] * 0.003);
     }
 
     console.log(loc_rot_vel, loc_rot_vel_measured);
