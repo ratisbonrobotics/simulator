@@ -97,29 +97,40 @@
     <section>
       <h2>State Representation</h2>
       <p>
-        The three-dimensional state vector, \(X\), entirely describes the
+        The vector-valued function, \(\mathbf{X}(t)\), entirely describes the
         drone's state at a point in time.
       </p>
+      <!-- prettier-ignore -->
       <div class="equation">
-        \( X = [x, y, z, \phi, \theta, \psi, \dot{x}, \dot{y}, \dot{z},
-        \dot{\hat\phi}, \dot{\hat\theta}, \dot{\hat\psi}] \)
+        \[
+          \mathbf{X} : \mathbb{R}^{12} \to \mathbb{R}^{12} \\
+          \mathbf{X}_i : \mathbb{R} \to \mathbb{R} \\
+          \mathbf{X}(t) =
+          \begin{bmatrix}
+            x(t),
+            y(t),
+            z(t),
+            \phi(t),
+            \theta(t),
+            \psi(t),
+            x'(t),
+            y'(t),
+            z'(t),
+            \phi_{\cdot}'(t),
+            \theta_{\cdot}'(t),
+            \psi_{\cdot}'(t)
+          \end{bmatrix}
+        \]
       </div>
-      <p>where</p>
-      <ul>
-        <li>\(x, y, z\) denote the drone's positional coordinates in space,</li>
-        <li>
-          \(\dot{x}, \dot{y}, \dot{z}\) represent linear velocities along the x,
-          y, and z axes,
-        </li>
-        <li>
-          \(\phi, \theta, \psi\) stand for rotational angles around the x, y,
-          and z axes,
-        </li>
-        <li>
-          \(\dot{\hat\phi}, \dot{\hat\theta}, \dot{\hat\psi}\) indicate
-          rotational velocities within the drone's frame of reference.
-        </li>
-      </ul>
+      <p>
+        where \(x(t), y(t), z(t)\) denote the drone's positional coordinates in
+        space, \(\phi(t), \theta(t), \psi(t)\) stand for rotational angles
+        around the \(x\), \(y\) and \(z\)-axes, and \(x'(t), y'(t), z'(t)\)
+        represent linear velocities, i.e. the first derivative of the position,
+        along the \(x\), \(y\) and \(z\)-axes. The rotational velocities within
+        the drone's frame of reference are denoted by \(\phi_{\cdot}'(t),
+        \theta_{\cdot}'(t), \psi_{\cdot}'(t)\).
+      </p>
 
       <figure>
         <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
@@ -174,43 +185,45 @@
       </div>
       <h2>Dynamics Formulation</h2>
       <p>
-        The dynamics of the drone are characterized by how its state \(X\)
-        evolves through time under the influence of forces. The thrusts and
-        moments follow a quadratic relationship with rotor velocities
-        (\(\omega_{i}\)), which is derived from the principles of fluid
-        dynamics.
+        The dynamics of the drone are characterized by how its state
+        \(\mathbf{X}(t)\) evolves through time under the influence of forces.
+        The thrusts and moments follow a quadratic relationship with rotor
+        velocities (\(\omega_{i}\)), which is derived from the principles of
+        fluid dynamics.
       </p>
       <div class="equation">
-        \[ F_{i} = k_{f} \omega_{i}^2 \qquad M_{i} = k_{m} \omega_{i}^2 \]
+        \[ F_{i\cdot}(t) = k_{f} (\omega_{i\cdot}(t))^2 \qquad M_{i\cdot}(t) =
+        k_{m} (\omega_{i\cdot}(t))^2 \]
       </div>
       <p>
-        Changes in the drone's position (\(x, y, z\)) are derived from the
-        integration of velocities (\(\dot{x}, \dot{y}, \dot{z}\)), which in turn
-        stem from the integration of accelerations (\(\ddot{x}, \ddot{y},
-        \ddot{z}\)). These accelerations are calculated using Newton's second
-        law of motion <a href="#newton1687">2</a>, with \(g\) being earth's
-        gravitational constant \( 9.81 \frac{m}{s^2} \). Through a rotating the
-        vector of linear acceleration from within the drone's frame of reference
-        by the angles \(\phi\), \(\theta\) and \(\psi\), we obtain the vector of
-        linear acceleration in the world's frame of reference.
+        Changes in the drone's position (\(x(t), y(t), z(t)\)) are derived from
+        the integration of velocities (\(x'(t), y'(t), z'(t)\)), which in turn
+        stem from the integration of accelerations (\(x''(t), y''(t), z''(t)\)),
+        i.e. the second derivative of the position. These accelerations are
+        calculated using Newton's second law of motion
+        <a href="#newton1687">2</a>, with \(g\) being earth's gravitational
+        constant \( 9.81 \frac{m}{s^2} \). Through rotating the vector of linear
+        acceleration from within the drone's frame of reference by the angles
+        \(\phi(t), \theta(t), \psi(t)\), we obtain the vector of linear
+        acceleration in the world's frame of reference.
       </p>
       <!-- prettier-ignore -->
       <div class="equation">
         \[
         \begin{align*}
           \begin{bmatrix}
-            \ddot x \\
-            \ddot y \\
-            \ddot z
+            x''(t) \\
+            y''(t) \\
+            z''(t)
           \end{bmatrix} &=
           \left(
           \left(
-          R_x(\phi)
-          R_y(\theta)
-          R_z(\psi)\right)^T
+          R_x(\phi(t))
+          R_y(\theta(t))
+          R_z(\psi(t))\right)^T
           \begin{bmatrix}
             0 \\
-            \frac{1}{m}\sum_i^4 F_i \\
+            \frac{1}{m}\sum_i^4 F_{i\cdot} \\
             0
           \end{bmatrix}
           \right)
@@ -239,8 +252,8 @@
           />
         </div>
         <figcaption>
-          Drone at \(X = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\). The drone's and
-          the world's frame of reference are perfectly aligned.
+          Drone at \(\mathbf{X}(0) = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]\). The
+          drone's and the world's frame of reference are perfectly aligned.
         </figcaption>
       </figure>
 
@@ -250,10 +263,9 @@
       <div class="equation">
         \[
         \begin{align*}
-        \mathbf{\tau} &= \mathbf{r} \times \mathbf{F} \\
-        \tau_{\hat\phi} &= -l \cdot (F_3 + F_4 - F_2 - F_1) \\
-        \tau_{\hat\theta} &= -(M_1 + M_3 - M_2 - M_4) \\
-        \tau_{\hat\psi} &= -l \cdot (F_2 + F_3 - F_1 - F_4)
+          \tau_{x\cdot}(t) &= -l \cdot (F_{3\cdot}(t) + F_{4\cdot}(t) - F_{2\cdot}(t) - F_{1\cdot}(t)) \\
+          \tau_{y\cdot}(t) &= -(M_{1\cdot}(t) + M_{3\cdot}(t) - M_{2\cdot}(t) - M_{4\cdot}(t)) \\
+          \tau_{z\cdot}(t) &= -l \cdot (F_{2\cdot}(t) + F_{3\cdot}(t) - F_{1\cdot}(t) - F_{4\cdot}(t))
         \end{align*}
         \]
       </div>
@@ -269,70 +281,70 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \tau_{\hat\phi} \\
-            \tau_{\hat\theta} \\
-            \tau_{\hat\psi}
+            \tau_{x\cdot}(t) \\
+            \tau_{y\cdot}(t) \\
+            \tau_{z\cdot}(t)
           \end{bmatrix} &=
           \begin{bmatrix}
-            I_{\hat\phi} & 0 & 0 \\
-            0 & I_{\hat\theta} & 0 \\
-            0 & 0 & I_{\hat\psi}
+            I_{x\cdot} & 0 & 0 \\
+            0 & I_{y\cdot} & 0 \\
+            0 & 0 & I_{z\cdot}
           \end{bmatrix}
           \begin{bmatrix}
-            \ddot{\hat\phi} \\
-            \ddot{\hat\theta} \\
-            \ddot{\hat\psi}
+            \phi_{\cdot}''(t) \\
+            \theta_{\cdot}''(t) \\
+            \psi_{\cdot}''(t)
           \end{bmatrix}
           +
           \begin{bmatrix}
-            \dot{\hat\phi} \\
-            \dot{\hat\theta} \\
-            \dot{\hat\psi}
+            \phi_{\cdot}'(t) \\
+            \theta_{\cdot}'(t) \\
+            \psi_{\cdot}'(t)
           \end{bmatrix}
           \times
           \left(
             \begin{bmatrix}
-              I_{\hat\phi} & 0 & 0 \\
-              0 & I_{\hat\theta} & 0 \\
-              0 & 0 & I_{\hat\psi}
+              I_{x\cdot} & 0 & 0 \\
+              0 & I_{y\cdot} & 0 \\
+              0 & 0 & I_{z\cdot}
             \end{bmatrix}
             \begin{bmatrix}
-              \dot{\hat\phi} \\
-              \dot{\hat\theta} \\
-              \dot{\hat\psi}
+              \phi_{\cdot}'(t) \\
+              \theta_{\cdot}'(t) \\
+              \psi_{\cdot}'(t)
             \end{bmatrix}
           \right) \\
           \begin{bmatrix} 
-            \ddot{\hat\phi} \\ 
-            \ddot{\hat\theta} \\ 
-            \ddot{\hat\psi}
+          \phi_{\cdot}''(t) \\
+          \theta_{\cdot}''(t) \\
+          \psi_{\cdot}''(t)
           \end{bmatrix} &=
           \begin{bmatrix} 
-            \frac{1}{I_{\hat\phi}} & 0 & 0 \\ 
-            0 & \frac{1}{I_{\hat\theta}} & 0 \\ 
-            0 & 0 & \frac{1}{I_{\hat\psi}} 
+            \frac{1}{I_{x\cdot}} & 0 & 0 \\ 
+            0 & \frac{1}{I_{y\cdot}} & 0 \\ 
+            0 & 0 & \frac{1}{I_{z\cdot}} 
           \end{bmatrix}
           \left( 
             \begin{bmatrix} 
-              \tau_{\hat\phi} \\ 
-              \tau_{\hat\theta} \\ 
-              \tau_{\hat\psi} 
+              \tau_{x\cdot}(t) \\
+              \tau_{y\cdot}(t) \\
+              \tau_{z\cdot}(t)
             \end{bmatrix} - 
             \begin{bmatrix} 
-              \dot{\hat\phi} \\ 
-              \dot{\hat\theta} \\ 
-              \dot{\hat\psi} 
+              \phi_{\cdot}'(t) \\
+              \theta_{\cdot}'(t) \\
+              \psi_{\cdot}'(t)
             \end{bmatrix} \times 
             \left( 
               \begin{bmatrix} 
-                I_{\hat\phi} & 0 & 0 \\ 
-                0 & I_{\hat\theta} & 0 \\ 
-                0 & 0 & I_{\hat\psi} 
+                I_{x\cdot} & 0 & 0 \\ 
+                0 & I_{y\cdot} & 0 \\ 
+                0 & 0 & I_{z\cdot} 
               \end{bmatrix} 
               \begin{bmatrix} 
-                \dot{\hat\phi} \\ 
-                \dot{\hat\theta} \\ 
-                \dot{\hat\psi} 
+                \phi_{\cdot}'(t) \\
+                \theta_{\cdot}'(t) \\
+                \psi_{\cdot}'(t)
               \end{bmatrix} 
             \right) 
           \right)
@@ -348,9 +360,9 @@
         \[
         \begin{align*}
           \begin{bmatrix}
-            \dot\phi \\
-            \dot\theta \\
-            \dot\psi
+            \phi'(t) \\
+            \theta'(t) \\
+            \psi'(t)
           \end{bmatrix}
           &= 
           \left(
@@ -358,9 +370,9 @@
             R_y(\theta)
             R_z(\psi)\right)^T
           \begin{bmatrix}
-            \dot{\hat\phi} \\
-            \dot{\hat\theta} \\
-            \dot{\hat\psi}
+            \phi_{\cdot}'(t) \\
+            \theta_{\cdot}'(t) \\
+            \psi_{\cdot}'(t)
           \end{bmatrix}
         \end{align*}
         \]
@@ -369,15 +381,15 @@
       <h2>State Evolution</h2>
       <p>
         The state of the drone at time \( t_2 \) is determined by the sum of its
-        current state \( X_{t_1} \) and the integral of the state's time
-        derivative \( \dot{X_{t_1}} \) over the interval \( t_2 - t_1 \). This
-        integral represents a precise calculation of the state change. However,
-        for small intervals, we assume a constant rate of change, simplifying
-        the integral to a product.
+        current state \( \mathbf{X}(t_1) \) and the integral of the state's time
+        derivative \( \mathbf{X}'(t_1) \) over the interval \( t_2 - t_1 \).
+        This integral represents a precise calculation of the state change.
+        However, for small intervals, we assume a constant rate of change,
+        simplifying the integral to a product.
       </p>
       <div class="equation">
-        \[ X_{t_2} = X_{t_1} + \int_{t_1}^{t_2} \dot{X}_{t} dt \approx X_{t_1} +
-        (t_2 - t_1)\dot{X}_{t_1} \]
+        \[ \mathbf{X}(t_2) = \mathbf{X}(t_1) + \int_{t_1}^{t_2} \mathbf{X}'(t)
+        dt \approx \mathbf{X}(t_1) + (t_2 - t_1)\mathbf{X}'(t_1) \]
       </div>
     </section>
 
