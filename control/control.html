@@ -95,18 +95,18 @@
           \end{bmatrix}
           , \quad
           y_{\cdot}''(t) =
-          \frac{1}{m}
+          
           \begin{bmatrix}
-            h_1,
-            h_2,
-            h_3,
-            h_4
+            \frac{1}{m} &
+            \frac{1}{m} &
+            \frac{1}{m} &
+            \frac{1}{m}
           \end{bmatrix}
           \begin{bmatrix}
-            F_1 \\
-            F_2 \\
-            F_3 \\
-            F_4
+            F_{1\cdot}(t) \\
+            F_{2\cdot}(t) \\
+            F_{3\cdot}(t) \\
+            F_{4\cdot}(t)
           \end{bmatrix}
 
           \\
@@ -139,9 +139,23 @@
       <div class="equation">
         \[
         \begin{align*}
-          \tau_{x\cdot}(t) &= -l \cdot (F_{3\cdot}(t) + F_{4\cdot}(t) - F_{2\cdot}(t) - F_{1\cdot}(t)) \\
-          \tau_{y\cdot}(t) &= -(M_{1\cdot}(t) + M_{3\cdot}(t) - M_{2\cdot}(t) - M_{4\cdot}(t)) \\
-          \tau_{z\cdot}(t) &= -l \cdot (F_{2\cdot}(t) + F_{3\cdot}(t) - F_{1\cdot}(t) - F_{4\cdot}(t))
+          \begin{bmatrix}
+            \tau_{x\cdot}(t) \\
+            \tau_{y\cdot}(t) \\
+            \tau_{z\cdot}(t)
+          \end{bmatrix}
+          =
+          \begin{bmatrix}
+          \frac{l}{M_{1\cdot}(t)} & \frac{l}{M_{2\cdot}(t)} & -\frac{l}{M_{3\cdot}(t)} & -\frac{l}{M_{4\cdot}(t)} \\
+          -\frac{1}{F_{1\cdot}(t)} & \frac{1}{F_{2\cdot}(t)} & -\frac{1}{F_{3\cdot}(t)} & \frac{1}{F_{4\cdot}(t)} \\
+          \frac{l}{M_{1\cdot}(t)} & -\frac{l}{M_{2\cdot}(t)} & -\frac{l}{M_{3\cdot}(t)} & \frac{l}{M_{4\cdot}(t)}
+          \end{bmatrix}
+          \begin{bmatrix}
+            F_{1\cdot}(t)M_{1\cdot}(t) \\
+            F_{2\cdot}(t)M_{2\cdot}(t) \\
+            F_{3\cdot}(t)M_{3\cdot}(t) \\
+            F_{4\cdot}(t)M_{4\cdot}(t)
+          \end{bmatrix}
         \end{align*}
         \]
       </div>
