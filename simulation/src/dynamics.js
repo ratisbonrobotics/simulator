@@ -28,11 +28,15 @@ var time = 0.0;
 
 setInterval(function () {
 
+	// --- DEMO MOVEMENT ---
 	omega_1 = omega_stable + 0.081 * Math.sin(time + 0.001) + time * 0.0005;
 	omega_2 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
 	omega_3 = omega_stable + 0.081 * Math.sin(time) + time * 0.0005;
 	omega_4 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
+	time += dt;
+	// ---
 
+	// --- FORCES AND MOMENTS ---
 	let F1 = k_f * omega_1 ** 2;
 	let F2 = k_f * omega_2 ** 2;
 	let F3 = k_f * omega_3 ** 2;
@@ -43,6 +47,7 @@ setInterval(function () {
 	let M3 = k_m * omega_3 ** 2;
 	let M4 = k_m * omega_4 ** 2;
 
+	// --- ROTATION MATRIX ---
 	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
 	let R_T = transpMat3f(R);
 
@@ -62,7 +67,5 @@ setInterval(function () {
 
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
-
-	time += dt;
 
 }, dt * 1000);
