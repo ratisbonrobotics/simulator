@@ -16,15 +16,20 @@
     <title>Ratisbon Robotics</title>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        loadExternalHTML("/lib/navbar.html", "navbar");
+        loadExternalHTML("/lib/footer.html", "footer");
+      });
+
+      function loadExternalHTML(url, targetId) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
           var parser = new DOMParser();
           var doc = parser.parseFromString(xhr.responseText, "text/html");
-          var navbar = document.getElementById("navbar");
+          var target = document.getElementById(targetId);
 
           Array.from(doc.body.childNodes).forEach(function (node) {
             if (node.nodeName.toLowerCase() !== "script") {
-              navbar.appendChild(node.cloneNode(true));
+              target.appendChild(node.cloneNode(true));
             }
           });
 
@@ -35,9 +40,9 @@
             document.body.appendChild(script);
           }
         };
-        xhr.open("GET", "/lib/navbar.html", true);
+        xhr.open("GET", url, true);
         xhr.send();
-      });
+      }
     </script>
   </head>
 
@@ -73,18 +78,7 @@
           </script>
         </div>
 
-        <div class="tile is-parent">
-          <article class="tile is-child notification has-background-light">
-            <div class="content">
-              <div class="content has-text-centered">
-                <p>
-                  <strong>Ratisbon Robotics</strong> by
-                  <a href="https://markusheimerl.com">Markus Heimerl</a>
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
+        <footer id="footer"></footer>
       </div>
     </div>
   </body>
