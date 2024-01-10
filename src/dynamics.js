@@ -11,9 +11,10 @@ const m = 1.0;
 const dt = 0.01;
 const omega_min = 20
 const omega_max = 66
+const omega_stable = 41.635;
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.66;
+var omega_1 = 41.65;
 var omega_2 = 41.65;
 var omega_3 = 41.65;
 var omega_4 = 41.65;
@@ -23,7 +24,15 @@ var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
 
+var time = 0.0;
+
 setInterval(function () {
+
+	omega_1 = omega_stable + 0.081 * Math.sin(time + 0.001) + time * 0.0005;
+	omega_2 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
+	omega_3 = omega_stable + 0.081 * Math.sin(time) + time * 0.0005;
+	omega_4 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
+
 	let F1 = k_f * omega_1 ** 2;
 	let F2 = k_f * omega_2 ** 2;
 	let F3 = k_f * omega_3 ** 2;
@@ -53,5 +62,7 @@ setInterval(function () {
 
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
+
+	time += dt;
 
 }, dt * 1000);
