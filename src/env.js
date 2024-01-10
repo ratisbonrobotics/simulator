@@ -7,7 +7,6 @@ var mouse = {
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext("webgl");
 resizeCanvas();
-const dt = 0.01;
 
 // --- ADD EVENT LISTENERS ---
 window.addEventListener("orientationchange", resizeCanvas);

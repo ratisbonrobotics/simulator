@@ -8,6 +8,7 @@ const loc_I_mat = vecToDiagMat3f(I);
 const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 1.0;
+const dt = 0.01;
 const omega_min = 20
 const omega_max = 66
 
