@@ -48,29 +48,21 @@
 
   <body>
     <nav id="navbar"></nav>
-
-    <iframe
-      src="simulation/simulation.html"
-      style="width: 100%; height: 500px"
-      onload="resizeIframe(this)"
-      scrolling="no"
-    ></iframe>
-
-    <script>
-      function resizeIframe(iframe) {
-        try {
-          const iframeDocument =
-            iframe.contentDocument || iframe.contentWindow.document;
-          const height =
-            iframeDocument.documentElement.scrollHeight ||
-            iframeDocument.body.scrollHeight + 200;
-          iframe.style.height = height + "px";
-        } catch (e) {
-          console.error("Error resizing iframe:", e);
-        }
-      }
-    </script>
-
-    <footer id="footer"></footer>
+    <div class="tile is-ancestor">
+      <div class="tile is-vertical">
+        <div class="tile is-parent">
+          <article
+            class="tile is-child notification has-background-light has-text-centered"
+          >
+            <iframe
+              src="simulation/simulation.html"
+              style="width: 100%; height: 550px"
+              scrolling="no"
+            ></iframe>
+          </article>
+        </div>
+        <footer id="footer"></footer>
+      </div>
+    </div>
   </body>
 </html>
