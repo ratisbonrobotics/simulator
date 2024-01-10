@@ -59,6 +59,7 @@
               src="aerodynamics.html"
               style="width: 100%; height: 500px"
               onload="resizeIframe(this)"
+              scrolling="no"
             ></iframe>
           </article>
 
@@ -68,8 +69,8 @@
                 const iframeDocument =
                   iframe.contentDocument || iframe.contentWindow.document;
                 const height =
-                  (iframeDocument.documentElement.scrollHeight ||
-                    iframeDocument.body.scrollHeight) + 200;
+                  iframeDocument.documentElement.scrollHeight ||
+                  iframeDocument.body.scrollHeight;
                 iframe.style.height = height + "px";
               } catch (e) {
                 console.error("Error resizing iframe:", e);
