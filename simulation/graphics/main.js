@@ -85,7 +85,7 @@ function drawScene() {
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2);
     gl.uniform1i(uniformLocations["texture"], drone_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, droneModelMatrix);
-    gl.drawArrays(gl.TRIANGLES, 0, 1668);
+    gl.drawArrays(gl.TRIANGLES, 0, 924);
 
     requestAnimationFrame(drawScene);
 }
