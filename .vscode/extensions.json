@@ -1,7 +1,6 @@
 {
     "recommendations": [
         "ms-vscode.live-server",
-        "esbenp.prettier-vscode",
-        "michaelcurrin.auto-commit-msg"
+        "esbenp.prettier-vscode"
     ]
 }
