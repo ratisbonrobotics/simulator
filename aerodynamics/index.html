@@ -43,6 +43,22 @@
         xhr.open("GET", url, true);
         xhr.send();
       }
+
+      function resizeIframe(iframe) {
+        try {
+          const iframeDocument = iframe.contentWindow.document;
+          const height = iframeDocument.body.scrollHeight + 50;
+          console.log(height);
+          iframe.style.height = height + "px";
+        } catch (e) {
+          console.error("Error resizing iframe:", e);
+        }
+      }
+
+      window.addEventListener("resize", function () {
+        var iframe = document.querySelector("iframe");
+        resizeIframe(iframe);
+      });
     </script>
   </head>
 
@@ -62,21 +78,6 @@
               scrolling="no"
             ></iframe>
           </article>
-
-          <script>
-            function resizeIframe(iframe) {
-              try {
-                const iframeDocument =
-                  iframe.contentDocument || iframe.contentWindow.document;
-                const height =
-                  iframeDocument.documentElement.scrollHeight ||
-                  iframeDocument.body.scrollHeight;
-                iframe.style.height = height + "px";
-              } catch (e) {
-                console.error("Error resizing iframe:", e);
-              }
-            }
-          </script>
         </div>
 
         <footer id="footer"></footer>
