@@ -2,6 +2,6 @@
     "recommendations": [
         "ms-vscode.live-server",
         "esbenp.prettier-vscode",
-        "karlmoritzwildenhain.gpt-commit-generator"
+        "andrewbutson.vscode-openai"
     ]
 }
