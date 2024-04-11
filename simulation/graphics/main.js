@@ -54,9 +54,9 @@ var sofa_texcoordbuffer;
 var sofa_texture;
 async function loadSofa() {
     let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
-    terrain_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["v"]);
-    terrain_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["vt"]);
-    terrain_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["v"]);
+    sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["vt"]);
+    sofa_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
 var drone_vertexbuffer;
@@ -85,16 +85,16 @@ function drawScene() {
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
 
     // --- DRAW TERRAIN ---
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_vertexbuffer, attribLocations.vertexposition, 3);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_texcoordbuffer, attribLocations.texturecoordinate, 2);
-    gl.uniform1i(uniformLocations["texture"], sofa_texture);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2);
+    gl.uniform1i(uniformLocations["texture"], terrain_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
     // --- DRAW SOFA ---
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2);
-    gl.uniform1i(uniformLocations["texture"], terrain_texture);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_vertexbuffer, attribLocations.vertexposition, 3);
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_texcoordbuffer, attribLocations.texturecoordinate, 2);
+    gl.uniform1i(uniformLocations["texture"], sofa_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, sofaModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 121116);
 
