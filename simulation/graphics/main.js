@@ -99,7 +99,7 @@ function drawScene() {
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_texcoordbuffer, attribLocations.texturecoordinate, 2);
     gl.uniform1i(uniformLocations["texture"], sofa_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, sofaModelMatrix);
-    gl.drawArrays(gl.TRIANGLES, 0, 121116);
+    gl.drawArrays(gl.TRIANGLES, 0, 1121116);
 
     // --- DRAW DRONE ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
