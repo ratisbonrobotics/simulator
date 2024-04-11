@@ -57,6 +57,7 @@ var sofa_texture;
 async function loadSofa() {
     let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
     sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["v"]);
+    console.log(obj["sofa"]["v"]);
     sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["vt"]);
     sofa_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
