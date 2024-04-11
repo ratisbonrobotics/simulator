@@ -39,6 +39,9 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 init3D(gl);
 
 // --- GET DATA FROM OBJ ---
+console.log(await parseGLB('graphics/data/alarm.glb'))
+
+
 var terrain_vertexbuffer;
 var terrain_texcoordbuffer;
 var terrain_texture;
