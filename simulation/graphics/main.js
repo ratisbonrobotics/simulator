@@ -39,7 +39,6 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 init3D(gl);
 
 // --- GET DATA FROM OBJ ---
-parseGLB('graphics/data/alarm.glb')
 
 var terrain_vertexbuffer;
 var terrain_texcoordbuffer;
@@ -56,7 +55,8 @@ var sofa_texcoordbuffer;
 var sofa_texture;
 async function loadSofa() {
     let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
-    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["v"]);
+    let verticies = await parseGLB('graphics/data/alarm.glb');
+    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies);
     console.log(obj["sofa"]["v"]);
     sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["vt"]);
     sofa_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
