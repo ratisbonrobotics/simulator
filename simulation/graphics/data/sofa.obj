@@ -1,7 +1,7 @@
 # Blender 3.6.0
 # www.blender.org
 mtllib sofa.mtl
-o Mesh_0
+o sofa
 v 0.235657 -0.184603 0.495761
 v 0.223128 -0.183466 0.499262
 v 0.223086 -0.194596 0.496282
