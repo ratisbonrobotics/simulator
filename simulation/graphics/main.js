@@ -56,10 +56,11 @@ var sofa_texture;
 async function loadSofa() {
     let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
     let verticies = await parseGLB('graphics/data/alarm.glb');
-    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[0]["v"]);
-    console.log(verticies);
+    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["vertexData"]);
+    //console.log(verticies);
     sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["sofa"]["vt"]);
-    sofa_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+    console.log(obj["sofa"]["vt"]);
+    sofa_texture = addTexture(gl, 'graphics/data/alarm.jpeg');
 }
 
 var drone_vertexbuffer;
