@@ -56,9 +56,7 @@ async function loadSofa() {
     let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
     let verticies = await parseGLB('graphics/data/alarm.glb');
     sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["vertexData"]);
-    //console.log(verticies);
     sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["texCoordData"]);
-    //console.log(obj["sofa"]["vt"]);
     sofa_texture = addTexture(gl, verticies[11]["textureURL"]);
 }
 
