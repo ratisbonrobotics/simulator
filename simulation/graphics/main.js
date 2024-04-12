@@ -49,15 +49,19 @@ async function loadTerrain() {
     terrain_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
 }
 
-var sofa_vertexbuffer;
-var sofa_texcoordbuffer;
-var sofa_texture;
-async function loadSofa() {
-    let [obj, mtl] = await parseOBJ('graphics/data/sofa.obj');
-    let verticies = await parseGLB('graphics/data/alarm.glb');
-    sofa_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["vertexData"]);
-    sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["texCoordData"]);
-    sofa_texture = addTexture(gl, verticies[11]["textureURL"]);
+var alarm_vertexbuffer = [];
+var alarm_texcoordbuffer = [];
+var alarm_texture = [];
+async function loadAlarm() {
+    let glb_data = await parseGLB('graphics/data/alarm.glb');
+    for (let primitive = 0; primitive < glb_data.length; primitive++) {
+        alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
+        alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
+        if (glb_data[primitive]["textureURL"] !== undefined)
+            alarm_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
+        else
+            alarm_texture[primitive] = undefined;
+    }
 }
 
 var drone_vertexbuffer;
@@ -70,7 +74,7 @@ async function loadDrone() {
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
     await loadTerrain();
-    await loadSofa();
+    await loadAlarm();
     requestAnimationFrame(drawScene);
 }
 
@@ -92,12 +96,16 @@ function drawScene() {
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-    // --- DRAW SOFA ---
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_vertexbuffer, attribLocations.vertexposition, 3);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sofa_texcoordbuffer, attribLocations.texturecoordinate, 2);
-    gl.uniform1i(uniformLocations["texture"], sofa_texture);
-    gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, sofaModelMatrix);
-    gl.drawArrays(gl.TRIANGLES, 0, 1121116);
+    // --- DRAW ALARM ---
+    for (let primitive = 0; primitive < alarm_vertexbuffer.length; primitive++) {
+        if (alarm_texture[primitive] !== undefined) {
+            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[primitive], attribLocations.vertexposition, 3);
+            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
+            gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
+            gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
+            gl.drawArrays(gl.TRIANGLES, 0, 1121116);
+        }
+    }
 
     // --- DRAW DRONE ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
