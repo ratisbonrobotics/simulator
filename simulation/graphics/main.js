@@ -39,7 +39,6 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 init3D(gl);
 
 // --- GET DATA FROM OBJ ---
-
 var terrain_vertexbuffer;
 var terrain_texcoordbuffer;
 var terrain_texture;
@@ -60,7 +59,7 @@ async function loadSofa() {
     //console.log(verticies);
     sofa_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, verticies[11]["texCoordData"]);
     //console.log(obj["sofa"]["vt"]);
-    sofa_texture = addTexture(gl, 'graphics/data/alarm.jpeg');
+    sofa_texture = addTexture(gl, verticies[11]["textureURL"]);
 }
 
 var drone_vertexbuffer;
