@@ -57,10 +57,7 @@ async function loadAlarm() {
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
         alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
         alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
-        if (glb_data[primitive]["textureURL"] !== undefined)
-            alarm_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
-        else
-            alarm_texture[primitive] = undefined;
+        alarm_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
     }
 }
 
@@ -98,13 +95,11 @@ function drawScene() {
 
     // --- DRAW ALARM ---
     for (let primitive = 0; primitive < alarm_vertexbuffer.length; primitive++) {
-        if (alarm_texture[primitive] !== undefined) {
-            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[primitive], attribLocations.vertexposition, 3);
-            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
-            gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
-            gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
-            gl.drawArrays(gl.TRIANGLES, 0, 1121116);
-        }
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[primitive], attribLocations.vertexposition, 3);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
+        gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
+        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
+        gl.drawArrays(gl.TRIANGLES, 0, 1121116);
     }
 
     // --- DRAW DRONE ---
