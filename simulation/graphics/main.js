@@ -53,8 +53,8 @@ var alarm_vertexbuffer = [];
 var alarm_texcoordbuffer = [];
 var alarm_texture = [];
 async function loadAlarm() {
-    let glb_data = await parseGLB('graphics/data/scene_edited.glb');
-    for (let primitive = 9; primitive < 10; primitive++) {
+    let glb_data = await parseGLB('graphics/data/bathtub.glb');
+    for (let primitive = 0; primitive < glb_data.length; primitive++) {
         alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
         alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
         alarm_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
@@ -94,13 +94,13 @@ function drawScene() {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
     // --- DRAW ALARM ---
-    /*for (let primitive = 1; primitive < alarm_vertexbuffer.length; primitive++) {
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[15], attribLocations.vertexposition, 3);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[15], attribLocations.texturecoordinate, 2);
-        gl.uniform1i(uniformLocations["texture"], alarm_texture[15]);
+    for (let primitive = 0; primitive < alarm_vertexbuffer.length; primitive++) {
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[primitive], attribLocations.vertexposition, 3);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
+        gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
         gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
         gl.drawArrays(gl.TRIANGLES, 0, 1121116);
-    }*/
+    }
 
     // --- DRAW DRONE ---
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
