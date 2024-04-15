@@ -53,7 +53,7 @@ var alarm_vertexbuffer = [];
 var alarm_texcoordbuffer = [];
 var alarm_texture = [];
 async function loadAlarm() {
-    let glb_data = await parseGLB('graphics/data/empty_apartment.glb');
+    let glb_data = await parseGLB('graphics/data/complete_scene.glb');
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
         alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
         alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
@@ -99,7 +99,7 @@ function drawScene() {
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
         gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
         gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
-        gl.drawArrays(gl.TRIANGLES, 0, 1121116);
+        gl.drawArrays(gl.TRIANGLES, 0, 20000);
     }
 
     // --- DRAW DRONE ---
