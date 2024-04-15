@@ -53,7 +53,7 @@ var alarm_vertexbuffer = [];
 var alarm_texcoordbuffer = [];
 var alarm_texture = [];
 async function loadAlarm() {
-    let glb_data = await parseGLB('graphics/data/bathroom.glb');
+    let glb_data = await parseGLB('graphics/data/empty_apartement.glb');
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
         alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
         alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
