@@ -16,7 +16,14 @@ function getMouseInput(s) {
 var cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 
+var attachedToDrone = false;
 setInterval(function () {
+    if (keys["1"]) {
+        attachedToDrone = true;
+    }
+    if (keys["2"]) {
+        attachedToDrone = false;
+    }
     var movementVector = getKeyboardInput(0.01);
     var rotationVector = getMouseInput(0.01);
     rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);

@@ -67,15 +67,23 @@ async function loadDrone() {
 }
 
 // --- SETUP PROJECTION MATRIX ---
-let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 100);
+let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 // --- DRAW ---
+
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // --- SETUP VIEWMATRIX ---
-    gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
+    if (attachedToDrone) {
+        droneModelMatrixAttached = droneModelMatrix;
+        roty = yRotMat4f(degToRad(180));
+        droneModelMatrixAttached = multMat4f(roty, droneModelMatrixAttached);
+        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(droneModelMatrixAttached));
+    } else {
+        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
+    }
 
     // --- DRAW SCENE ---
     for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
