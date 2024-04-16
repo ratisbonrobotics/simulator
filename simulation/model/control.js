@@ -51,9 +51,11 @@ setInterval(function () {
 
     // --- CONTROL ---
     let pitch_control = Kp_pitch * (desired_loc_rot_vel[0] - loc_rot_vel[0]) + Kd_pitch * (desired_loc_rot_acc[0] - loc_rot_vel[0]);
+    pitch_control = 0;
     let yaw_control = Kp_yaw * (desired_loc_rot_vel[1] - loc_rot_vel[1]) + Kd_yaw * (desired_loc_rot_acc[1] - loc_rot_vel[1]);
 
     let alt_control = Kp_alt * (desired_loc_lin_vel[1] - loc_lin_vel[1]) + Kd_alt * (desired_loc_lin_acc[1] - loc_lin_acc[1]);
+    alt_control = 0;
 
     // --- MOTOR COMMANDS ---
     omega_1 = omega_stable + yaw_control - pitch_control + alt_control;
