@@ -1,9 +1,13 @@
 // ----------------------------------- CONTROL PARAMETERS -----------------------------------
-const Kp_roll = 1.0;
+const Kp_roll = 0.1;
+const Kd_roll = 0.01;
 const Kp_pitch = 1.0;
+const Kd_pitch = 0.1;
 const Kp_yaw = 1.0;
 const Kp_alt = 3.0;
 const Kd_alt = 1.8;
+const Kp_att = 1.0;
+const Kd_att = 0.1;
 var desired_loc_rot_pos = [0.0, 0.0, 0.0];
 var desired_loc_rot_vel = [0.0, 0.0, 0.0];
 var desired_loc_rot_acc = [0.0, 0.0, 0.0];
@@ -19,6 +23,15 @@ var desired_glob_lin_acc = [0.0, 0.0, 0.0];
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
     // --- USER INPUT ---
+
+    if (keys["w"]) {
+        desired_loc_lin_vel[0] = 0.1; // Forward
+    } else if (keys["s"]) {
+        desired_loc_lin_vel[0] = -0.1; // Backward
+    } else {
+        desired_loc_lin_vel[0] = 0.0;
+    }
+
     if (keys["x"]) {
         desired_loc_lin_vel[1] = 0.1; // Up
     } else if (keys["z"]) {
@@ -27,14 +40,20 @@ setInterval(function () {
         desired_loc_lin_vel[1] = 0.0;
     }
 
+    // --- ATTITUDE CONTROL ---
+    let att_control = Kp_pitch * (desired_loc_rot_vel[0] - loc_rot_vel[0]) + Kd_pitch * (desired_loc_rot_acc[0] - loc_rot_acc[0]);
+
+    // --- PITCH CONTROL ---
+    let pitch_control = Kp_pitch * (desired_loc_lin_vel[0] - loc_lin_vel[0]) + Kd_pitch * (desired_loc_lin_acc[0] - loc_lin_acc[0]);
+
     // --- ALTITUDE CONTROL ---
     let alt_control = Kp_alt * (desired_loc_lin_vel[1] - loc_lin_vel[1]) + Kd_alt * (desired_loc_lin_acc[1] - loc_lin_acc[1]);
 
     // --- MOTOR COMMANDS ---
-    omega_1 = omega_stable + alt_control;
-    omega_2 = omega_stable + alt_control;
-    omega_3 = omega_stable + alt_control;
-    omega_4 = omega_stable + alt_control;
+    omega_1 = omega_stable - pitch_control + alt_control + att_control;
+    omega_2 = omega_stable - pitch_control + alt_control + att_control;
+    omega_3 = omega_stable + pitch_control + alt_control + att_control;
+    omega_4 = omega_stable + pitch_control + alt_control + att_control;
 
 }, dt * 10);
 
