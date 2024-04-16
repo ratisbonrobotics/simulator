@@ -11,7 +11,7 @@ const m = 1.0;
 const dt = 0.01;
 const omega_min = 20
 const omega_max = 66
-const omega_stable = 41.635;
+const omega_stable = 41.6398;
 
 // ----------------------------------- DYNAMICS -----------------------------------
 var omega_1 = 41.65;
@@ -31,15 +31,13 @@ var loc_rot_vel_measured = [0.0, 0.0, 0.0];
 var time = 0.0;
 
 setInterval(function () {
-
-	// --- DEMO MOVEMENT ---
-	omega_1 = omega_stable + 0.081 * Math.sin(time + 0.001) + time * 0.0005;
-	omega_2 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
-	omega_3 = omega_stable + 0.081 * Math.sin(time) + time * 0.0005;
-	omega_4 = omega_stable + 0.1 * Math.cos(time) + time * 0.0005;
 	time += dt;
-	// ---
-
+	/*
+	omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
+	omega_2 = Math.max(Math.min(omega_1, omega_max), omega_min);
+	omega_3 = Math.max(Math.min(omega_1, omega_max), omega_min);
+	omega_4 = Math.max(Math.min(omega_1, omega_max), omega_min);
+	*/
 	// --- FORCES AND MOMENTS ---
 	let F1 = k_f * omega_1 ** 2;
 	let F2 = k_f * omega_2 ** 2;
@@ -79,4 +77,4 @@ setInterval(function () {
 		loc_lin_acc_measured[i] = loc_lin_acc_measured[i] + generateGaussianNoise(0, loc_lin_acc_measured[i] * 0.003);
 	}
 
-}, dt * 1000);
+}, dt * 1);
