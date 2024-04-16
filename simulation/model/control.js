@@ -3,9 +3,10 @@ const Kp_roll = 1.0;
 const Kp_pitch = 1.0;
 const Kp_yaw = 1.0;
 const Kp_alt = 3.0;
-const Kd_alt = 0.8;
+const Kd_alt = 1.8;
 var desired_loc_rot_pos = [0.0, 0.0, 0.0];
-var desired_glob_lin_pos = [0.0, 0.0, 0.0];
+var desired_glob_lin_pos = [0.0, 0.2, 0.0];
+var desired_glob_lin_vel = [0.0, 0.0, 0.0];
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
@@ -41,20 +42,21 @@ setInterval(function () {
     }
 
     // --- PITCH CONTROL ---
-    let pitch_error = desired_loc_rot_pos[0] - loc_rot_pos[0];
-    let pitch_control = Kp_pitch * pitch_error;
+    let pitch_error_pos = desired_loc_rot_pos[0] - loc_rot_pos[0];
+    let pitch_control = Kp_pitch * pitch_error_pos;
 
     // --- ROLL CONTROL ---
-    let roll_error = desired_loc_rot_pos[2] - loc_rot_pos[2];
-    let roll_control = Kp_roll * roll_error;
+    let roll_error_pos = desired_loc_rot_pos[2] - loc_rot_pos[2];
+    let roll_control = Kp_roll * roll_error_pos;
 
     // --- YAW CONTROL ---
-    let yaw_error = desired_loc_rot_pos[1] - loc_rot_pos[1];
-    let yaw_control = Kp_yaw * yaw_error;
+    let yaw_error_pos = desired_loc_rot_pos[1] - loc_rot_pos[1];
+    let yaw_control = Kp_yaw * yaw_error_pos;
 
     // --- ALTITUDE CONTROL ---
-    let alt_error = desired_glob_lin_pos[1] - glob_lin_pos[1];
-    let alt_control = Kp_alt * alt_error - Kd_alt * glob_lin_vel[1];
+    let alt_error_pos = desired_glob_lin_pos[1] - glob_lin_pos[1];
+    let alt_error_vel = desired_glob_lin_vel[1] - glob_lin_vel[1];
+    let alt_control = Kp_alt * alt_error_pos + Kd_alt * alt_error_vel;
 
     // --- MOTOR COMMANDS ---
     /*
