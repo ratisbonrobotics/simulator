@@ -29,10 +29,10 @@ setInterval(function () {
         desired_rot_vel[2] = 0.0;
     }
 
-    if (keys["q"]) {
-        desired_rot_vel[1] = -0.1; // Yaw left (counterclockwise)
-    } else if (keys["e"]) {
-        desired_rot_vel[1] = 0.1; // Yaw right (clockwise)
+    if (keys["e"]) {
+        desired_rot_vel[1] = 0.1; // Yaw left (counterclockwise)
+    } else if (keys["q"]) {
+        desired_rot_vel[1] = -0.1; // Yaw right (clockwise)
     } else {
         desired_rot_vel[1] = 0.0;
     }
@@ -40,16 +40,16 @@ setInterval(function () {
     if (keys["x"]) {
         desired_alt = 0.2; // Maintain altitude
     } else if (keys["z"]) {
-        desired_alt = 0.001; // Land
+        desired_alt = 0.005; // Land
     }
 
     // --- ROLL CONTROL ---
     let roll_error = desired_rot_vel[2] - loc_rot_vel[2];
-    let roll_control = Kp_roll * roll_error - Kd_roll * loc_rot_vel[0];
+    let roll_control = Kp_roll * roll_error;// - Kd_roll * loc_rot_vel[2];
 
     // --- PITCH CONTROL ---
     let pitch_error = desired_rot_vel[0] - loc_rot_vel[0];
-    let pitch_control = Kp_pitch * pitch_error - Kd_pitch * loc_rot_vel[0];
+    let pitch_control = Kp_pitch * pitch_error;// - Kd_pitch * loc_rot_vel[0];
 
     // --- YAW CONTROL ---
     let yaw_error = desired_rot_vel[1] - loc_rot_vel[1];
@@ -61,19 +61,19 @@ setInterval(function () {
 
     // --- MOTOR COMMANDS ---
     /*
-    omega_1 = omega_stable + roll_control + pitch_control - yaw_control + alt_control;
-    omega_2 = omega_stable - roll_control + pitch_control + yaw_control + alt_control;
-    omega_3 = omega_stable - roll_control - pitch_control - yaw_control + alt_control;
-    omega_4 = omega_stable + roll_control - pitch_control + yaw_control + alt_control;
-*/
     omega_1 = omega_stable + roll_control - pitch_control - yaw_control + alt_control;
     omega_2 = omega_stable - roll_control - pitch_control + yaw_control + alt_control;
     omega_3 = omega_stable - roll_control + pitch_control - yaw_control + alt_control;
     omega_4 = omega_stable + roll_control + pitch_control + yaw_control + alt_control;
-
-    // --- LIMIT MOTOR SPEEDS ---
-    omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
-    omega_2 = Math.max(Math.min(omega_2, omega_max), omega_min);
-    omega_3 = Math.max(Math.min(omega_3, omega_max), omega_min);
-    omega_4 = Math.max(Math.min(omega_4, omega_max), omega_min);
+    */
+    omega_1 = omega_stable + roll_control - yaw_control + alt_control;
+    omega_2 = omega_stable - roll_control + yaw_control + alt_control;
+    omega_3 = omega_stable - roll_control - yaw_control + alt_control;
+    omega_4 = omega_stable + roll_control + yaw_control + alt_control;
+    /*
+    omega_1 = omega_stable - pitch_control;
+    omega_2 = omega_stable - pitch_control;
+    omega_3 = omega_stable + pitch_control;
+    omega_4 = omega_stable + pitch_control;
+    */
 }, dt * 10);

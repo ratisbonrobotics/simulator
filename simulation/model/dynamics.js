@@ -31,13 +31,15 @@ var loc_rot_vel_measured = [0.0, 0.0, 0.0];
 var time = 0.0;
 
 setInterval(function () {
+	// --- ADVANCE TIME ---
 	time += dt;
-	/*
+
+	// --- LIMIT MOTOR SPEEDS ---
 	omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
-	omega_2 = Math.max(Math.min(omega_1, omega_max), omega_min);
-	omega_3 = Math.max(Math.min(omega_1, omega_max), omega_min);
-	omega_4 = Math.max(Math.min(omega_1, omega_max), omega_min);
-	*/
+	omega_2 = Math.max(Math.min(omega_2, omega_max), omega_min);
+	omega_3 = Math.max(Math.min(omega_3, omega_max), omega_min);
+	omega_4 = Math.max(Math.min(omega_4, omega_max), omega_min);
+
 	// --- FORCES AND MOMENTS ---
 	let F1 = k_f * omega_1 ** 2;
 	let F2 = k_f * omega_2 ** 2;
