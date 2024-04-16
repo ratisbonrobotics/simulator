@@ -1,26 +1,27 @@
 // ----------------------------------- CONSTANTS -----------------------------------
-const k_f = 0.00141446535;
-const k_m = 0.0004215641;
-const L = 0.23;
+const k_f = 0.0004905;
+const k_m = 0.00004905;
+const L = 0.25;
 const l = (L / Math.sqrt(2));
-const I = [0.0121, 0.0223, 0.0119];
+const I = [0.01, 0.02, 0.01];
 const loc_I_mat = vecToDiagMat3f(I);
 const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
-const m = 1.0;
+const m = 0.5;
 const dt = 0.01;
-const omega_min = 20
-const omega_max = 66
-const omega_stable = 41.6398;
+const omega_min = 0;
+const omega_max = 100;
+const omega_stable = 50;
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = 41.65;
-var omega_2 = 41.65;
-var omega_3 = 41.65;
-var omega_4 = 41.65;
+var omega_1 = omega_stable;
+var omega_2 = omega_stable;
+var omega_3 = omega_stable;
+var omega_4 = omega_stable;
 
 var glob_lin_pos = [0.0, 1.0, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
+
 var glob_rot_pos = [0.0, 0.0, 0.0];
 
 var loc_rot_pos = [0.0, 0.0, 0.0];
