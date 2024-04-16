@@ -40,8 +40,7 @@ setInterval(function () {
         turn_left_right = 0.0;
     }
 
-    console.log(glob_rot_pos);
-    console.log("");
+    
 
     // --- MOTOR COMMANDS ---
     omega_1 = omega_stable - forward_backward + turn_left_right;
