@@ -69,6 +69,7 @@ setInterval(function () {
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	loc_lin_vel = multMatVec3f(R, glob_lin_vel);
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
+	glob_lin_pos = [0, 1, 0];
 	loc_lin_pos = multMatVec3f(R, glob_lin_pos);
 
 	// --- TORQUE AND ROTATION ---
