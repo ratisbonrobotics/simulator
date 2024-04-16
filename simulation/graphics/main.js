@@ -38,26 +38,18 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 // --- INIT 3D ---
 init3D(gl);
 
-// --- GET DATA FROM OBJ ---
-var terrain_vertexbuffer;
-var terrain_texcoordbuffer;
-var terrain_texture;
-async function loadTerrain() {
-    let [obj, mtl] = await parseOBJ('graphics/data/terrain.obj');
-    terrain_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["terrain"]["v"]);
-    terrain_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["terrain"]["vt"]);
-    terrain_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
-}
-
-var alarm_vertexbuffer = [];
-var alarm_texcoordbuffer = [];
-var alarm_texture = [];
-async function loadAlarm() {
+// --- GET DATA FROM 3D FILES ---
+var scene_vertexbuffer = [];
+var scene_texcoordbuffer = [];
+var scene_texture = [];
+async function loadScene() {
     let glb_data = await parseGLB('graphics/data/scene.glb');
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
-        alarm_vertexbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
-        alarm_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
-        alarm_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
+        scene_vertexbuffer[primitive] = [];
+        scene_vertexbuffer[primitive][0] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
+        scene_vertexbuffer[primitive][1] = glb_data[primitive]["vertexData"].length;
+        scene_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
+        scene_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
     }
 }
 
@@ -70,8 +62,7 @@ async function loadDrone() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
-    await loadTerrain();
-    await loadAlarm();
+    await loadScene();
     requestAnimationFrame(drawScene);
 }
 
@@ -86,20 +77,13 @@ function drawScene() {
     // --- SETUP VIEWMATRIX ---
     gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
 
-    // --- DRAW TERRAIN ---
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_vertexbuffer, attribLocations.vertexposition, 3);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, terrain_texcoordbuffer, attribLocations.texturecoordinate, 2);
-    gl.uniform1i(uniformLocations["texture"], terrain_texture);
-    gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, terrainModelMatrix);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-    // --- DRAW ALARM ---
-    for (let primitive = 0; primitive < alarm_vertexbuffer.length; primitive++) {
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_vertexbuffer[primitive], attribLocations.vertexposition, 3);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, alarm_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
-        gl.uniform1i(uniformLocations["texture"], alarm_texture[primitive]);
+    // --- DRAW SCENE ---
+    for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocations.vertexposition, 3);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
+        gl.uniform1i(uniformLocations["texture"], scene_texture[primitive]);
         gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
-        gl.drawArrays(gl.TRIANGLES, 0, 20000);
+        gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
     }
 
     // --- DRAW DRONE ---
