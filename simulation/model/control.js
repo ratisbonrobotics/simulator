@@ -14,17 +14,17 @@ var desired_alt = 0.2;
 setInterval(function () {
     // --- USER INPUT ---
     if (keys["w"]) {
-        desired_rot_vel[0] = -0.1; // Pitch forward
+        desired_rot_vel[0] = 0.1; // Pitch forward
     } else if (keys["s"]) {
-        desired_rot_vel[0] = 0.1; // Pitch backward
+        desired_rot_vel[0] = -0.1; // Pitch backward
     } else {
         desired_rot_vel[0] = 0.0;
     }
 
     if (keys["a"]) {
-        desired_rot_vel[2] = -0.1; // Roll left
+        desired_rot_vel[2] = 0.1; // Roll left
     } else if (keys["d"]) {
-        desired_rot_vel[2] = 0.1; // Roll right
+        desired_rot_vel[2] = -0.1; // Roll right
     } else {
         desired_rot_vel[2] = 0.0;
     }
@@ -44,16 +44,16 @@ setInterval(function () {
     }
 
     // --- ROLL CONTROL ---
-    let roll_error = desired_rot_vel[0] - loc_rot_vel[0];
+    let roll_error = desired_rot_vel[2] - loc_rot_vel[2];
     let roll_control = Kp_roll * roll_error - Kd_roll * loc_rot_vel[0];
 
     // --- PITCH CONTROL ---
-    let pitch_error = desired_rot_vel[1] - loc_rot_vel[1];
-    let pitch_control = Kp_pitch * pitch_error - Kd_pitch * loc_rot_vel[1];
+    let pitch_error = desired_rot_vel[0] - loc_rot_vel[0];
+    let pitch_control = Kp_pitch * pitch_error - Kd_pitch * loc_rot_vel[0];
 
     // --- YAW CONTROL ---
-    let yaw_error = desired_rot_vel[2] - loc_rot_vel[2];
-    let yaw_control = Kp_yaw * yaw_error - Kd_yaw * loc_rot_vel[2];
+    let yaw_error = desired_rot_vel[1] - loc_rot_vel[1];
+    let yaw_control = Kp_yaw * yaw_error - Kd_yaw * loc_rot_vel[1];
 
     // --- ALTITUDE CONTROL ---
     let alt_error = desired_alt - glob_lin_pos[1];
@@ -66,10 +66,10 @@ setInterval(function () {
     omega_3 = omega_stable - roll_control - pitch_control - yaw_control + alt_control;
     omega_4 = omega_stable + roll_control - pitch_control + yaw_control + alt_control;
 */
-    omega_1 = omega_stable - yaw_control + alt_control;
-    omega_2 = omega_stable + yaw_control + alt_control;
-    omega_3 = omega_stable - yaw_control + alt_control;
-    omega_4 = omega_stable + yaw_control + alt_control;
+    omega_1 = omega_stable + roll_control - pitch_control - yaw_control + alt_control;
+    omega_2 = omega_stable - roll_control - pitch_control + yaw_control + alt_control;
+    omega_3 = omega_stable - roll_control + pitch_control - yaw_control + alt_control;
+    omega_4 = omega_stable + roll_control + pitch_control + yaw_control + alt_control;
 
     // --- LIMIT MOTOR SPEEDS ---
     omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
