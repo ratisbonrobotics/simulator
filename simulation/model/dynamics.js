@@ -21,9 +21,11 @@ var omega_4 = omega_stable;
 
 var glob_lin_pos = [0.0, 1.0, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
+
 var glob_rot_pos = [0.0, 0.0, 0.0];
-var loc_rot_vel = [0.0, 0.0, 0.0];
+
 var loc_rot_pos = [0.0, 0.0, 0.0];
+var loc_rot_vel = [0.0, 0.0, 0.0];
 
 // --------------------------------- SENSOR DATA ----------------------------------
 var loc_lin_acc_measured = [0.0, 0.0, 0.0];
