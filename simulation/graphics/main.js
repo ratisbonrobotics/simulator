@@ -82,7 +82,7 @@ function drawScene() {
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocations.vertexposition, 3);
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
         gl.uniform1i(uniformLocations["texture"], scene_texture[primitive]);
-        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, alarmModelMatrix);
+        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, sceneModelMatrix);
         gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
     }
 
