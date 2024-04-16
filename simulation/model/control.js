@@ -17,35 +17,36 @@ var desired_glob_lin_pos = [0.0, 1.0, 0.0];
 var desired_glob_lin_vel = [0.0, 0.0, 0.0];
 var desired_glob_lin_acc = [0.0, 0.0, 0.0];
 
+var forward_backward = 0.0;
+var turn_left_right = 0.0;
+
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
     // --- PITCH INPUT ---
     if (attachedToDrone && keys["w"]) {
-        desired_loc_rot_vel[0] = -0.1; // Forward
+        forward_backward = 0.1;
     } else if (attachedToDrone && keys["s"]) {
-        desired_loc_rot_vel[0] = 0.1; // Backward
+        forward_backward = -0.1;
     } else {
-        desired_loc_rot_vel[0] = 0.0;
+        forward_backward = 0.0;
     }
 
     // --- YAW INPUT ---
     if (attachedToDrone && keys["q"]) {
-        desired_loc_rot_vel[1] = -0.2; // Turn left
+        turn_left_right = 0.1;
     } else if (attachedToDrone && keys["e"]) {
-        desired_loc_rot_vel[1] = 0.2; // Turn right
+        turn_left_right = -0.1;
     } else {
-        desired_loc_rot_vel[1] = 0.0;
+        turn_left_right = 0.0;
     }
 
-    // --- CONTROL ---
-    let pitch_control = Kp_pitch * (desired_loc_rot_vel[0] - loc_rot_vel[0]) + Kd_pitch * (desired_loc_rot_acc[0] - loc_rot_acc[0]);
-    console.log(loc_rot_vel);
-    let yaw_control = Kp_yaw * (desired_loc_rot_vel[1] - loc_rot_vel[1]) + Kd_yaw * (desired_loc_rot_acc[1] - loc_rot_acc[1]);
+    console.log(glob_rot_pos);
+    console.log("");
 
     // --- MOTOR COMMANDS ---
-    omega_1 = omega_stable - yaw_control + pitch_control;
-    omega_2 = omega_stable + yaw_control + pitch_control;
-    omega_3 = omega_stable - yaw_control - pitch_control;
-    omega_4 = omega_stable + yaw_control - pitch_control;
+    omega_1 = omega_stable - forward_backward + turn_left_right;
+    omega_2 = omega_stable - forward_backward - turn_left_right;
+    omega_3 = omega_stable + forward_backward + turn_left_right;
+    omega_4 = omega_stable + forward_backward - turn_left_right;
 
 }, dt * 10);
