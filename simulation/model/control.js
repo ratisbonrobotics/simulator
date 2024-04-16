@@ -5,8 +5,8 @@ const Kp_pitch = 1.0;
 const Kd_pitch = 0.1;
 const Kp_yaw = 1.0;
 const Kd_yaw = 0.1;
-const Kp_alt = 1.0;
-const Kd_alt = 0.1;
+const Kp_alt = 3.0;
+const Kd_alt = 0.8;
 var desired_rot_vel = [0.0, 0.0, 0.0];
 var desired_alt = 0.2;
 
@@ -40,7 +40,7 @@ setInterval(function () {
     if (keys["x"]) {
         desired_alt = 0.2; // Maintain altitude
     } else if (keys["z"]) {
-        desired_alt = 0.0; // Land
+        desired_alt = 0.001; // Land
     }
 
     // --- ROLL CONTROL ---
@@ -60,10 +60,16 @@ setInterval(function () {
     let alt_control = Kp_alt * alt_error - Kd_alt * glob_lin_vel[1];
 
     // --- MOTOR COMMANDS ---
+    /*
     omega_1 = omega_stable + roll_control + pitch_control - yaw_control + alt_control;
     omega_2 = omega_stable - roll_control + pitch_control + yaw_control + alt_control;
     omega_3 = omega_stable - roll_control - pitch_control - yaw_control + alt_control;
     omega_4 = omega_stable + roll_control - pitch_control + yaw_control + alt_control;
+*/
+    omega_1 = omega_stable + alt_control;
+    omega_2 = omega_stable + alt_control;
+    omega_3 = omega_stable + alt_control;
+    omega_4 = omega_stable + alt_control;
 
     // --- LIMIT MOTOR SPEEDS ---
     omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
