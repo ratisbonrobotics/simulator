@@ -5,12 +5,44 @@ const Kp_yaw = 1.0;
 const Kp_alt = 3.0;
 const Kd_alt = 1.8;
 var desired_loc_rot_pos = [0.0, 0.0, 0.0];
+var desired_loc_rot_vel = [0.0, 0.0, 0.0];
+var desired_loc_rot_acc = [0.0, 0.0, 0.0];
+
+var desired_loc_lin_pos = [0.0, 0.0, 0.0];
+var desired_loc_lin_vel = [0.0, 0.0, 0.0];
+var desired_loc_lin_acc = [0.0, 0.0, 0.0];
+
 var desired_glob_lin_pos = [0.0, 0.2, 0.0];
 var desired_glob_lin_vel = [0.0, 0.0, 0.0];
+var desired_glob_lin_acc = [0.0, 0.0, 0.0];
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
     // --- USER INPUT ---
+    if (keys["x"]) {
+        desired_loc_lin_vel[1] = 0.1; // Up
+    } else if (keys["z"]) {
+        desired_loc_lin_vel[1] = -0.1; // Down
+    } else {
+        desired_loc_lin_vel[1] = 0.0;
+    }
+
+    // --- ALTITUDE CONTROL ---
+    let alt_control = Kp_alt * (desired_loc_lin_vel[1] - loc_lin_vel[1]) + Kd_alt * (desired_loc_lin_acc[1] - loc_lin_acc[1]);
+
+    // --- MOTOR COMMANDS ---
+    omega_1 = omega_stable + alt_control;
+    omega_2 = omega_stable + alt_control;
+    omega_3 = omega_stable + alt_control;
+    omega_4 = omega_stable + alt_control;
+
+}, dt * 10);
+
+
+
+
+
+/*
     if (keys["w"]) {
         desired_loc_rot_pos[0] = 0.1; // Pitch forward
     } else if (keys["s"]) {
@@ -35,12 +67,6 @@ setInterval(function () {
         desired_loc_rot_pos[1] = 0.0;
     }
 
-    if (keys["x"]) {
-        desired_glob_lin_pos[1] = 0.2; // Maintain altitude
-    } else if (keys["z"]) {
-        desired_glob_lin_pos[1] = 0.005; // Land
-    }
-
     // --- PITCH CONTROL ---
     let pitch_error_pos = desired_loc_rot_pos[0] - loc_rot_pos[0];
     let pitch_control = Kp_pitch * pitch_error_pos;
@@ -53,27 +79,4 @@ setInterval(function () {
     let yaw_error_pos = desired_loc_rot_pos[1] - loc_rot_pos[1];
     let yaw_control = Kp_yaw * yaw_error_pos;
 
-    // --- ALTITUDE CONTROL ---
-    let alt_error_pos = desired_glob_lin_pos[1] - glob_lin_pos[1];
-    let alt_error_vel = desired_glob_lin_vel[1] - glob_lin_vel[1];
-    let alt_control = Kp_alt * alt_error_pos + Kd_alt * alt_error_vel;
-
-    // --- MOTOR COMMANDS ---
-    /*
-    omega_1 = omega_stable + roll_control - pitch_control - yaw_control + alt_control;
-    omega_2 = omega_stable - roll_control - pitch_control + yaw_control + alt_control;
-    omega_3 = omega_stable - roll_control + pitch_control - yaw_control + alt_control;
-    omega_4 = omega_stable + roll_control + pitch_control + yaw_control + alt_control;
-    
-    omega_1 = omega_stable + roll_control - yaw_control + alt_control;
-    omega_2 = omega_stable - roll_control + yaw_control + alt_control;
-    omega_3 = omega_stable - roll_control - yaw_control + alt_control;
-    omega_4 = omega_stable + roll_control + yaw_control + alt_control;
     */
-
-    omega_1 = omega_stable + alt_control;
-    omega_2 = omega_stable + alt_control;
-    omega_3 = omega_stable + alt_control;
-    omega_4 = omega_stable + alt_control;
-
-}, dt * 10);

@@ -24,6 +24,8 @@ var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
 var loc_rot_pos = [0.0, 0.0, 0.0];
+var loc_lin_vel = [0.0, 0.0, 0.0];
+var loc_lin_acc = [0.0, 0.0, 0.0];
 
 // --------------------------------- SENSOR DATA ----------------------------------
 var loc_lin_acc_measured = [0.0, 0.0, 0.0];
@@ -60,6 +62,7 @@ setInterval(function () {
 	let loc_lin_acc = [0, (1 / m) * (F1 + F2 + F3 + F4), 0];
 	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
+	loc_lin_vel = multMatVec3f(R, glob_lin_vel);
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
 
 	// --- TORQUE AND ROTATION ---
@@ -75,10 +78,10 @@ setInterval(function () {
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 	// --- UPDATE SENSOR DATA ---
-	loc_lin_acc_measured = multMatVec3f(R, glob_lin_acc);
+	loc_lin_acc = multMatVec3f(R, glob_lin_acc);
 	for (var i = 0; i < 3; i++) {
 		loc_rot_vel_measured[i] = loc_rot_vel[i] + generateGaussianNoise(0, loc_rot_vel[i] * 0.003);
-		loc_lin_acc_measured[i] = loc_lin_acc_measured[i] + generateGaussianNoise(0, loc_lin_acc_measured[i] * 0.003);
+		loc_lin_acc_measured[i] = loc_lin_acc[i] + generateGaussianNoise(0, loc_lin_acc[i] * 0.003);
 	}
 
 }, dt * 1);
