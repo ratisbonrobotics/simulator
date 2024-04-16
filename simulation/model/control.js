@@ -1,6 +1,6 @@
 // ----------------------------------- CONTROL PARAMETERS -----------------------------------
 const Kp_pitch = 0.5;
-const Kd_pitch = 0.05;
+const Kd_pitch = 0.3;
 const Kp_yaw = 0.5;
 
 var desired_loc_rot_vel = [0.0, 0.0, 0.0];
@@ -10,9 +10,9 @@ var desired_loc_rot_pos = [0.0, 0.0, 0.0];
 setInterval(function () {
     // --- USER INPUT ---
     if (attachedToDrone && keys["w"]) {
-        desired_loc_rot_vel[0] = 0.1; // Pitch forward
+        desired_loc_rot_vel[0] = -0.1; // Pitch forward
     } else if (attachedToDrone && keys["s"]) {
-        desired_loc_rot_vel[0] = -0.1; // Pitch backward
+        desired_loc_rot_vel[0] = 0.1; // Pitch backward
     } else {
         desired_loc_rot_vel[0] = 0.0; // No pitch input
     }

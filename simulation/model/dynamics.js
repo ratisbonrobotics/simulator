@@ -63,7 +63,7 @@ setInterval(function () {
 	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
-	glob_lin_pos = [0, 1, 0];
+	//glob_lin_pos = [0, 1, 0];
 
 	// --- TORQUE AND ROTATION ---
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
@@ -79,7 +79,7 @@ setInterval(function () {
 
 	// --- UPDATE SENSOR DATA ---
 	loc_lin_acc_measured = multMatVec3f(R, glob_lin_acc);
-	for (var i = 0; i < 3; i++) {
+	for (let i = 0; i < 3; i++) {
 		loc_rot_vel_measured[i] = loc_rot_vel[i] + generateGaussianNoise(0, loc_rot_vel[i] * 0.003);
 		loc_lin_acc_measured[i] = loc_lin_acc_measured[i] + generateGaussianNoise(0, loc_lin_acc_measured[i] * 0.003);
 	}
