@@ -25,4 +25,4 @@ canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 var cameraModelMatrix = modelMat4f(0.0, 0.2, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 var droneModelMatrix = modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01);
 const terrainModelMatrix = modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-var sofaModelMatrix = modelMat4f(-0.5, 0.3, -0.5, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0);
+var alarmModelMatrix = modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
