@@ -23,6 +23,7 @@ var glob_lin_pos = [0.0, 0.2, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
 var glob_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
+var loc_rot_pos = [0.0, 0.0, 0.0];
 
 // --------------------------------- SENSOR DATA ----------------------------------
 var loc_lin_acc_measured = [0.0, 0.0, 0.0];
@@ -65,6 +66,7 @@ setInterval(function () {
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
+	loc_rot_pos = addVec3f(loc_rot_pos, multScalVec3f(dt, loc_rot_vel));
 
 	let glob_rot_vel = multMatVec3f(R_T, loc_rot_vel);
 	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
