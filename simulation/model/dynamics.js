@@ -9,8 +9,8 @@ const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 0.5;
 const dt = 0.01;
-const omega_min = 0;
-const omega_max = 100;
+const omega_min = 30;
+const omega_max = 70;
 const omega_stable = 50;
 
 // ----------------------------------- DYNAMICS -----------------------------------
