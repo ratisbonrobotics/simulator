@@ -60,10 +60,11 @@ setInterval(function () {
 
 	// --- THRUST AND POSITION ---
 	let loc_lin_acc = [0, (1 / m) * (F1 + F2 + F3 + F4), 0];
-	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
+	let glob_lin_acc = multMatVec3f(R_T, loc_lin_acc);
+
+	glob_lin_acc = subVec3f(glob_lin_acc, [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
-	//glob_lin_pos = [0, 1, 0];
 
 	// --- TORQUE AND ROTATION ---
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
@@ -71,11 +72,10 @@ setInterval(function () {
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 	loc_rot_pos = addVec3f(loc_rot_pos, multScalVec3f(dt, loc_rot_vel));
 
-	let glob_rot_vel = multMatVec3f(R_T, loc_rot_vel);
-	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
+	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, loc_rot_vel));
 
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], loc_rot_pos[0], loc_rot_pos[1], loc_rot_pos[2], 0.01, 0.01, 0.01);
+	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 	// --- UPDATE SENSOR DATA ---
 	loc_lin_acc_measured = multMatVec3f(R, glob_lin_acc);
