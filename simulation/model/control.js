@@ -2,10 +2,10 @@
 const Kp_pitch = 0.5;
 const Kd_pitch = 0.3;
 
+const Kp_yaw = 0.5;
+
 const Kp_roll = 0.5;
 const Kd_roll = 0.3;
-
-const Kp_yaw = 0.5;
 
 var desired_loc_rot_vel = [0.0, 0.0, 0.0];
 var desired_loc_rot_pos = [0.0, 0.0, 0.0];
@@ -43,9 +43,9 @@ setInterval(function () {
     let roll_control = Kp_roll * (desired_loc_rot_vel[2] - loc_rot_vel[2]) + Kd_roll * (desired_loc_rot_pos[2] - loc_rot_pos[2]);
 
     // --- MOTOR COMMANDS ---
-    omega_1 = omega_stable + roll_control + pitch_control - yaw_control;
-    omega_2 = omega_stable - roll_control + pitch_control + yaw_control;
-    omega_3 = omega_stable - roll_control - pitch_control - yaw_control;
-    omega_4 = omega_stable + roll_control - pitch_control + yaw_control;
+    omega_1 = omega_stable + pitch_control - yaw_control + roll_control;
+    omega_2 = omega_stable + pitch_control + yaw_control - roll_control;
+    omega_3 = omega_stable - pitch_control - yaw_control - roll_control;
+    omega_4 = omega_stable - pitch_control + yaw_control + roll_control;
 
 }, dt * 10);
