@@ -47,7 +47,7 @@ async function loadScene() {
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
         scene_vertexbuffer[primitive] = [];
         scene_vertexbuffer[primitive][0] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
-        scene_vertexbuffer[primitive][1] = glb_data[primitive]["vertexData"].length;
+        scene_vertexbuffer[primitive][1] = Math.floor(glb_data[primitive]["vertexData"].length / 3);
         scene_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
         scene_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
     }
