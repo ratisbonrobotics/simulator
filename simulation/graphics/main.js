@@ -71,7 +71,6 @@ let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
 // --- DRAW ---
-
 function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

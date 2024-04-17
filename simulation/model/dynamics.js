@@ -61,12 +61,14 @@ setInterval(function () {
 	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
+	glob_lin_pos = [0, 1, 0];
 
 	// --- TORQUE AND ROTATION ---
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 	loc_rot_pos = addVec3f(loc_rot_pos, multScalVec3f(dt, loc_rot_vel));
+	console.log(loc_rot_pos.map(n => n.toFixed(2)));
 
 	// --- UPDATE MODEL MATRIX ---
 	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], loc_rot_pos[0], loc_rot_pos[1], loc_rot_pos[2], 0.01, 0.01, 0.01);
