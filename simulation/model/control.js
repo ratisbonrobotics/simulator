@@ -12,40 +12,81 @@ var desired_loc_rot_pos = [0.0, 0.0, 0.0];
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
-    // --- USER INPUT ---
-    if (attachedToDrone && keys["w"]) {
-        desired_loc_rot_vel[0] = -0.1; // Pitch forward
-    } else if (attachedToDrone && keys["s"]) {
-        desired_loc_rot_vel[0] = 0.1; // Pitch backward
-    } else {
-        desired_loc_rot_vel[0] = 0.0; // No pitch input
-    }
+    omega_1 = omega_stable;
+    omega_2 = omega_stable;
+    omega_3 = omega_stable;
+    omega_4 = omega_stable;
 
-    if (attachedToDrone && keys["q"]) {
-        desired_loc_rot_vel[1] = -0.2; // Yaw left
-    } else if (attachedToDrone && keys["e"]) {
-        desired_loc_rot_vel[1] = 0.2; // Yaw right
-    } else {
-        desired_loc_rot_vel[1] = 0.0; // No yaw input
+    if (attachedToDrone && keys["w"]) {
+        omega_1 -= 0.1;
+        omega_2 -= 0.1;
+        omega_3 += 0.1;
+        omega_4 += 0.1;
+    } else if (attachedToDrone && keys["s"]) {
+        omega_1 += 0.1;
+        omega_2 += 0.1;
+        omega_3 -= 0.1;
+        omega_4 -= 0.1;
     }
 
     if (attachedToDrone && keys["a"]) {
-        desired_loc_rot_vel[2] = 0.1; // Roll left
+        omega_1 += 0.1;
+        omega_2 -= 0.1;
+        omega_3 -= 0.1;
+        omega_4 += 0.1;
     } else if (attachedToDrone && keys["d"]) {
-        desired_loc_rot_vel[2] = -0.1; // Roll right
-    } else {
-        desired_loc_rot_vel[2] = 0.0; // No roll input
+        omega_1 -= 0.1;
+        omega_2 += 0.1;
+        omega_3 += 0.1;
+        omega_4 -= 0.1;
     }
 
-    // --- CONTROL ---
-    let pitch_control = Kp_pitch * (desired_loc_rot_vel[0] - loc_rot_vel[0]) + Kd_pitch * (desired_loc_rot_pos[0] - loc_rot_pos[0]);
-    let yaw_control = Kp_yaw * (desired_loc_rot_vel[1] - loc_rot_vel[1]);
-    let roll_control = Kp_roll * (desired_loc_rot_vel[2] - loc_rot_vel[2]) + Kd_roll * (desired_loc_rot_pos[2] - loc_rot_pos[2]);
+    if (attachedToDrone && keys["q"]) {
+        omega_1 += 0.1;
+        omega_2 -= 0.1;
+        omega_3 += 0.1;
+        omega_4 -= 0.1;
+    } else if (attachedToDrone && keys["e"]) {
+        omega_1 -= 0.1;
+        omega_2 += 0.1;
+        omega_3 -= 0.1;
+        omega_4 += 0.1;
+    }
 
-    // --- MOTOR COMMANDS ---
-    omega_1 = omega_stable + pitch_control - yaw_control + roll_control;
-    omega_2 = omega_stable + pitch_control + yaw_control - roll_control;
-    omega_3 = omega_stable - pitch_control - yaw_control - roll_control;
-    omega_4 = omega_stable - pitch_control + yaw_control + roll_control;
-
+    /*    // --- USER INPUT ---
+        if (attachedToDrone && keys["w"]) {
+            desired_loc_rot_vel[0] = -0.1; // Pitch forward
+        } else if (attachedToDrone && keys["s"]) {
+            desired_loc_rot_vel[0] = 0.1; // Pitch backward
+        } else {
+            desired_loc_rot_vel[0] = 0.0; // No pitch input
+        }
+    
+        if (attachedToDrone && keys["q"]) {
+            desired_loc_rot_vel[1] = -0.2; // Yaw left
+        } else if (attachedToDrone && keys["e"]) {
+            desired_loc_rot_vel[1] = 0.2; // Yaw right
+        } else {
+            desired_loc_rot_vel[1] = 0.0; // No yaw input
+        }
+    
+        if (attachedToDrone && keys["a"]) {
+            desired_loc_rot_vel[2] = 0.1; // Roll left
+        } else if (attachedToDrone && keys["d"]) {
+            desired_loc_rot_vel[2] = -0.1; // Roll right
+        } else {
+            desired_loc_rot_vel[2] = 0.0; // No roll input
+        }
+    
+        // --- CONTROL ---
+        let pitch_control = Kp_pitch * (desired_loc_rot_vel[0] - loc_rot_vel[0]) + Kd_pitch * (desired_loc_rot_pos[0] - getXRotFromMat4f(droneModelMatrix));
+        let yaw_control = Kp_yaw * (desired_loc_rot_vel[1] - loc_rot_vel[1]);
+        let roll_control = Kp_roll * (desired_loc_rot_vel[2] - loc_rot_vel[2]) + Kd_roll * (desired_loc_rot_pos[2] - getZRotFromMat4f(droneModelMatrix));
+    
+        // --- MOTOR COMMANDS ---
+        omega_1 = omega_stable + pitch_control - yaw_control + roll_control;
+        omega_2 = omega_stable + pitch_control + yaw_control - roll_control;
+        omega_3 = omega_stable - pitch_control - yaw_control - roll_control;
+        omega_4 = omega_stable - pitch_control + yaw_control + roll_control;
+    */
 }, dt * 10);

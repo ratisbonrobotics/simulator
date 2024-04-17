@@ -19,15 +19,8 @@ var omega_2 = omega_stable;
 var omega_3 = omega_stable;
 var omega_4 = omega_stable;
 
-var glob_lin_pos = [0.0, 1.0, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
-
-var loc_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
-
-// --------------------------------- SENSOR DATA ----------------------------------
-var loc_lin_acc_measured = [0.0, 0.0, 0.0];
-var loc_rot_vel_measured = [0.0, 0.0, 0.0];
 
 var time = 0.0;
 
@@ -53,26 +46,39 @@ setInterval(function () {
 	let M4 = k_m * omega_4 ** 2;
 
 	// --- ROTATION MATRIX ---
-	let R = multMat3f(multMat3f(xRotMat3f(loc_rot_pos[0]), yRotMat3f(loc_rot_pos[1])), zRotMat3f(loc_rot_pos[2]));
+	let R = multMat3f(multMat3f(xRotMat3f(getXRotFromMat4f(droneModelMatrix)), yRotMat3f(getYRotFromMat4f(droneModelMatrix))), zRotMat3f(getZRotFromMat4f(droneModelMatrix)));
 	let R_T = transpMat3f(R);
 
 	// --- THRUST AND POSITION ---
 	let loc_lin_acc = [0, (1 / m) * (F1 + F2 + F3 + F4), 0];
 	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
-	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
-	glob_lin_pos = [0, 1, 0];
 
 	// --- TORQUE AND ROTATION ---
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
-	loc_rot_pos = addVec3f(loc_rot_pos, multScalVec3f(dt, loc_rot_vel));
-	console.log(loc_rot_pos.map(n => n.toFixed(2)));
 
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], loc_rot_pos[0], loc_rot_pos[1], loc_rot_pos[2], 0.01, 0.01, 0.01);
+	droneModelMatrix = multMat4f(zRotMat4f(multScalVec3f(dt, loc_rot_vel)[2]), droneModelMatrix);
+	droneModelMatrix = multMat4f(yRotMat4f(multScalVec3f(dt, loc_rot_vel)[1]), droneModelMatrix);
+	droneModelMatrix = multMat4f(xRotMat4f(multScalVec3f(dt, loc_rot_vel)[0]), droneModelMatrix);
 
+	console.log(getXRotFromMat4f(droneModelMatrix).toFixed(2), getYRotFromMat4f(droneModelMatrix).toFixed(2), getZRotFromMat4f(droneModelMatrix).toFixed(2));
+
+
+
+}, dt);
+
+
+
+
+
+
+/*
+// --------------------------------- SENSOR DATA ----------------------------------
+var loc_lin_acc_measured = [0.0, 0.0, 0.0];
+var loc_rot_vel_measured = [0.0, 0.0, 0.0];
 	// --- UPDATE SENSOR DATA ---
 	loc_lin_acc_measured = multMatVec3f(R, glob_lin_acc);
 	for (let i = 0; i < 3; i++) {
@@ -80,4 +86,4 @@ setInterval(function () {
 		loc_lin_acc_measured[i] = loc_lin_acc_measured[i] + generateGaussianNoise(0, loc_lin_acc_measured[i] * 0.003);
 	}
 
-}, dt);
+*/
