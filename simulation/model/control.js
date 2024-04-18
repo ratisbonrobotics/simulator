@@ -1,46 +1,11 @@
 // ----------------------------------- CONTROL PARAMETERS -----------------------------------
+var linear_position_d_W = [1, 1, 1];
+var linear_velocity_d_W = [0, 0, 0];
+var yaw_d = 3.14;
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
-    omega_1 = omega_stable;
-    omega_2 = omega_stable;
-    omega_3 = omega_stable;
-    omega_4 = omega_stable;
-
-    if (attachedToDrone && keys["w"]) {
-        omega_1 -= 0.01;
-        omega_2 -= 0.01;
-        omega_3 += 0.01;
-        omega_4 += 0.01;
-    } else if (attachedToDrone && keys["s"]) {
-        omega_1 += 0.01;
-        omega_2 += 0.01;
-        omega_3 -= 0.01;
-        omega_4 -= 0.01;
-    }
-
-    if (attachedToDrone && keys["a"]) {
-        omega_1 += 0.01;
-        omega_2 -= 0.01;
-        omega_3 -= 0.01;
-        omega_4 += 0.01;
-    } else if (attachedToDrone && keys["d"]) {
-        omega_1 -= 0.01;
-        omega_2 += 0.01;
-        omega_3 += 0.01;
-        omega_4 -= 0.01;
-    }
-
-    if (attachedToDrone && keys["q"]) {
-        omega_1 += 0.1;
-        omega_2 -= 0.1;
-        omega_3 += 0.1;
-        omega_4 -= 0.1;
-    } else if (attachedToDrone && keys["e"]) {
-        omega_1 -= 0.1;
-        omega_2 += 0.1;
-        omega_3 -= 0.1;
-        omega_4 += 0.1;
-    }
+    let error_p = subVec3f(linear_position_W, linear_position_d_W);
+    let error_v = subVec3f(linear_position_W, linear_position_d_W);
 
 }, dt * 10);

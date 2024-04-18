@@ -76,8 +76,6 @@ setInterval(function () {
 	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration_B));
 	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));
 
-
-
 	// --- SET MODEL MATRIX ---
 	droneModelMatrix = identMat4f();
 	droneModelMatrix = multMat4f(translMat4f(linear_position_W[0], linear_position_W[1], linear_position_W[2]), droneModelMatrix);
