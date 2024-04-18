@@ -60,7 +60,7 @@ setInterval(function () {
 	let tau_B = tau_B_drag + tau_B_thrust;
 
 	// --- ACCELERATIONS ---
-	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrix(droneModelMatrix), f_B_thrust));
+	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), f_B_thrust));
 	linear_acceleration = multScalVec3f(1 / m, linear_acceleration);
 	let angular_acceleration = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
 	angular_acceleration[0] = angular_acceleration[0] / I[0];
@@ -70,5 +70,11 @@ setInterval(function () {
 	// --- ADVANCE STATE ---
 	linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration));
 	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration));
+
+	// --- UPDATE MODEL MATRIX ---
+	droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
+	let rot_dot = multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), so3hat(angular_velocity_B));
+	let new_rot = addMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), multScalMat3f(dt, rot_dot));
+	droneModelMatrix = setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot);
 
 }, dt);
