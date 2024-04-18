@@ -19,6 +19,8 @@ var omega_2 = omega_stable;
 var omega_3 = omega_stable;
 var omega_4 = omega_stable;
 
+var angular_velocity_B = [0, 0, 0];
+
 var time = 0.0;
 
 setInterval(function () {
@@ -54,6 +56,11 @@ setInterval(function () {
 	let tau_B_thrust = addVec3f(tau_B_thrust_1, tau_B_thrust_2);
 	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_3);
 	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_4);
+	let tau_B = tau_B_drag + tau_B_thrust;
+
+	// --- ACCELERATIONS ---
+	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrix(droneModelMatrix), f_B_thrust));
+	let angular_acceleration = crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B));
 
 
 
