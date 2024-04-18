@@ -78,6 +78,6 @@ setInterval(function () {
 
 	droneModelMatrix = setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot);
 */
-	console.log(getRotationMatrixFromModelMatrix(droneModelMatrix).map(n => n.toFixed(2)));
+	console.log(setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot).map(n => n.toFixed(2)));
 
 }, dt);
