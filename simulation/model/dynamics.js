@@ -9,9 +9,9 @@ const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 0.5;
 const dt = 0.01;
-const omega_min = 300;
-const omega_max = 700;
-const omega_stable = 500;
+const omega_min = 30;
+const omega_max = 70;
+const omega_stable = 50;
 
 // ----------------------------------- DYNAMICS -----------------------------------
 var omega_1 = omega_stable;
@@ -76,6 +76,21 @@ setInterval(function () {
 	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration_B));
 	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));
 
+	console.log(R_W_B.map(n => n.toFixed(2)));
+
 	// --- SET MODEL MATRIX ---
+	droneModelMatrix = identMat4f();
+	droneModelMatrix = multMat4f(translMat4f(linear_position_W[0], linear_position_W[1], linear_position_W[2]), droneModelMatrix);
+	let R_W_B_inv = invMat3f(R_W_B);
+	droneModelMatrix[0] = R_W_B_inv[0];
+	droneModelMatrix[1] = R_W_B_inv[1];
+	droneModelMatrix[2] = R_W_B_inv[2];
+	droneModelMatrix[4] = R_W_B_inv[3];
+	droneModelMatrix[5] = R_W_B_inv[4];
+	droneModelMatrix[6] = R_W_B_inv[5];
+	droneModelMatrix[8] = R_W_B_inv[6];
+	droneModelMatrix[9] = R_W_B_inv[7];
+	droneModelMatrix[10] = R_W_B_inv[8];
+	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
 
 }, dt);
