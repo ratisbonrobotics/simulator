@@ -50,17 +50,17 @@ setInterval(function () {
 
 	// --- TORQUE ---
 	let tau_B_drag = [0, M1 - M2 + M3 - M4, 0];
-	let tau_B_thrust_1 = crossVec3f([-L, 0, L], F1);
-	let tau_B_thrust_2 = crossVec3f([L, 0, L], F2);
-	let tau_B_thrust_3 = crossVec3f([L, 0, -L], F3);
-	let tau_B_thrust_4 = crossVec3f([-L, 0, -L], F4);
+	let tau_B_thrust_1 = crossVec3f([-L, 0, L], [0, F1, 0]);
+	let tau_B_thrust_2 = crossVec3f([L, 0, L], [0, F2, 0]);
+	let tau_B_thrust_3 = crossVec3f([L, 0, -L], [0, F3, 0]);
+	let tau_B_thrust_4 = crossVec3f([-L, 0, -L], [0, F4, 0]);
 	let tau_B_thrust = addVec3f(tau_B_thrust_1, tau_B_thrust_2);
 	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_3);
 	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_4);
-	let tau_B = tau_B_drag + tau_B_thrust;
+	let tau_B = addVec3f(tau_B_drag, tau_B_thrust);
 
 	// --- ACCELERATIONS ---
-	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), f_B_thrust));
+	let linear_acceleration = addVec3f([0, -g * m, 0], multMatVec3f(getRotationMatrixFromModelMatrix(droneModelMatrix), f_B_thrust));
 	linear_acceleration = multScalVec3f(1 / m, linear_acceleration);
 	let angular_acceleration = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
 	angular_acceleration[0] = angular_acceleration[0] / I[0];
@@ -72,9 +72,12 @@ setInterval(function () {
 	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration));
 
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
 	let rot_dot = multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), so3hat(angular_velocity_B));
 	let new_rot = addMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), multScalMat3f(dt, rot_dot));
+	/*droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
+
 	droneModelMatrix = setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot);
+*/
+	console.log(getRotationMatrixFromModelMatrix(droneModelMatrix).map(n => n.toFixed(2)));
 
 }, dt);
