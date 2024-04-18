@@ -19,11 +19,6 @@ var omega_2 = omega_stable;
 var omega_3 = omega_stable;
 var omega_4 = omega_stable;
 
-var glob_lin_pos = [0.0, 1.0, 0.0];
-var glob_lin_vel = [0.0, 0.0, 0.0];
-var glob_rot_pos = [0.0, 0.0, 0.0];
-var loc_rot_vel = [0.0, 0.0, 0.0];
-
 var time = 0.0;
 
 setInterval(function () {
@@ -47,50 +42,19 @@ setInterval(function () {
 	let M3 = k_m * omega_3 * Math.abs(omega_3);
 	let M4 = k_m * omega_4 * Math.abs(omega_4);
 
-	// --- ROTATION MATRIX ---
-	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
-	let R_T = transpMat3f(R);
+	// --- THRUST ---
+	let f_B_thrust = [0, F1 + F2 + F3 + F4, 0];
 
-	// --- THRUST AND POSITION ---
-	let loc_lin_acc = [0, (1 / m) * (F1 + F2 + F3 + F4), 0];
-	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
-	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
-	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
-	glob_lin_pos = [0, 1, 0];
+	// --- TORQUE ---
+	let tau_B_drag = [0, M1 - M2 + M3 - M4, 0];
+	let tau_B_thrust_1 = crossVec3f([-L, 0, L], F1);
+	let tau_B_thrust_2 = crossVec3f([L, 0, L], F2);
+	let tau_B_thrust_3 = crossVec3f([L, 0, -L], F3);
+	let tau_B_thrust_4 = crossVec3f([-L, 0, -L], F4);
+	let tau_B_thrust = addVec3f(tau_B_thrust_1, tau_B_thrust_2);
+	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_3);
+	tau_B_thrust = addVec3f(tau_B_thrust, tau_B_thrust_4);
 
-	// --- TORQUE AND ROTATION ---
-	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
-	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
-	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 
-	let glob_rot_vel = multMatVec3f(R_T, loc_rot_vel);
-	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
-	console.log(glob_rot_pos.map(n => n.toFixed(2)));
-
-	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
 
 }, dt);
-
-
-
-
-
-
-
-
-
-
-
-/*
-// --------------------------------- SENSOR DATA ----------------------------------
-var loc_lin_acc_measured = [0.0, 0.0, 0.0];
-var loc_rot_vel_measured = [0.0, 0.0, 0.0];
-	// --- UPDATE SENSOR DATA ---
-	loc_lin_acc_measured = multMatVec3f(R, glob_lin_acc);
-	for (let i = 0; i < 3; i++) {
-		loc_rot_vel_measured[i] = loc_rot_vel[i] + generateGaussianNoise(0, loc_rot_vel[i] * 0.003);
-		loc_lin_acc_measured[i] = loc_lin_acc_measured[i] + generateGaussianNoise(0, loc_lin_acc_measured[i] * 0.003);
-	}
-
-*/
