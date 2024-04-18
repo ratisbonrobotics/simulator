@@ -21,6 +21,9 @@ var omega_4 = omega_stable;
 
 var angular_velocity_B = [0, 0, 0];
 var linear_velocity_W = [0, 0, 0];
+var linear_position_W = [0, 1, 0];
+
+var R_W_B = multMat3f(multMat3f(xRotMat3f(0), yRotMat3f(0)), zRotMat3f(0));
 
 var time = 0.0;
 
@@ -60,23 +63,19 @@ setInterval(function () {
 	let tau_B = addVec3f(tau_B_drag, tau_B_thrust);
 
 	// --- ACCELERATIONS ---
-	let linear_acceleration = addVec3f([0, -g * m, 0], multMatVec3f(getRotationMatrixFromModelMatrix(droneModelMatrix), f_B_thrust));
-	linear_acceleration = multScalVec3f(1 / m, linear_acceleration);
-	let angular_acceleration = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
-	angular_acceleration[0] = angular_acceleration[0] / I[0];
-	angular_acceleration[1] = angular_acceleration[1] / I[1];
-	angular_acceleration[2] = angular_acceleration[2] / I[2];
+	let linear_acceleration_W = addVec3f([0, -g * m, 0], multMatVec3f(R_W_B, f_B_thrust));
+	linear_acceleration_W = multScalVec3f(1 / m, linear_acceleration_W);
+	let angular_acceleration_B = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
+	angular_acceleration_B[0] = angular_acceleration_B[0] / I[0];
+	angular_acceleration_B[1] = angular_acceleration_B[1] / I[1];
+	angular_acceleration_B[2] = angular_acceleration_B[2] / I[2];
 
 	// --- ADVANCE STATE ---
-	linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration));
-	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration));
+	linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration_W));
+	linear_position_W = addVec3f(linear_position_W, multScalVec3f(dt, linear_velocity_W));
+	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration_B));
+	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));
 
-	// --- UPDATE MODEL MATRIX ---
-	let rot_dot = multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), so3hat(angular_velocity_B));
-	let new_rot = addMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), multScalMat3f(dt, rot_dot));
-
-	droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
-	droneModelMatrix = setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot);
-	console.log(droneModelMatrix.map(n => n.toFixed(2)));
+	// --- SET MODEL MATRIX ---
 
 }, dt);
