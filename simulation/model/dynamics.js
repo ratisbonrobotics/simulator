@@ -21,6 +21,7 @@ var omega_4 = omega_stable;
 
 var glob_lin_pos = [0.0, 1.0, 0.0];
 var glob_lin_vel = [0.0, 0.0, 0.0];
+var glob_rot_pos = [0.0, 0.0, 0.0];
 var loc_rot_vel = [0.0, 0.0, 0.0];
 
 var time = 0.0;
@@ -47,7 +48,7 @@ setInterval(function () {
 	let M4 = k_m * omega_4 ** 2;
 
 	// --- ROTATION MATRIX ---
-	let R = multMat3f(multMat3f(xRotMat3f(getXRotFromMat4f(droneModelMatrix)), yRotMat3f(getYRotFromMat4f(droneModelMatrix))), zRotMat3f(getZRotFromMat4f(droneModelMatrix)));
+	let R = multMat3f(multMat3f(xRotMat3f(glob_rot_pos[0]), yRotMat3f(glob_rot_pos[1])), zRotMat3f(glob_rot_pos[2]));
 	let R_T = transpMat3f(R);
 
 	// --- THRUST AND POSITION ---
@@ -55,18 +56,20 @@ setInterval(function () {
 	let glob_lin_acc = subVec3f(multMatVec3f(R_T, loc_lin_acc), [0, g, 0]);
 	glob_lin_vel = addVec3f(glob_lin_vel, multScalVec3f(dt, glob_lin_acc));
 	glob_lin_pos = addVec3f(glob_lin_pos, multScalVec3f(dt, glob_lin_vel));
+	glob_lin_pos = [0, 1, 0];
 
 	// --- TORQUE AND ROTATION ---
 	let loc_torque = [-l * (F3 + F4 - F2 - F1), -(M1 + M3 - M2 - M4), -l * (F2 + F3 - F1 - F4)];
 	let loc_rot_acc = multMatVec3f(loc_I_mat_inv, subVec3f(loc_torque, crossVec3f(loc_rot_vel, multMatVec3f(loc_I_mat, loc_rot_vel))));
 	loc_rot_vel = addVec3f(loc_rot_vel, multScalVec3f(dt, loc_rot_acc));
 
+	let glob_rot_vel = multMatVec3f(R_T, loc_rot_vel);
+	glob_rot_pos = addVec3f(glob_rot_pos, multScalVec3f(dt, glob_rot_vel));
+	console.log(glob_rot_pos.map(n => n.toFixed(2)));
+
 	// --- UPDATE MODEL MATRIX ---
-	droneModelMatrix = setXYZ(droneModelMatrix, glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2]);
-	let loc_rot_pos_delta = multScalVec3f(dt, loc_rot_vel);
-	droneModelMatrix = multMat4f(zRotMat4f(loc_rot_pos_delta[2]), droneModelMatrix);
-	droneModelMatrix = multMat4f(yRotMat4f(loc_rot_pos_delta[1]), droneModelMatrix);
-	droneModelMatrix = multMat4f(xRotMat4f(loc_rot_pos_delta[0]), droneModelMatrix);
+	droneModelMatrix = modelMat4f(glob_lin_pos[0], glob_lin_pos[1], glob_lin_pos[2], glob_rot_pos[0], glob_rot_pos[1], glob_rot_pos[2], 0.01, 0.01, 0.01);
+
 }, dt);
 
 
