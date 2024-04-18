@@ -20,6 +20,7 @@ var omega_3 = omega_stable;
 var omega_4 = omega_stable;
 
 var angular_velocity_B = [0, 0, 0];
+var linear_velocity_W = [0, 0, 0];
 
 var time = 0.0;
 
@@ -60,8 +61,14 @@ setInterval(function () {
 
 	// --- ACCELERATIONS ---
 	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrix(droneModelMatrix), f_B_thrust));
+	linear_acceleration = multScalVec3f(1 / m, linear_acceleration);
 	let angular_acceleration = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
+	angular_acceleration[0] = angular_acceleration[0] / I[0];
+	angular_acceleration[1] = angular_acceleration[1] / I[1];
+	angular_acceleration[2] = angular_acceleration[2] / I[2];
 
-
+	// --- ADVANCE STATE ---
+	linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration));
+	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration));
 
 }, dt);
