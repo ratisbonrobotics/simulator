@@ -9,9 +9,9 @@ const loc_I_mat_inv = invMat3f(loc_I_mat);
 const g = 9.81;
 const m = 0.5;
 const dt = 0.01;
-const omega_min = 30;
-const omega_max = 70;
-const omega_stable = 50;
+const omega_min = 300;
+const omega_max = 700;
+const omega_stable = 500;
 
 // ----------------------------------- DYNAMICS -----------------------------------
 var omega_1 = omega_stable;
@@ -74,10 +74,9 @@ setInterval(function () {
 	// --- UPDATE MODEL MATRIX ---
 	let rot_dot = multMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), so3hat(angular_velocity_B));
 	let new_rot = addMat3f(getRotationMatrixFromModelMatrix(droneModelMatrix), multScalMat3f(dt, rot_dot));
-	/*droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
 
+	droneModelMatrix = multMat4f(translMat4f(linear_velocity_W[0] * dt, linear_velocity_W[1] * dt, linear_velocity_W[2] * dt), droneModelMatrix);
 	droneModelMatrix = setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot);
-*/
-	console.log(setRotationMatrixOfModelMatrix(droneModelMatrix, new_rot).map(n => n.toFixed(2)));
+	console.log(droneModelMatrix.map(n => n.toFixed(2)));
 
 }, dt);
