@@ -60,7 +60,7 @@ setInterval(function () {
 
 	// --- ACCELERATIONS ---
 	let linear_acceleration = addVec3f([0, -g * m, 0], multMat3f(getRotationMatrix(droneModelMatrix), f_B_thrust));
-	let angular_acceleration = crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B));
+	let angular_acceleration = addVec3f(crossVec3f(multScalVec3f(-1, angular_velocity_B), multMatVec3f(loc_I_mat, angular_velocity_B)), tau_B);
 
 
 
