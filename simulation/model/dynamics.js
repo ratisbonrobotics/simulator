@@ -90,6 +90,6 @@ setInterval(function () {
 	droneModelMatrix[9] = R_W_B_inv[7];
 	droneModelMatrix[10] = R_W_B_inv[8];
 	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
-	console.log(droneModelMatrix.map(n => n.toFixed(2)));
+	// console.log(droneModelMatrix.map(n => n.toFixed(2)));
 
 }, dt);
