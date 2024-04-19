@@ -25,12 +25,7 @@ let linear_position_W = [0, 1, 0];
 
 let R_W_B = multMat3f(multMat3f(xRotMat3f(0), yRotMat3f(0)), zRotMat3f(0));
 
-let time = 0.0;
-
 setInterval(function () {
-	// --- ADVANCE TIME ---
-	time += dt;
-
 	// --- LIMIT MOTOR SPEEDS ---
 	omega_1 = Math.max(Math.min(omega_1, omega_max), omega_min);
 	omega_2 = Math.max(Math.min(omega_2, omega_max), omega_min);
@@ -79,17 +74,7 @@ setInterval(function () {
 	// --- SET MODEL MATRIX ---
 	droneModelMatrix = identMat4f();
 	droneModelMatrix = multMat4f(translMat4f(linear_position_W[0], linear_position_W[1], linear_position_W[2]), droneModelMatrix);
-	let R_W_B_inv = invMat3f(R_W_B);
-	droneModelMatrix[0] = R_W_B_inv[0];
-	droneModelMatrix[1] = R_W_B_inv[1];
-	droneModelMatrix[2] = R_W_B_inv[2];
-	droneModelMatrix[4] = R_W_B_inv[3];
-	droneModelMatrix[5] = R_W_B_inv[4];
-	droneModelMatrix[6] = R_W_B_inv[5];
-	droneModelMatrix[8] = R_W_B_inv[6];
-	droneModelMatrix[9] = R_W_B_inv[7];
-	droneModelMatrix[10] = R_W_B_inv[8];
+	setRot3Mat4f(droneModelMatrix, invMat3f(R_W_B));
 	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
-	// console.log(droneModelMatrix.map(n => n.toFixed(2)));
 
 }, dt);
