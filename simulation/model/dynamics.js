@@ -50,7 +50,6 @@ setInterval(function () {
 
 	// --- THRUST ---
 	let f_B_thrust = [0, F1 + F2 + F3 + F4, 0];
-	console.log("right now", f_B_thrust[1]);
 
 	// --- TORQUE ---
 	let tau_B_drag = [0, M1 - M2 + M3 - M4, 0];
