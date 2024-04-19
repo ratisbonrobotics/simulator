@@ -50,6 +50,7 @@ setInterval(function () {
 
 	// --- THRUST ---
 	let f_B_thrust = [0, F1 + F2 + F3 + F4, 0];
+	console.log("right now", f_B_thrust[1]);
 
 	// --- TORQUE ---
 	let tau_B_drag = [0, M1 - M2 + M3 - M4, 0];
@@ -71,10 +72,10 @@ setInterval(function () {
 	angular_acceleration_B[2] = angular_acceleration_B[2] / I[2];
 
 	// --- ADVANCE STATE ---
-	/*linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration_W));
+	linear_velocity_W = addVec3f(linear_velocity_W, multScalVec3f(dt, linear_acceleration_W));
 	linear_position_W = addVec3f(linear_position_W, multScalVec3f(dt, linear_velocity_W));
 	angular_velocity_B = addVec3f(angular_velocity_B, multScalVec3f(dt, angular_acceleration_B));
-	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));*/
+	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));
 
 	// --- SET MODEL MATRIX ---
 	droneModelMatrix = identMat4f();
