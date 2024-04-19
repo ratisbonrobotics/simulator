@@ -58,13 +58,11 @@ setInterval(function () {
         F_bar_column_0[2], F_bar_column_1[2], F_bar_column_2[2], F_bar_column_3[2]
     ];
     let F_bar_inv = inv4Mat4f(F_bar);
-    //console.log(F_bar);
     let omega_sign_square = multMatVec4f(F_bar_inv, [f_z_B_control, tau_B_control[0], tau_B_control[1], tau_B_control[2]]);
-    console.log(omega_sign_square);
-    //console.log(omega_sign_square.map(n => Math.sqrt(Math.abs(n))));
-    /*omega_1 = Math.sqrt(Math.abs(omega_sign_square[0]));
+    
+    omega_1 = Math.sqrt(Math.abs(omega_sign_square[0]));
     omega_2 = Math.sqrt(Math.abs(omega_sign_square[1]));
     omega_3 = Math.sqrt(Math.abs(omega_sign_square[2]));
-    omega_4 = Math.sqrt(Math.abs(omega_sign_square[3]));*/
+    omega_4 = Math.sqrt(Math.abs(omega_sign_square[3]));
 
 }, dt * 10);
