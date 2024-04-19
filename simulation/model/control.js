@@ -1,15 +1,15 @@
 // ----------------------------------- CONTROL PARAMETERS -----------------------------------
-let linear_position_d_W = [1, 1, 1];
+let linear_position_d_W = [0, 1, 0];
 let linear_velocity_d_W = [0, 0, 0];
 let linear_acceleration_d_W = [0, 0, 0];
 let angular_velocity_d_B = [0, 0, 0];
 let angular_acceleration_d_B = [0, 0, 0];
-let yaw_d = 3.14;
+let yaw_d = 0.0;
 
-const k_p = 0.01;
-const k_v = 0.01;
-const k_R = 0.01;
-const k_w = 0.01;
+const k_p = 1.0;
+const k_v = 1.0;
+const k_R = 1.0;
+const k_w = 1.0;
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {

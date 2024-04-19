@@ -27,8 +27,6 @@ let R_W_B = multMat3f(multMat3f(xRotMat3f(0), yRotMat3f(0)), zRotMat3f(0));
 
 let time = 0.0;
 
-let prints = 0;
-
 setInterval(function () {
 	// --- ADVANCE TIME ---
 	time += dt;
