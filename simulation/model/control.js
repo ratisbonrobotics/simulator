@@ -15,7 +15,7 @@ const k_w = 1.0;
 setInterval(function () {
     // --- LINEAR CONTROL ---
     let error_p = subVec3f(linear_position_W, linear_position_d_W);
-    let error_v = subVec3f(linear_position_W, linear_position_d_W);
+    let error_v = subVec3f(linear_velocity_W, linear_velocity_d_W);
 
     let z_W_d = multScalVec3f(-k_p, error_p);
     z_W_d = addVec3f(z_W_d, multScalVec3f(-k_v, error_v));
@@ -23,7 +23,7 @@ setInterval(function () {
     z_W_d = addVec3f(z_W_d, multScalVec3f(m, linear_acceleration_d_W));
     let z_W_B = multMatVec3f(R_W_B, [0, 1, 0]);
     let f_z_B_control = dotVec3f(z_W_d, z_W_B);
-
+    console.log(z_W_d);
     // --- ATTITIDUE CONTROL ---
     let x_tilde_d_W = [Math.cos(yaw_d), 0, Math.sin(yaw_d)];
     let R_W_d_column_2 = normVec3f(z_W_d);
