@@ -25,16 +25,21 @@ setInterval(function () {
     let f_z_B_control = dotVec3f(z_W_d, z_W_B);
 
     // --- ATTITIDUE CONTROL ---
-    let x_tilde_d_W = [Math.cos(yaw_d), 0, -Math.sin(yaw_d)];
-    let R_W_d_column_2 = normVec3f(z_W_d);
-    let R_W_d_column_1 = normVec3f(crossVec3f(z_W_d, x_tilde_d_W));
+    let x_tilde_d_W = [Math.sin(yaw_d), 0, Math.cos(yaw_d)];
     let R_W_d_column_0 = normVec3f(crossVec3f(crossVec3f(z_W_d, x_tilde_d_W), z_W_d));
+    let R_W_d_column_1 = normVec3f(crossVec3f(z_W_d, x_tilde_d_W));
+    let R_W_d_column_2 = normVec3f(z_W_d);
     let R_W_d = [
+        R_W_d_column_0[2], R_W_d_column_1[2], R_W_d_column_2[2],
         R_W_d_column_0[0], R_W_d_column_1[0], R_W_d_column_2[0],
         R_W_d_column_0[1], R_W_d_column_1[1], R_W_d_column_2[1],
-        R_W_d_column_0[2], R_W_d_column_1[2], R_W_d_column_2[2]
     ];
-    R_W_d = R_W_B; // cheat.
+    /*console.log("z_W_d", z_W_d);
+    console.log("x_tilde_d_W", x_tilde_d_W);
+    console.log("R_W_B", R_W_B);
+    console.log("R_W_d", R_W_d);
+    console.log("");
+    R_W_d = R_W_B; // cheat.*/
 
     let error_r = multScalVec3f(0.5, so3vee(subMat3f(multMat3f(transpMat3f(R_W_d), R_W_B), multMat3f(transpMat3f(R_W_B), R_W_d))));
     let error_w = subVec3f(angular_velocity_B, multMatVec3f(multMat3f(transpMat3f(R_W_d), R_W_B), angular_velocity_d_B));
@@ -59,7 +64,7 @@ setInterval(function () {
     ];
     let F_bar_inv = inv4Mat4f(F_bar);
     let omega_sign_square = multMatVec4f(F_bar_inv, [f_z_B_control, tau_B_control[0], tau_B_control[1], tau_B_control[2]]);
-    
+
     omega_1 = Math.sqrt(Math.abs(omega_sign_square[0]));
     omega_2 = Math.sqrt(Math.abs(omega_sign_square[1]));
     omega_3 = Math.sqrt(Math.abs(omega_sign_square[2]));
