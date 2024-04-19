@@ -4,16 +4,18 @@ let linear_velocity_d_W = [0, 0, 0];
 let linear_acceleration_d_W = [0, 0, 0];
 let angular_velocity_d_B = [0, 0, 0];
 let angular_acceleration_d_B = [0, 0, 0];
-let yaw_d = -0.5 * Math.PI;
+let yaw_d = 0.0; //-0.5 * Math.PI;
 
 /*
-
 let yaw_d = -0.5 * Math.PI, then R_W_d:
 0 0 -1
 0 1 0
 1 0 0
 
 let yaw_d = 0.0, then R_W_d:
+1 0 0
+0 1 0
+0 0 1
 */
 
 const k_p = 1.0;
@@ -98,16 +100,16 @@ setInterval(function () {
         let R_W_d_column_1 = normVec3f(crossVec3f(z_W_d, x_tilde_d_W));
         let R_W_d_column_2 = normVec3f(z_W_d);
         let R_W_d = [
-            R_W_d_column_2[0], R_W_d_column_1[0], R_W_d_column_0[0],
-            R_W_d_column_2[2], R_W_d_column_1[2], R_W_d_column_0[2],
-            R_W_d_column_2[1], R_W_d_column_1[1], R_W_d_column_0[1],
+            R_W_d_column_0[0], R_W_d_column_1[0], R_W_d_column_2[0],
+            R_W_d_column_0[1], R_W_d_column_1[1], R_W_d_column_2[1],
+            R_W_d_column_0[2], R_W_d_column_1[2], R_W_d_column_2[2],
         ];
         console.log("z_W_d", z_W_d.map(n => n.toFixed(2)));
         console.log("x_tilde_d_W", x_tilde_d_W.map(n => n.toFixed(2)));
         console.log("R_W_B", R_W_B.map(n => n.toFixed(2)));
         console.log("R_W_d", R_W_d.map(n => n.toFixed(2)));
         console.log("");
-        //R_W_d = R_W_B; // /*cheat.*/
+        R_W_d = R_W_B; // /*cheat.*/
 
         let error_r = multScalVec3f(0.5, so3vee(subMat3f(multMat3f(transpMat3f(R_W_d), R_W_B), multMat3f(transpMat3f(R_W_B), R_W_d))));
         let error_w = subVec3f(angular_velocity_B, multMatVec3f(multMat3f(transpMat3f(R_W_d), R_W_B), angular_velocity_d_B));
