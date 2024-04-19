@@ -1,6 +1,6 @@
 // --- SETUP ENVIRONMENT ---
-var keys = {};
-var mouse = {
+let keys = {};
+let mouse = {
     horizontal: 0,
     vertical: 0
 };
@@ -22,6 +22,6 @@ canvas.addEventListener("keydown", function (event) { keys[event.key] = true; })
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
 // --- OBJECT MODEL MATRICIES ---
-var cameraModelMatrix = modelMat4f(0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-var droneModelMatrix = modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01);
-var sceneModelMatrix = modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+let cameraModelMatrix = modelMat4f(0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+let droneModelMatrix = modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01);
+let sceneModelMatrix = modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);

@@ -1,7 +1,7 @@
 function getKeyboardInput(s) {
-    var x = (keys["a"] ? -1 : keys["d"] ? 1 : 0) * s;
-    var y = (keys["q"] ? -1 : keys["e"] ? 1 : 0) * s;
-    var z = (keys["w"] ? -1 : keys["s"] ? 1 : 0) * s;
+    let x = (keys["a"] ? -1 : keys["d"] ? 1 : 0) * s;
+    let y = (keys["q"] ? -1 : keys["e"] ? 1 : 0) * s;
+    let z = (keys["w"] ? -1 : keys["s"] ? 1 : 0) * s;
 
     return [x, y, z];
 }
@@ -13,10 +13,10 @@ function getMouseInput(s) {
     return inp;
 }
 
-var cameraModelMatrixOld = cameraModelMatrix;
+let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 
-var attachedToDrone = false;
+let attachedToDrone = false;
 setInterval(function () {
     if (keys["1"]) {
         attachedToDrone = true;
@@ -25,8 +25,8 @@ setInterval(function () {
         attachedToDrone = false;
     }
     if (!attachedToDrone) {
-        var movementVector = getKeyboardInput(0.01);
-        var rotationVector = getMouseInput(0.01);
+        let movementVector = getKeyboardInput(0.01);
+        let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
 
         cameraModelMatrix = cameraModelMatrixOld;

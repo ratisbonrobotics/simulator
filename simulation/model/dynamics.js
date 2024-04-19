@@ -14,18 +14,18 @@ const omega_max = 70;
 const omega_stable = 50;
 
 // ----------------------------------- DYNAMICS -----------------------------------
-var omega_1 = omega_stable;
-var omega_2 = omega_stable;
-var omega_3 = omega_stable;
-var omega_4 = omega_stable;
+let omega_1 = omega_stable;
+let omega_2 = omega_stable;
+let omega_3 = omega_stable;
+let omega_4 = omega_stable;
 
-var angular_velocity_B = [0, 0, 0];
-var linear_velocity_W = [0, 0, 0];
-var linear_position_W = [0, 1, 0];
+let angular_velocity_B = [0, 0, 0];
+let linear_velocity_W = [0, 0, 0];
+let linear_position_W = [0, 1, 0];
 
-var R_W_B = multMat3f(multMat3f(xRotMat3f(0), yRotMat3f(0)), zRotMat3f(0));
+let R_W_B = multMat3f(multMat3f(xRotMat3f(0), yRotMat3f(0)), zRotMat3f(0));
 
-var time = 0.0;
+let time = 0.0;
 
 setInterval(function () {
 	// --- ADVANCE TIME ---

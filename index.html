@@ -21,11 +21,11 @@
       });
 
       function loadExternalHTML(url, targetId) {
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onload = function () {
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(xhr.responseText, "text/html");
-          var target = document.getElementById(targetId);
+          let parser = new DOMParser();
+          let doc = parser.parseFromString(xhr.responseText, "text/html");
+          let target = document.getElementById(targetId);
 
           Array.from(doc.body.childNodes).forEach(function (node) {
             if (node.nodeName.toLowerCase() !== "script") {
@@ -33,9 +33,9 @@
             }
           });
 
-          var scripts = doc.getElementsByTagName("script");
-          for (var i = 0; i < scripts.length; i++) {
-            var script = document.createElement("script");
+          let scripts = doc.getElementsByTagName("script");
+          for (let i = 0; i < scripts.length; i++) {
+            let script = document.createElement("script");
             script.text = scripts[i].innerText;
             document.body.appendChild(script);
           }

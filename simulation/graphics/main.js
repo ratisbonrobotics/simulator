@@ -39,9 +39,9 @@ const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewm
 init3D(gl);
 
 // --- GET DATA FROM 3D FILES ---
-var scene_vertexbuffer = [];
-var scene_texcoordbuffer = [];
-var scene_texture = [];
+let scene_vertexbuffer = [];
+let scene_texcoordbuffer = [];
+let scene_texture = [];
 async function loadScene() {
     let glb_data = await parseGLB('graphics/data/scene.glb');
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
@@ -53,9 +53,9 @@ async function loadScene() {
     }
 }
 
-var drone_vertexbuffer;
-var drone_texcoordbuffer;
-var drone_texture;
+let drone_vertexbuffer;
+let drone_texcoordbuffer;
+let drone_texture;
 loadDrone();
 async function loadDrone() {
     let [obj, mtl] = await parseOBJ('graphics/data/drone.obj');
