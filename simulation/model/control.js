@@ -6,6 +6,16 @@ let angular_velocity_d_B = [0, 0, 0];
 let angular_acceleration_d_B = [0, 0, 0];
 let yaw_d = -0.5 * Math.PI;
 
+/*
+
+let yaw_d = -0.5 * Math.PI, then R_W_d:
+0 0 -1
+0 1 0
+1 0 0
+
+let yaw_d = 0.0, then R_W_d:
+*/
+
 const k_p = 1.0;
 const k_v = 1.0;
 const k_R = 1.0;
@@ -21,15 +31,15 @@ setInterval(function () {
         omega_4 = omega_stable;
 
         if (keys["w"]) {
-            omega_1 += 0.01;
-            omega_2 += 0.01;
-            omega_3 -= 0.01;
-            omega_4 -= 0.01;
-        } else if (keys["s"]) {
             omega_1 -= 0.01;
             omega_2 -= 0.01;
             omega_3 += 0.01;
             omega_4 += 0.01;
+        } else if (keys["s"]) {
+            omega_1 += 0.01;
+            omega_2 += 0.01;
+            omega_3 -= 0.01;
+            omega_4 -= 0.01;
         }
 
         if (keys["q"]) {
@@ -57,15 +67,15 @@ setInterval(function () {
         }
 
         if (keys["ArrowUp"]) {
-            omega_1 += 0.01;
-            omega_2 += 0.01;
-            omega_3 += 0.01;
-            omega_4 += 0.01;
+            omega_1 += 0.1;
+            omega_2 += 0.1;
+            omega_3 += 0.1;
+            omega_4 += 0.1;
         } else if (keys["ArrowDown"]) {
-            omega_1 -= 0.01;
-            omega_2 -= 0.01;
-            omega_3 -= 0.01;
-            omega_4 -= 0.01;
+            omega_1 -= 0.1;
+            omega_2 -= 0.1;
+            omega_3 -= 0.1;
+            omega_4 -= 0.1;
         }
 
         console.log("R_W_B", R_W_B.map(n => n.toFixed(2)));

@@ -76,10 +76,7 @@ function drawScene() {
 
     // --- SETUP VIEWMATRIX ---
     if (attachedToDrone) {
-        droneModelMatrixAttached = droneModelMatrix;
-        roty = yRotMat4f(degToRad(180));
-        droneModelMatrixAttached = multMat4f(roty, droneModelMatrixAttached);
-        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(droneModelMatrixAttached));
+        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneModelMatrix)));
     } else {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
     }
