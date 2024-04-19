@@ -6,17 +6,17 @@ let angular_velocity_d_B = [0, 0, 0];
 let angular_acceleration_d_B = [0, 0, 0];
 let yaw_d = 3.14;
 
-const k_p = 1.0;
-const k_v = 1.0;
-const k_R = 1.0;
-const k_w = 1.0;
+const k_p = 0.01;
+const k_v = 0.01;
+const k_R = 0.01;
+const k_w = 0.01;
 
 // ----------------------------------- CONTROL LOOP -----------------------------------
 setInterval(function () {
     // --- LINEAR CONTROL ---
     let error_p = subVec3f(linear_position_W, linear_position_d_W);
     let error_v = subVec3f(linear_position_W, linear_position_d_W);
-    
+
     let z_W_d = multScalVec3f(-k_p, error_p);
     z_W_d = addVec3f(z_W_d, multScalVec3f(-k_v, error_v));
     z_W_d = addVec3f(z_W_d, [0, m * g, 0]);
@@ -59,9 +59,9 @@ setInterval(function () {
     let F_bar_inv = inv4Mat4f(F_bar);
     let omega_sign_square = multMatVec4f(F_bar_inv, [f_z_B_control, tau_B_control[0], tau_B_control[1], tau_B_control[2]]);
 
-    omega_1 = Math.sqrt(omega_sign_square[0]);
-    omega_2 = Math.sqrt(omega_sign_square[1]);
-    omega_3 = Math.sqrt(omega_sign_square[2]);
-    omega_4 = Math.sqrt(omega_sign_square[3]);
-    
+    omega_1 = Math.sqrt(Math.abs(omega_sign_square[0]));
+    omega_2 = Math.sqrt(Math.abs(omega_sign_square[1]));
+    omega_3 = Math.sqrt(Math.abs(omega_sign_square[2]));
+    omega_4 = Math.sqrt(Math.abs(omega_sign_square[3]));
+
 }, dt * 10);
