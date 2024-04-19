@@ -3,6 +3,7 @@ var linear_position_d_W = [1, 1, 1];
 var linear_velocity_d_W = [0, 0, 0];
 var linear_acceleration_d_W = [0, 0, 0];
 var angular_velocity_d_B = [0, 0, 0];
+var angular_acceleration_d_B = [0, 0, 0];
 var yaw_d = 3.14;
 
 const k_p = 1.0;
@@ -37,6 +38,11 @@ setInterval(function () {
     let error_r = so3vee(subMat3f(multMat3f(transpMat3f(R_W_d), R_W_B), multMat3f(transpMat3f(R_W_B), R_W_d)));
     let error_w = subVec3f(angular_velocity_B, multMatVec3f(multMat3f(transpMat3f(R_W_d), R_W_B), angular_velocity_d_B));
 
-    let tau_B_control;
+    let tau_B_control = multScalVec3f(-k_R, error_r);
+    tau_B_control = addVec3f(tau_B_control, multScalVec3f(-k_w, error_w));
+    tau_B_control = addVec3f(tau_B_control, crossVec3f(angular_velocity_B, multMatVec3f(loc_I_mat, angular_velocity_B)));
+    let term_0 = multMat3f(transpMat3f(R_W_B), multMatVec3f(R_W_d, angular_acceleration_d_B));
+    let term_1 = crossVec3f(angular_velocity_B, multMat3f(transpMat3f(R_W_B), multMatVec3f(R_W_d, angular_velocity_d_B)));
+    tau_B_control = subVec3f(tau_B_control, multMatVec3f(loc_I_mat, subVec3f(term_1, term_0)));
 
 }, dt * 10);
