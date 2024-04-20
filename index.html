@@ -15,6 +15,13 @@
     />
     <title>Ratisbon Robotics</title>
     <script>
+      window.addEventListener("message", function (event) {
+        if (event.data.frameHeight) {
+          var iframe = document.querySelector("iframe");
+          iframe.style.height = event.data.frameHeight + "px";
+        }
+      });
+
       document.addEventListener("DOMContentLoaded", function () {
         loadExternalHTML("/lib/navbar.html", "navbar");
         loadExternalHTML("/lib/footer.html", "footer");
@@ -43,20 +50,6 @@
         xhr.open("GET", url, true);
         xhr.send();
       }
-    </script>
-    <script>
-      window.addEventListener(
-        "message",
-        function (event) {
-          if (event.origin === window.location.origin) {
-            if (event.data.type === "resize") {
-              document.querySelector("iframe").style.height =
-                event.data.height + "px";
-            }
-          }
-        },
-        false
-      );
     </script>
   </head>
 

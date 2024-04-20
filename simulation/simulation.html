@@ -37,9 +37,6 @@
         box-shadow: 0px 0px 10px #aaa;
         border-radius: 7px;
         background-color: black;
-        margin-left: 40px;
-        margin-top: 20px;
-        margin-bottom: 20px;
       }
       .chat-container {
         width: 100%;
@@ -48,7 +45,6 @@
         border-radius: 7px;
         box-shadow: 0px 0px 10px #aaa;
         padding: 20px;
-        margin: 0 20px;
       }
       .api-key-container {
         display: flex;
@@ -104,18 +100,17 @@
       }
     </style>
     <script>
-      function resizeIframe() {
-        var height = document.documentElement.scrollHeight;
+      function sendHeight() {
+        var height = document.body.scrollHeight;
         window.parent.postMessage(
           {
-            type: "resize",
-            height: height,
+            frameHeight: height,
           },
           "*"
         );
       }
-      window.addEventListener("load", resizeIframe);
-      window.addEventListener("resize", resizeIframe);
+      window.onload = sendHeight;
+      window.onresize = sendHeight;
     </script>
   </head>
   <body>
