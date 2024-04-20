@@ -21,12 +21,6 @@
         align-items: center;
         font-family: Arial, sans-serif;
       }
-      .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-      }
       .content-container {
         display: flex;
         flex-direction: column;
@@ -43,6 +37,9 @@
         box-shadow: 0px 0px 10px #aaa;
         border-radius: 7px;
         background-color: black;
+        margin-left: 40px;
+        margin-top: 20px;
+        margin-bottom: 20px;
       }
       .chat-container {
         width: 100%;
@@ -60,12 +57,12 @@
       }
       .api-key-input {
         flex: 1;
-        padding: 10px;
+        padding: var(--input-padding);
         border: 1px solid #ccc;
         border-radius: 5px 0 0 5px;
       }
       .api-key-submit {
-        padding: 10px;
+        padding: var(--input-padding);
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-left: none;
@@ -83,16 +80,18 @@
       }
       .chat-input {
         flex: 1;
-        padding: 10px;
+        padding: var(--input-padding);
         border: 1px solid #ccc;
         border-radius: 5px;
         resize: none;
       }
       .chat-submit {
-        background: none;
-        border: none;
+        padding: var(--input-padding);
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-left: none;
+        border-radius: 0 5px 5px 0;
         cursor: pointer;
-        margin-left: 10px;
       }
     </style>
     <script>
