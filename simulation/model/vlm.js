@@ -86,5 +86,5 @@ function displayMessage(role, content) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-document.querySelector('.chat-submit').addEventListener('click', sendMessage);
-document.querySelector('.api-key-submit').addEventListener('click', setApiKey);
+document.querySelector('#chat-submit').addEventListener('click', sendMessage);
+document.querySelector('#api-key-submit').addEventListener('click', setApiKey);

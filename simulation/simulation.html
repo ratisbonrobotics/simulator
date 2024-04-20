@@ -14,29 +14,6 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
-    <style>
-      body,
-      html {
-        height: 100%;
-      }
-      canvas {
-        border: 1px solid #000;
-        box-shadow: 0px 0px 10px #aaa;
-        border-radius: 7px;
-        background-color: transparent;
-      }
-      .chat-messages {
-        height: 300px;
-        overflow-y: auto;
-        margin-bottom: 10px;
-      }
-      .chat-input {
-        resize: none;
-      }
-      .button.is-fullheight {
-        height: 100%;
-      }
-    </style>
     <script>
       function sendHeight() {
         var height = document.body.scrollHeight;
@@ -47,7 +24,7 @@
     </script>
   </head>
   <body>
-    <div class="container">
+    <div class="tile">
       <div class="columns is-centered is-vcentered">
         <div class="column is-narrow">
           <canvas tabindex="1" id="canvas" aria-label="canvas"></canvas>
@@ -64,21 +41,27 @@
                 />
               </div>
               <div class="control">
-                <button class="button">&#10003;</button>
+                <button id="api-key-submit" class="button">&#10003;</button>
               </div>
             </div>
-            <div class="chat-messages" id="chatMessages"></div>
+            <div
+              class="box has-fixed-size"
+              id="chatMessages"
+              style="height: 300px"
+            ></div>
             <div class="field has-addons">
               <div class="control is-expanded">
-                <textarea
-                  class="textarea chat-input"
+                <input
+                  class="input chat-input"
                   id="chatInput"
                   placeholder="Type your instructions..."
                   rows="2"
-                ></textarea>
+                />
               </div>
               <div class="control">
-                <button class="button is-fullheight">&#10148;</button>
+                <button id="chat-submit" class="button is-fullheight">
+                  &#10148;
+                </button>
               </div>
             </div>
           </div>
