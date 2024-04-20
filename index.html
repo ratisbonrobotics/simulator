@@ -11,7 +11,7 @@
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
     <title>Ratisbon Robotics</title>
     <script>
@@ -54,22 +54,17 @@
   </head>
 
   <body>
-    <nav id="navbar"></nav>
-    <div class="tile is-ancestor">
-      <div class="tile is-vertical">
-        <div class="tile is-parent">
-          <article
-            class="tile is-child notification has-background-light has-text-centered"
-          >
-            <iframe
-              src="simulation/simulation.html"
-              style="width: 100%"
-              scrolling="no"
-            ></iframe>
-          </article>
-        </div>
-        <footer id="footer"></footer>
-      </div>
-    </div>
+    <article class="box has-background-light">
+      <nav id="navbar"></nav>
+    </article>
+    <article class="box mt-5 has-background-light">
+      <iframe
+        src="simulation/simulation.html"
+        style="width: 100%"
+        scrolling="no"
+      ></iframe>
+    </article>
+
+    <div id="footer"></div>
   </body>
 </html>

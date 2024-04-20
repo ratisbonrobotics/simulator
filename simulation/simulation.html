@@ -12,7 +12,7 @@
     <title>Ratisbon Robotics</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
     <script>
       function sendHeight() {
@@ -24,45 +24,57 @@
     </script>
   </head>
   <body>
-    <div class="tile">
-      <div class="columns is-centered is-vcentered">
-        <div class="column is-narrow">
-          <canvas tabindex="1" id="canvas" aria-label="canvas"></canvas>
-        </div>
-        <div class="column is-narrow">
-          <div class="box">
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <input
-                  type="text"
-                  class="input"
-                  id="apiKeyInput"
-                  placeholder="sk-2JuIWy29wFTd..."
-                />
-              </div>
-              <div class="control">
-                <button id="api-key-submit" class="button">&#10003;</button>
-              </div>
+    <div class="columns">
+      <div class="column">
+        <canvas
+          style="border-radius: 5px; border: 2px solid black"
+          tabindex="1"
+          id="canvas"
+          aria-label="canvas"
+        ></canvas>
+      </div>
+      <div class="column">
+        <div class="box">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input
+                type="text"
+                class="input"
+                id="apiKeyInput"
+                placeholder="sk-2JuIWy29wFTd..."
+              />
             </div>
-            <div
-              class="box has-fixed-size"
+            <div class="control">
+              <button id="api-key-submit" class="button">&#10003;</button>
+            </div>
+          </div>
+          <div class="mt-4">
+            <textarea
+              class="textarea has-fixed-size"
+              readonly
               id="chatMessages"
-              style="height: 300px"
-            ></div>
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                <input
-                  class="input chat-input"
-                  id="chatInput"
-                  placeholder="Type your instructions..."
-                  rows="2"
-                />
-              </div>
-              <div class="control">
-                <button id="chat-submit" class="button is-fullheight">
-                  &#10148;
-                </button>
-              </div>
+              rows="10"
+            ></textarea>
+          </div>
+          <div class="mt-4">
+            <div class="field">
+              <nav class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <textarea
+                      class="textarea has-fixed-size"
+                      id="chatInput"
+                      placeholder="Enter..."
+                      rows="1"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <button id="chat-submit" class="button">&#10148;</button>
+                  </div>
+                </div>
+              </nav>
             </div>
           </div>
         </div>
