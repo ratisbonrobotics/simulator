@@ -62,6 +62,7 @@
         border-radius: 5px 0 0 5px;
         font-size: 16px;
         height: 30px;
+        font-family: Arial, sans-serif;
       }
       .api-key-submit {
         background-color: #f0f0f0;
@@ -85,10 +86,11 @@
         flex: 1;
         padding: var(--input-padding);
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 5px 0 0 5px;
         resize: none;
         font-size: 16px;
         height: 60px;
+        font-family: Arial, sans-serif;
       }
       .chat-submit {
         padding: var(--input-padding);
@@ -126,7 +128,7 @@
               type="text"
               class="api-key-input"
               id="apiKeyInput"
-              placeholder="Enter your OpenAI API key"
+              placeholder="sk-2JuIWy29wFTd..."
             />
             <button class="api-key-submit">&#10003;</button>
           </div>
@@ -135,7 +137,7 @@
             <textarea
               class="chat-input"
               id="chatInput"
-              placeholder="Type your message..."
+              placeholder="Type your instructions..."
             ></textarea>
             <button class="chat-submit">&#10148;</button>
           </div>
