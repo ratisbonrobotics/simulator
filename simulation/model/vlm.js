@@ -6,29 +6,30 @@ function sendMessage() {
 
     const width = gl.drawingBufferWidth;
     const height = gl.drawingBufferHeight;
-    const pixels = new Uint8Array(width * height * 4); // 4 components per pixel: RGBA
+    const pixels = new Uint8Array(width * height * 4);
     gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    var can = document.createElement("canvas");
-    can.width = width;
-    can.height = height;
-    var ctx = can.getContext("2d");
-    var imageData = ctx.createImageData(width, height);
-    imageData.data.set(pixels);
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    const imageData = new ImageData(new Uint8ClampedArray(pixels), width, height);
     // Flip the image data vertically (WebGL's readPixels reads bottom to top)
-    for (let y = 0; y < height / 2; y++) {
-        for (let x = 0; x < width; x++) {
-            for (let c = 0; c < 4; c++) {
-                let topIdx = (x + y * width) * 4 + c;
-                let bottomIdx = (x + (height - 1 - y) * width) * 4 + c;
-                let temp = imageData.data[topIdx];
-                imageData.data[topIdx] = imageData.data[bottomIdx];
-                imageData.data[bottomIdx] = temp;
-            }
+    const halfHeight = Math.floor(height / 2);
+    const rowBytes = width * 4;
+    for (let y = 0; y < halfHeight; y++) {
+        const topOffset = y * rowBytes;
+        const bottomOffset = (height - 1 - y) * rowBytes;
+
+        for (let x = 0; x < rowBytes; x++) {
+            const temp = imageData.data[topOffset + x];
+            imageData.data[topOffset + x] = imageData.data[bottomOffset + x];
+            imageData.data[bottomOffset + x] = temp;
         }
     }
     ctx.putImageData(imageData, 0, 0);
-    var url = can.toDataURL();
+    const url = canvas.toDataURL();
     console.log(url);
+
 
 
     /*
