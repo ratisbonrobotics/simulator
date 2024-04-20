@@ -106,8 +106,12 @@ setInterval(function () {
         ];
         console.log("z_W_d", z_W_d.map(n => n.toFixed(2)));
         console.log("x_tilde_d_W", x_tilde_d_W.map(n => n.toFixed(2)));
-        console.log("R_W_B", R_W_B.map(n => n.toFixed(2)));
-        console.log("R_W_d", R_W_d.map(n => n.toFixed(2)));
+        console.log("R_W_B:\n" + R_W_B.map(n => n.toFixed(2)).reduce((acc, val, i) => {
+            return i % 3 === 0 ? acc + '\n' + val + ' ' : acc + val + ' ';
+        }, '').trim());
+        console.log("R_W_d:\n" + R_W_d.map(n => n.toFixed(2)).reduce((acc, val, i) => {
+            return i % 3 === 0 ? acc + '\n' + val + ' ' : acc + val + ' ';
+        }, '').trim());
         console.log("");
         R_W_d = R_W_B; // /*cheat.*/
 
