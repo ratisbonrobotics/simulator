@@ -1,4 +1,4 @@
-const apiKey = '';
+let apiKey = '';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
 const imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Camponotus_flavomarginatus_ant.jpg';
 
