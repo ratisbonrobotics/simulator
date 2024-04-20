@@ -43,7 +43,7 @@
       }
       .chat-container {
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
         background-color: white;
         border-radius: 7px;
         box-shadow: 0px 0px 10px #aaa;
@@ -60,14 +60,17 @@
         padding: var(--input-padding);
         border: 1px solid #ccc;
         border-radius: 5px 0 0 5px;
+        font-size: 16px;
+        height: 30px;
       }
       .api-key-submit {
-        padding: var(--input-padding);
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-left: none;
         border-radius: 0 5px 5px 0;
         cursor: pointer;
+        font-size: 16px;
+        height: 32px;
       }
       .chat-messages {
         height: 300px;
@@ -84,6 +87,8 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         resize: none;
+        font-size: 16px;
+        height: 60px;
       }
       .chat-submit {
         padding: var(--input-padding);
@@ -92,6 +97,8 @@
         border-left: none;
         border-radius: 0 5px 5px 0;
         cursor: pointer;
+        font-size: 16px;
+        height: 62px;
       }
     </style>
     <script>
@@ -119,7 +126,7 @@
               type="text"
               class="api-key-input"
               id="apiKeyInput"
-              placeholder="Enter your API key"
+              placeholder="Enter your OpenAI API key"
             />
             <button class="api-key-submit">&#10003;</button>
           </div>
