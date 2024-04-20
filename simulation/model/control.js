@@ -1,10 +1,10 @@
 // ----------------------------------- CONTROL PARAMETERS -----------------------------------
-let linear_position_d_W = [1, 2, 1];
+let linear_position_d_W = [0, 1, 0];
 let linear_velocity_d_W = [0, 0, 0];
 let linear_acceleration_d_W = [0, 0, 0];
 let angular_velocity_d_B = [0, 0, 0];
 let angular_acceleration_d_B = [0, 0, 0];
-let yaw_d = -0.5 * Math.PI;
+let yaw_d = 0.0;
 
 const k_p = 0.05;
 const k_v = 0.5;
@@ -16,46 +16,38 @@ setInterval(function () {
     if (attachedToDrone) {
         // --- MANUAL CONTROL ---
         if (keys["w"]) {
-            angular_velocity_d_B[0] = 0.01;
+            angular_velocity_d_B[0] = 0.03;
         } else if (keys["s"]) {
-            angular_velocity_d_B[0] = -0.01;
+            angular_velocity_d_B[0] = -0.03;
         } else {
             angular_velocity_d_B[0] = 0.0;
         }
 
         if (keys["q"]) {
-            yaw_d += 0.01;
+            yaw_d += 0.005;
         } else if (keys["e"]) {
-            yaw_d -= 0.01;
+            yaw_d -= 0.005;
         }
 
         if (keys["a"]) {
-            omega_1 += 0.01;
-            omega_2 -= 0.01;
-            omega_3 -= 0.01;
-            omega_4 += 0.01;
+            angular_velocity_d_B[2] = -0.03;
         } else if (keys["d"]) {
-            omega_1 -= 0.01;
-            omega_2 += 0.01;
-            omega_3 += 0.01;
-            omega_4 -= 0.01;
+            angular_velocity_d_B[2] = 0.03;
+        } else {
+            angular_velocity_d_B[2] = 0.0;
         }
 
         if (keys["ArrowUp"]) {
-            omega_1 += 0.1;
-            omega_2 += 0.1;
-            omega_3 += 0.1;
-            omega_4 += 0.1;
+            linear_position_d_W[1] += 0.01;
         } else if (keys["ArrowDown"]) {
-            omega_1 -= 0.1;
-            omega_2 -= 0.1;
-            omega_3 -= 0.1;
-            omega_4 -= 0.1;
+            linear_position_d_W[1] -= 0.01;
         }
     }
 
     // --- LINEAR CONTROL ---
     let error_p = subVec3f(linear_position_W, linear_position_d_W);
+    error_p[0] = 0.0;
+    error_p[2] = 0.0;
     let error_v = subVec3f(linear_velocity_W, linear_velocity_d_W);
 
     let z_W_d = multScalVec3f(-k_p, error_p);
