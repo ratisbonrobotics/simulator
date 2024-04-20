@@ -1,9 +1,11 @@
 let apiKey = '';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
+let chatHistory = [];
 
 function sendMessage() {
     const userMessage = document.getElementById('chatInput').value;
 
+    // WebGL code to capture the screen and convert it to a base64 image
     const width = gl.drawingBufferWidth;
     const height = gl.drawingBufferHeight;
     const pixels = new Uint8Array(width * height * 4);
@@ -27,29 +29,26 @@ function sendMessage() {
     ctx.putImageData(imageData, 0, 0);
     const base64Image = canvas.toDataURL();
 
-    const requestBody = {
-        model: 'gpt-4-turbo',
-        messages: [
+    // Append the new user message to the chat history
+    chatHistory.push({
+        role: 'user',
+        content: [
             {
-                role: 'system',
-                content: 'You are an AI assistant that can describe images.'
+                type: "text",
+                text: userMessage
             },
             {
-                role: 'user',
-                content: [
-                    {
-                        type: "text",
-                        text: userMessage
-                    },
-                    {
-                        type: "image_url",
-                        image_url: {
-                            url: base64Image
-                        }
-                    }
-                ]
+                type: "image_url",
+                image_url: {
+                    url: base64Image
+                }
             }
         ]
+    });
+
+    const requestBody = {
+        model: 'gpt-4-turbo',
+        messages: chatHistory
     };
 
     const requestOptions = {
