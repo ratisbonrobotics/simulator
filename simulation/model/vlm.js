@@ -3,30 +3,32 @@ const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
 function sendMessage() {
     const userMessage = document.getElementById('chatInput').value;
-    // Assume canvas is your <canvas> element and gl is the WebGL context
-    var canvas = document.getElementById('canvas');
-    var gl = canvas.getContext('webgl');
-    let width = canvas.width;
-    let height = canvas.height;
-    var pixels = new Uint8Array(width * height * 4);
+
+    const width = gl.drawingBufferWidth;
+    const height = gl.drawingBufferHeight;
+    const pixels = new Uint8Array(width * height * 4); // 4 components per pixel: RGBA
     gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    console.log(pixels);
-
-    // Create a new canvas to use as a buffer
-    var bufferCanvas = document.createElement('canvas');
-    bufferCanvas.width = width;
-    bufferCanvas.height = height;
-    var ctx = bufferCanvas.getContext('2d');
-
-    // Create ImageData and set the pixels
+    var can = document.createElement("canvas");
+    can.width = width;
+    can.height = height;
+    var ctx = can.getContext("2d");
     var imageData = ctx.createImageData(width, height);
     imageData.data.set(pixels);
+    // Flip the image data vertically (WebGL's readPixels reads bottom to top)
+    for (let y = 0; y < height / 2; y++) {
+        for (let x = 0; x < width; x++) {
+            for (let c = 0; c < 4; c++) {
+                let topIdx = (x + y * width) * 4 + c;
+                let bottomIdx = (x + (height - 1 - y) * width) * 4 + c;
+                let temp = imageData.data[topIdx];
+                imageData.data[topIdx] = imageData.data[bottomIdx];
+                imageData.data[bottomIdx] = temp;
+            }
+        }
+    }
     ctx.putImageData(imageData, 0, 0);
-
-    // Export the canvas content as an image
-    var imgURL = bufferCanvas.toDataURL(); // Creates a PNG image by default
-
-    console.log(imgURL);
+    var url = can.toDataURL();
+    console.log(url);
 
 
     /*

@@ -5,7 +5,7 @@ let mouse = {
     vertical: 0
 };
 const canvas = document.getElementById("canvas");
-const gl = canvas.getContext("webgl");
+const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
 resizeCanvas();
 
 // --- ADD EVENT LISTENERS ---
