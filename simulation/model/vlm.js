@@ -13,13 +13,11 @@ function sendMessage() {
     canvas.height = height;
     const ctx = canvas.getContext("2d");
     const imageData = new ImageData(new Uint8ClampedArray(pixels), width, height);
-    // Flip the image data vertically (WebGL's readPixels reads bottom to top)
     const halfHeight = Math.floor(height / 2);
     const rowBytes = width * 4;
     for (let y = 0; y < halfHeight; y++) {
         const topOffset = y * rowBytes;
         const bottomOffset = (height - 1 - y) * rowBytes;
-
         for (let x = 0; x < rowBytes; x++) {
             const temp = imageData.data[topOffset + x];
             imageData.data[topOffset + x] = imageData.data[bottomOffset + x];
@@ -27,47 +25,55 @@ function sendMessage() {
         }
     }
     ctx.putImageData(imageData, 0, 0);
-    const url = canvas.toDataURL();
-    console.log(url);
+    const base64Image = canvas.toDataURL();
 
+    const requestBody = {
+        model: 'gpt-4-turbo',
+        messages: [
+            {
+                role: 'system',
+                content: 'You are an AI assistant that can describe images.'
+            },
+            {
+                role: 'user',
+                content: [
+                    {
+                        type: "text",
+                        text: userMessage
+                    },
+                    {
+                        type: "image_url",
+                        image_url: {
+                            url: base64Image
+                        }
+                    }
+                ]
+            }
+        ]
+    };
 
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(requestBody)
+    };
 
-    /*
-        const requestBody = {
-            model: 'gpt-4-turbo',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are an AI assistant that can describe images.'
-                },
-                {
-                    role: 'user',
-                    content: userMessage
-                }
-            ]
-        };
-        
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify(requestBody)
-            };
-        
-            fetch(apiUrl, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    const modelResponse = data.choices[0].message.content;
-                    displayMessage('user', userMessage);
-                    displayMessage('assistant', modelResponse);
-                    document.getElementById('chatInput').value = '';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });*/
+    fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            const modelResponse = data.choices[0].message.content;
+            displayMessage('user', userMessage);
+            displayMessage('assistant', modelResponse);
+            document.getElementById('chatInput').value = '';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
+
 
 function setApiKey() {
     apiKey = document.getElementById('apiKeyInput').value;
