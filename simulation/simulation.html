@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-background-light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,104 +10,37 @@
       type="image/png"
     />
     <title>Ratisbon Robotics</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
     <style>
       body,
       html {
-        margin: 0;
-        padding: 0;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Arial, sans-serif;
-      }
-      .content-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-      }
-      @media (min-width: 768px) {
-        .content-container {
-          flex-direction: row;
-        }
       }
       canvas {
         border: 1px solid #000;
         box-shadow: 0px 0px 10px #aaa;
         border-radius: 7px;
-        background-color: black;
-      }
-      .chat-container {
-        width: 100%;
-        max-width: 500px;
-        background-color: white;
-        border-radius: 7px;
-        box-shadow: 0px 0px 10px #aaa;
-        padding: 20px;
-      }
-      .api-key-container {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .api-key-input {
-        flex: 1;
-        padding: var(--input-padding);
-        border: 1px solid #ccc;
-        border-radius: 5px 0 0 5px;
-        font-size: 16px;
-        height: 30px;
-        font-family: Arial, sans-serif;
-      }
-      .api-key-submit {
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-left: none;
-        border-radius: 0 5px 5px 0;
-        cursor: pointer;
-        font-size: 16px;
-        height: 32px;
+        background-color: transparent;
       }
       .chat-messages {
         height: 300px;
         overflow-y: auto;
         margin-bottom: 10px;
       }
-      .chat-input-container {
-        display: flex;
-        align-items: center;
-      }
       .chat-input {
-        flex: 1;
-        padding: var(--input-padding);
-        border: 1px solid #ccc;
-        border-radius: 5px 0 0 5px;
         resize: none;
-        font-size: 16px;
-        height: 60px;
-        font-family: Arial, sans-serif;
       }
-      .chat-submit {
-        padding: var(--input-padding);
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-left: none;
-        border-radius: 0 5px 5px 0;
-        cursor: pointer;
-        font-size: 16px;
-        height: 62px;
+      .button.is-fullheight {
+        height: 100%;
       }
     </style>
     <script>
       function sendHeight() {
         var height = document.body.scrollHeight;
-        window.parent.postMessage(
-          {
-            frameHeight: height,
-          },
-          "*"
-        );
+        window.parent.postMessage({ frameHeight: height }, "*");
       }
       window.onload = sendHeight;
       window.onresize = sendHeight;
@@ -115,26 +48,39 @@
   </head>
   <body>
     <div class="container">
-      <div class="content-container">
-        <canvas tabindex="1" id="canvas" aria-label="canvas"></canvas>
-        <div class="chat-container">
-          <div class="api-key-container">
-            <input
-              type="text"
-              class="api-key-input"
-              id="apiKeyInput"
-              placeholder="sk-2JuIWy29wFTd..."
-            />
-            <button class="api-key-submit">&#10003;</button>
-          </div>
-          <div class="chat-messages" id="chatMessages"></div>
-          <div class="chat-input-container">
-            <textarea
-              class="chat-input"
-              id="chatInput"
-              placeholder="Type your instructions..."
-            ></textarea>
-            <button class="chat-submit">&#10148;</button>
+      <div class="columns is-centered is-vcentered">
+        <div class="column is-narrow">
+          <canvas tabindex="1" id="canvas" aria-label="canvas"></canvas>
+        </div>
+        <div class="column is-narrow">
+          <div class="box">
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input
+                  type="text"
+                  class="input"
+                  id="apiKeyInput"
+                  placeholder="sk-2JuIWy29wFTd..."
+                />
+              </div>
+              <div class="control">
+                <button class="button">&#10003;</button>
+              </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <textarea
+                  class="textarea chat-input"
+                  id="chatInput"
+                  placeholder="Type your instructions..."
+                  rows="2"
+                ></textarea>
+              </div>
+              <div class="control">
+                <button class="button is-fullheight">&#10148;</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
