@@ -25,7 +25,7 @@
   </head>
   <body>
     <div class="columns">
-      <div class="column">
+      <div class="column has-text-centered">
         <canvas
           style="border-radius: 5px; border: 2px solid black"
           tabindex="1"
@@ -57,27 +57,21 @@
             ></textarea>
           </div>
           <div class="mt-4">
-            <div class="field">
-              <nav class="level">
-                <div class="level-left">
-                  <div class="level-item">
-                    <textarea
-                      class="textarea has-fixed-size"
-                      id="chatInput"
-                      placeholder="Enter instructions..."
-                      rows="1"
-                      disabled
-                    ></textarea>
-                  </div>
-                </div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <button id="chat-submit" class="button" disabled>
-                      &#10148;
-                    </button>
-                  </div>
-                </div>
-              </nav>
+            <div class="field is-grouped">
+              <div class="control is-expanded">
+                <textarea
+                  class="textarea has-fixed-size"
+                  id="chatInput"
+                  placeholder="Enter instructions..."
+                  rows="1"
+                  disabled
+                ></textarea>
+              </div>
+              <div class="control">
+                <button id="chat-submit" class="button" disabled>
+                  &#10148;
+                </button>
+              </div>
             </div>
           </div>
         </div>
