@@ -14,6 +14,18 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
+    <style>
+      .notification {
+        position: fixed;
+        bottom: -500px;
+        right: 20px;
+        transition: bottom 0.5s ease-in-out;
+        z-index: 9999;
+      }
+      .notification.is-active {
+        bottom: 20px;
+      }
+    </style>
     <script>
       function sendHeight() {
         var height = document.body.scrollHeight;
@@ -21,9 +33,34 @@
       }
       window.onload = sendHeight;
       window.onresize = sendHeight;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const apiKeySubmit = document.getElementById("api-key-submit");
+        const notification = document.querySelector(".notification");
+        const deleteButton = document.querySelector(".delete");
+        const duration = 3000;
+
+        apiKeySubmit.addEventListener("click", () => {
+          notification.classList.add("is-active");
+          setTimeout(() => {
+            notification.classList.remove("is-active");
+          }, duration);
+        });
+
+        deleteButton.addEventListener("click", () => {
+          notification.classList.remove("is-active");
+        });
+      });
     </script>
   </head>
   <body>
+    <div class="notification is-success">
+      <nav class="level">
+        API key set successfully!
+        <button class="delete"></button>
+      </nav>
+    </div>
+
     <div class="columns">
       <div class="column">
         <canvas
