@@ -74,17 +74,40 @@ function sendMessage() {
 }
 
 
-function setApiKey() {
-    apiKey = document.getElementById('apiKeyInput').value;
-}
-
 function displayMessage(role, content) {
     const chatMessages = document.getElementById('chatMessages');
-    const messageElement = document.createElement('div');
-    messageElement.innerHTML = `<strong>${role}:</strong> ${content}`;
-    chatMessages.appendChild(messageElement);
+    chatMessages.innerHTML += `${role}: ${content}\n`;
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-document.querySelector('#chat-submit').addEventListener('click', sendMessage);
-document.querySelector('#api-key-submit').addEventListener('click', setApiKey);
+document.addEventListener("DOMContentLoaded", () => {
+    const chatSubmit = document.getElementById("chat-submit");
+    const apiKeySubmit = document.getElementById("api-key-submit");
+    const apiKeyInput = document.getElementById("apiKeyInput");
+    const notification = document.querySelector(".notification");
+    const notificationMessage = document.querySelector(".notification");
+    const duration = 3000;
+
+    chatSubmit.addEventListener('click', sendMessage);
+
+    apiKeySubmit.addEventListener("click", () => {
+        if (apiKeyInput.value.trim() === "") {
+            notificationMessage.textContent = "API key field cannot be empty!";
+            notification.classList.remove("is-success");
+            notification.classList.add("is-danger");
+            apiKeyInput.classList.add("is-danger");
+        } else {
+            apiKey = document.getElementById('apiKeyInput').value;
+            notificationMessage.textContent = "API key set successfully!";
+            notification.classList.remove("is-danger");
+            notification.classList.add("is-success");
+            apiKeyInput.classList.remove("is-danger");
+            apiKeyInput.classList.add("is-success");
+        }
+
+        notification.classList.add("is-active");
+        setTimeout(() => {
+            notification.classList.remove("is-active");
+        }, duration);
+    });
+});

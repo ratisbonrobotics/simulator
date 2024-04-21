@@ -33,35 +33,6 @@
       }
       window.onload = sendHeight;
       window.onresize = sendHeight;
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const apiKeySubmit = document.getElementById("api-key-submit");
-        const apiKeyInput = document.getElementById("apiKeyInput");
-        const notification = document.querySelector(".notification");
-        const notificationMessage = document.querySelector(".notification");
-        const deleteButton = document.querySelector(".delete");
-        const duration = 3000;
-
-        apiKeySubmit.addEventListener("click", () => {
-          if (apiKeyInput.value.trim() === "") {
-            notificationMessage.textContent = "API key field cannot be empty!";
-            notification.classList.remove("is-success");
-            notification.classList.add("is-danger");
-          } else {
-            notificationMessage.textContent = "API key set successfully!";
-            notification.classList.remove("is-danger");
-            notification.classList.add("is-success");
-          }
-
-          notification.classList.add("is-active");
-          setTimeout(() => {
-            notification.classList.remove("is-active");
-          }, duration);
-        });
-        deleteButton.addEventListener("click", () => {
-          notification.classList.remove("is-active");
-        });
-      });
     </script>
   </head>
   <body>
@@ -107,7 +78,7 @@
                     <textarea
                       class="textarea has-fixed-size"
                       id="chatInput"
-                      placeholder="Enter..."
+                      placeholder="Enter instructions..."
                       rows="1"
                     ></textarea>
                   </div>
