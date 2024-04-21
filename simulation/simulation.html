@@ -23,7 +23,7 @@
         z-index: 9999;
       }
       .notification.is-active {
-        bottom: 20px;
+        bottom: 5px;
       }
     </style>
     <script>
@@ -36,17 +36,28 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         const apiKeySubmit = document.getElementById("api-key-submit");
+        const apiKeyInput = document.getElementById("apiKeyInput");
         const notification = document.querySelector(".notification");
+        const notificationMessage = document.querySelector(".notification");
         const deleteButton = document.querySelector(".delete");
         const duration = 3000;
 
         apiKeySubmit.addEventListener("click", () => {
+          if (apiKeyInput.value.trim() === "") {
+            notificationMessage.textContent = "API key field cannot be empty!";
+            notification.classList.remove("is-success");
+            notification.classList.add("is-danger");
+          } else {
+            notificationMessage.textContent = "API key set successfully!";
+            notification.classList.remove("is-danger");
+            notification.classList.add("is-success");
+          }
+
           notification.classList.add("is-active");
           setTimeout(() => {
             notification.classList.remove("is-active");
           }, duration);
         });
-
         deleteButton.addEventListener("click", () => {
           notification.classList.remove("is-active");
         });
@@ -54,12 +65,7 @@
     </script>
   </head>
   <body>
-    <div class="notification is-success">
-      <nav class="level">
-        API key set successfully!
-        <button class="delete"></button>
-      </nav>
-    </div>
+    <div class="notification is-success">API key set successfully!</div>
 
     <div class="columns">
       <div class="column">
