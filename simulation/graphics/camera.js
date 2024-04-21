@@ -16,7 +16,7 @@ function getMouseInput(s) {
 let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 
-let attachedToDrone = false;
+let attachedToDrone = true;
 setInterval(function () {
     if (keys["1"]) {
         attachedToDrone = true;

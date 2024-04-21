@@ -1,6 +1,14 @@
 let apiKey = '';
 const apiUrl = 'https://api.openai.com/v1/chat/completions';
-let chatHistory = [];
+let chatHistory = [{
+    role: 'system',
+    content: [
+        {
+            type: "text",
+            text: "you are attached to a virtual drone inside a simulation. You can see the drones camera. You can manipulate the drones location by running javascript. Please denote your code with ```javascript ``` so that the script know which part to execute. The drone can be controlled via WSADEQ ArrowUp ArrowDown. There is a global 'keys' array to issue these keystrokes. So when you answer with ```javascript keys['w'] = true; setTimeout(function (){keys['w']=false;}, 3000);``` you will move forward for three seconds. You will be reprompted after your previous script finishes. Remember that turning around with E and Q can give you a lot of visual information without altering your position and might be a good strategy for planning your next move. Be careful to not run into any walls! Be mindful of your limited context window, so it would be wise to reiterate or think aloud information that might be useful for future planning. Your objective is given by the user's first message."
+        }
+    ]
+}];
 
 function sendMessage() {
     const userMessage = document.getElementById('chatInput').value;
@@ -66,10 +74,50 @@ function sendMessage() {
             const modelResponse = data.choices[0].message.content;
             displayMessage('user', userMessage);
             displayMessage('assistant', modelResponse);
-            document.getElementById('chatInput').value = '';
-            document.getElementById("chat-submit").classList.remove("is-loading");
-            document.getElementById("chat-submit").disabled = false;
-            document.getElementById("chatInput").disabled = false;
+
+            // Extract JavaScript code block from the model response
+            const codeBlock = modelResponse.match(/```javascript([\s\S]*?)```/);
+            if (codeBlock && codeBlock[1]) {
+                const code = codeBlock[1].trim();
+                try {
+                    // Create a new function that returns a Promise
+                    const executeCode = () => {
+                        return new Promise((resolve) => {
+                            // Execute the JavaScript code
+                            eval(code);
+                            // Resolve the Promise after the code execution is done
+                            resolve();
+                        });
+                    };
+
+                    // Wait for the code execution to complete
+                    executeCode().then(() => {
+                        // Wait for an additional 2 seconds before sending the next message
+                        setTimeout(() => {
+                            // Enable the input and button
+                            document.getElementById('chatInput').value = '';
+                            document.getElementById("chat-submit").classList.remove("is-loading");
+                            document.getElementById("chat-submit").disabled = false;
+                            document.getElementById("chatInput").disabled = false;
+                            // Send the next message
+                            document.getElementById("chat-submit").click();
+                        }, 2000);
+                    });
+                } catch (error) {
+                    console.error('Error executing JavaScript code:', error);
+                    // Enable the input and button in case of an error
+                    document.getElementById('chatInput').value = '';
+                    document.getElementById("chat-submit").classList.remove("is-loading");
+                    document.getElementById("chat-submit").disabled = false;
+                    document.getElementById("chatInput").disabled = false;
+                }
+            } else {
+                // If no JavaScript code block is found, enable the input and button
+                document.getElementById('chatInput').value = '';
+                document.getElementById("chat-submit").classList.remove("is-loading");
+                document.getElementById("chat-submit").disabled = false;
+                document.getElementById("chatInput").disabled = false;
+            }
         })
         .catch(error => {
             console.error('Error:', error);
