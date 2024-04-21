@@ -67,9 +67,15 @@ function sendMessage() {
             displayMessage('user', userMessage);
             displayMessage('assistant', modelResponse);
             document.getElementById('chatInput').value = '';
+            document.getElementById("chat-submit").classList.remove("is-loading");
+            document.getElementById("chat-submit").disabled = false;
+            document.getElementById("chatInput").disabled = false;
         })
         .catch(error => {
             console.error('Error:', error);
+            document.getElementById("chat-submit").classList.remove("is-loading");
+            document.getElementById("chat-submit").disabled = false;
+            document.getElementById("chatInput").disabled = false;
         });
 }
 
@@ -85,12 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatInput = document.getElementById("chatInput");
     const apiKeySubmit = document.getElementById("api-key-submit");
     const apiKeyInput = document.getElementById("apiKeyInput");
-    chatSubmit.addEventListener('click', sendMessage);
+    chatSubmit.addEventListener('click', () => {
+        chatSubmit.classList.add("is-loading");
+        chatSubmit.disabled = true;
+        chatInput.disabled = true;
+        sendMessage();
+    });
     apiKeySubmit.addEventListener("click", () => {
         if (apiKeyInput.value.trim() === "") {
             apiKeyInput.classList.add("is-danger");
         } else {
-            const apiKey = apiKeyInput.value;
+            apiKey = apiKeyInput.value;
             apiKeyInput.disabled = true;
             apiKeySubmit.disabled = true;
             checkOpenAIApiKey(apiKey)
