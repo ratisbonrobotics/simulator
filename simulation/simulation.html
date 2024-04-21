@@ -14,18 +14,6 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
-    <style>
-      .notification {
-        position: fixed;
-        bottom: -500px;
-        right: 20px;
-        transition: bottom 0.5s ease-in-out;
-        z-index: 9999;
-      }
-      .notification.is-active {
-        bottom: 5px;
-      }
-    </style>
     <script>
       function sendHeight() {
         var height = document.body.scrollHeight;
@@ -36,8 +24,6 @@
     </script>
   </head>
   <body>
-    <div class="notification"></div>
-
     <div class="columns">
       <div class="column">
         <canvas
@@ -80,12 +66,15 @@
                       id="chatInput"
                       placeholder="Enter instructions..."
                       rows="1"
+                      disabled
                     ></textarea>
                   </div>
                 </div>
                 <div class="level-right">
                   <div class="level-item">
-                    <button id="chat-submit" class="button">&#10148;</button>
+                    <button id="chat-submit" class="button" disabled>
+                      &#10148;
+                    </button>
                   </div>
                 </div>
               </nav>

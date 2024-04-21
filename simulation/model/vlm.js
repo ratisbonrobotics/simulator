@@ -82,32 +82,59 @@ function displayMessage(role, content) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const chatSubmit = document.getElementById("chat-submit");
+    const chatInput = document.getElementById("chatInput");
     const apiKeySubmit = document.getElementById("api-key-submit");
     const apiKeyInput = document.getElementById("apiKeyInput");
-    const notification = document.querySelector(".notification");
-    const notificationMessage = document.querySelector(".notification");
-    const duration = 3000;
-
     chatSubmit.addEventListener('click', sendMessage);
-
     apiKeySubmit.addEventListener("click", () => {
         if (apiKeyInput.value.trim() === "") {
-            notificationMessage.textContent = "API key field cannot be empty!";
-            notification.classList.remove("is-success");
-            notification.classList.add("is-danger");
             apiKeyInput.classList.add("is-danger");
         } else {
-            apiKey = document.getElementById('apiKeyInput').value;
-            notificationMessage.textContent = "API key set successfully!";
-            notification.classList.remove("is-danger");
-            notification.classList.add("is-success");
-            apiKeyInput.classList.remove("is-danger");
-            apiKeyInput.classList.add("is-success");
+            const apiKey = apiKeyInput.value;
+            checkOpenAIApiKey(apiKey)
+                .then(isValid => {
+                    if (isValid) {
+                        apiKeyInput.classList.remove("is-danger");
+                        apiKeyInput.classList.add("is-success");
+                        chatSubmit.disabled = false;
+                        chatInput.disabled = false;
+                    } else {
+                        apiKeyInput.classList.add("is-danger");
+                        apiKeyInput.classList.remove("is-success");
+                        chatSubmit.disabled = true;
+                        chatInput.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    apiKeyInput.classList.add("is-danger");
+                    apiKeyInput.classList.remove("is-success");
+                    chatSubmit.disabled = true;
+                    chatInput.disabled = true;
+                });
         }
-
-        notification.classList.add("is-active");
-        setTimeout(() => {
-            notification.classList.remove("is-active");
-        }, duration);
     });
 });
+
+function checkOpenAIApiKey(apiKey) {
+    const apiUrl = 'https://api.openai.com/v1/models';
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${apiKey}`
+        }
+    };
+
+    return fetch(apiUrl, requestOptions)
+        .then(response => {
+            if (response.ok) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+}
