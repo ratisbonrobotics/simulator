@@ -91,6 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
             apiKeyInput.classList.add("is-danger");
         } else {
             const apiKey = apiKeyInput.value;
+            apiKeyInput.disabled = true;
+            apiKeySubmit.disabled = true;
             checkOpenAIApiKey(apiKey)
                 .then(isValid => {
                     if (isValid) {
@@ -98,11 +100,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         apiKeyInput.classList.add("is-success");
                         chatSubmit.disabled = false;
                         chatInput.disabled = false;
+                        apiKeySubmit.disabled = false;
+                        apiKeyInput.disabled = false;
                     } else {
                         apiKeyInput.classList.add("is-danger");
                         apiKeyInput.classList.remove("is-success");
                         chatSubmit.disabled = true;
                         chatInput.disabled = true;
+                        apiKeySubmit.disabled = false;
+                        apiKeyInput.disabled = false;
                     }
                 })
                 .catch(error => {
@@ -111,6 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     apiKeyInput.classList.remove("is-success");
                     chatSubmit.disabled = true;
                     chatInput.disabled = true;
+                    apiKeySubmit.disabled = false;
+                    apiKeyInput.disabled = false;
                 });
         }
     });
