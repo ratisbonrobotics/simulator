@@ -14,68 +14,39 @@
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
     />
     <title>Ratisbon Robotics</title>
+    <script src="/lib/util.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         loadExternalHTML("/lib/navbar.html", "navbar");
         loadExternalHTML("/lib/footer.html", "footer");
       });
 
-      function loadExternalHTML(url, targetId) {
-        let xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          let parser = new DOMParser();
-          let doc = parser.parseFromString(xhr.responseText, "text/html");
-          let target = document.getElementById(targetId);
-
-          Array.from(doc.body.childNodes).forEach(function (node) {
-            if (node.nodeName.toLowerCase() !== "script") {
-              target.appendChild(node.cloneNode(true));
-            }
-          });
-
-          let scripts = doc.getElementsByTagName("script");
-          for (let i = 0; i < scripts.length; i++) {
-            let script = document.createElement("script");
-            script.text = scripts[i].innerText;
-            document.body.appendChild(script);
+      ["load", "resize"].forEach(function (event) {
+        window.addEventListener(event, function () {
+          let iframe = document.querySelector("iframe");
+          try {
+            const iframeDocument = iframe.contentWindow.document;
+            const height = iframeDocument.body.scrollHeight + 50;
+            console.log(height);
+            iframe.style.height = height + "px";
+          } catch (e) {
+            console.error("Error resizing iframe:", e);
           }
-        };
-        xhr.open("GET", url, true);
-        xhr.send();
-      }
-
-      function resizeIframe(iframe) {
-        try {
-          const iframeDocument = iframe.contentWindow.document;
-          const height = iframeDocument.body.scrollHeight + 50;
-          console.log(height);
-          iframe.style.height = height + "px";
-        } catch (e) {
-          console.error("Error resizing iframe:", e);
-        }
-      }
-
-      window.addEventListener("resize", function () {
-        let iframe = document.querySelector("iframe");
-        resizeIframe(iframe);
+        });
       });
     </script>
   </head>
-
   <body>
     <nav id="navbar"></nav>
-
     <article class="box m-3 has-background-light">
       <article class="box has-background-white">
         <iframe
           src="aerodynamics.html"
           style="width: 100%; height: 500px"
-          onload="resizeIframe(this)"
           scrolling="no"
         ></iframe>
       </article>
     </article>
-
     <footer id="footer"></footer>
   </body>
 </html>
