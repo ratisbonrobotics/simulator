@@ -43,7 +43,7 @@ let scene_vertexbuffer = [];
 let scene_texcoordbuffer = [];
 let scene_texture = [];
 async function loadScene() {
-    let glb_data = await parseGLB('graphics/data/scene.glb');
+    let glb_data = await parseGLB('/simulation/graphics/data/scene.glb');
     for (let primitive = 0; primitive < glb_data.length; primitive++) {
         scene_vertexbuffer[primitive] = [];
         scene_vertexbuffer[primitive][0] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
@@ -58,7 +58,7 @@ let drone_texcoordbuffer;
 let drone_texture;
 loadDrone();
 async function loadDrone() {
-    let [obj, mtl] = await parseOBJ('graphics/data/drone.obj');
+    let [obj, mtl] = await parseOBJ('/simulation/graphics/data/drone.obj');
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);

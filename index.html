@@ -15,55 +15,81 @@
     />
     <title>Ratisbon Robotics</title>
     <script>
-      window.addEventListener("message", function (event) {
-        if (event.data.frameHeight) {
-          var iframe = document.querySelector("iframe");
-          iframe.style.height = event.data.frameHeight + "px";
-        }
-      });
-
       document.addEventListener("DOMContentLoaded", function () {
         loadExternalHTML("/lib/navbar.html", "navbar");
         loadExternalHTML("/lib/footer.html", "footer");
       });
-
-      function loadExternalHTML(url, targetId) {
-        let xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          let parser = new DOMParser();
-          let doc = parser.parseFromString(xhr.responseText, "text/html");
-          let target = document.getElementById(targetId);
-
-          Array.from(doc.body.childNodes).forEach(function (node) {
-            if (node.nodeName.toLowerCase() !== "script") {
-              target.appendChild(node.cloneNode(true));
-            }
-          });
-
-          let scripts = doc.getElementsByTagName("script");
-          for (let i = 0; i < scripts.length; i++) {
-            let script = document.createElement("script");
-            script.text = scripts[i].innerText;
-            document.body.appendChild(script);
-          }
-        };
-        xhr.open("GET", url, true);
-        xhr.send();
-      }
     </script>
   </head>
 
   <body>
     <nav id="navbar"></nav>
-
     <article class="box m-3 has-background-light">
-      <iframe
-        src="simulation/simulation.html"
-        style="width: 100%"
-        scrolling="no"
-      ></iframe>
+      <div class="columns">
+        <div class="column has-text-centered">
+          <canvas
+            style="border-radius: 5px; border: 2px solid black"
+            tabindex="1"
+            id="canvas"
+            aria-label="canvas"
+          ></canvas>
+        </div>
+        <div class="column">
+          <div class="box">
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input
+                  type="text"
+                  class="input"
+                  id="apiKeyInput"
+                  placeholder="sk-2JuIWy29wFTd..."
+                />
+              </div>
+              <div class="control">
+                <button id="api-key-submit" class="button">&#10003;</button>
+              </div>
+            </div>
+            <div class="mt-4">
+              <textarea
+                class="textarea has-fixed-size"
+                readonly
+                id="chatMessages"
+                rows="10"
+              ></textarea>
+            </div>
+            <div class="mt-4">
+              <div class="field is-grouped">
+                <div class="control is-expanded">
+                  <textarea
+                    class="textarea has-fixed-size"
+                    id="chatInput"
+                    placeholder="Enter instructions..."
+                    rows="1"
+                    disabled
+                  ></textarea>
+                </div>
+                <div class="control">
+                  <button id="chat-submit" class="button" disabled>
+                    &#10148;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="/lib/util.js"></script>
+      <script src="/lib/vector3f.js"></script>
+      <script src="/lib/matrix3f.js"></script>
+      <script src="/lib/matrix4f.js"></script>
+      <script src="/lib/webgl.js"></script>
+      <script src="/simulation/graphics/env.js"></script>
+      <script src="/simulation/graphics/camera.js"></script>
+      <script src="/simulation/graphics/main.js"></script>
+      <script src="/simulation/model/dynamics.js"></script>
+      <script src="/simulation/model/control.js"></script>
+      <script src="/simulation/model/vlm.js"></script>
     </article>
-
     <div id="footer"></div>
   </body>
 </html>
