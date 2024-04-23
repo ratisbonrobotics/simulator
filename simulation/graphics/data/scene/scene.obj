@@ -1,6 +1,6 @@
 # Blender 4.1.0
 # www.blender.org
-mtllib scene3.mtl
+mtllib scene.mtl
 o geometry_ceiling
 v -8.409533 2.800000 -12.799097
 v -7.439532 2.800000 -12.799097

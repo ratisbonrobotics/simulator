@@ -44,7 +44,7 @@ let scene_texcoordbuffer = [];
 let scene_texture = [];
 
 async function loadScene() {
-    let [obj, mtl] = await parseOBJ('/simulation/graphics/data/scene3/scene3.obj');
+    let [obj, mtl] = await parseOBJ('/simulation/graphics/data/scene/scene.obj');
     let k = 0;
     for (const [key, value] of Object.entries(obj)) {
         scene_vertexbuffer[k] = [];
