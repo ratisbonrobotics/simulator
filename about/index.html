@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="Description" content="Ratisbon Robotics Web Simulator" />
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/151067388"
+      type="image/png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+    />
+    <title>Ratisbon Robotics</title>
+    <script src="/lib/util.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadExternalHTML("/lib/navbar.html", "navbar");
+        loadExternalHTML("/lib/footer.html", "footer");
+      });
+    </script>
+  </head>
+  <body>
+    <nav id="navbar"></nav>
+    <div class="box m-3 has-background-light">
+      <article class="box has-background-white">
+        <section class="hero is-medium">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title is-1">
+                Unleashing the Power of Autonomous Drones
+              </h1>
+              <h2 class="subtitle is-3">
+                Experience the Future of Robotics with Ratisbon
+              </h2>
+            </div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="container">
+            <div class="columns">
+              <div class="column is-two-thirds">
+                <div class="content">
+                  <p>
+                    Welcome to Ratisbon Robotics, where we're revolutionizing
+                    the world of autonomous drones. Our cutting-edge technology
+                    combines advanced simulations, state-of-the-art algorithms
+                    like GPT-4, and proprietary vision systems to create drones
+                    that navigate and perform tasks with unparalleled efficiency
+                    and intelligence.
+                  </p>
+                  <p>
+                    Our team of brilliant engineers and researchers has
+                    developed a groundbreaking simulation model using WebGL and
+                    JavaScript. This powerful tool allows us to rigorously test
+                    and refine our drone designs in a virtual environment,
+                    ensuring peak performance before deployment in the real
+                    world.
+                  </p>
+                  <p>
+                    But we're not just about the tech - we're on a mission to
+                    transform industries and improve lives. Our drones are
+                    designed to excel in a wide range of applications, from
+                    precision agriculture and infrastructure inspection to
+                    search and rescue operations and beyond. By harnessing the
+                    power of artificial intelligence and machine learning, our
+                    drones can autonomously navigate complex environments, avoid
+                    obstacles, and make split-second decisions.
+                  </p>
+                  <p>
+                    At Ratisbon Robotics, we believe that the future of drones
+                    lies in their ability to understand and interact with their
+                    surroundings in increasingly sophisticated ways. That's why
+                    we're pushing the boundaries of what's possible, combining
+                    cutting-edge hardware with the latest advances in AI to
+                    create drones that can truly think for themselves.
+                  </p>
+                  <p>
+                    Ready to experience the future of autonomous flight? Join us
+                    on this thrilling journey as we redefine what drones can do.
+                    Together, we'll unlock their full potential to transform
+                    industries, protect the environment, and save lives. The
+                    sky's the limit with Ratisbon Robotics.
+                  </p>
+                </div>
+              </div>
+              <div class="column">
+                <figure class="image is-square">
+                  <img
+                    style="border-radius: 5px; border: 2px solid black"
+                    src="/about/impressionism_drone.webp"
+                    alt="Impressionistic interpretation of a drone where the PCB is visible"
+                  />
+                </figure>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="section">
+          <div class="container">
+            <h2 class="title is-2">Experience Our Drone Simulator</h2>
+            <div class="content">
+              <p>
+                Want to see our drones in action? Check out our interactive
+                drone simulator! Here's how to get started:
+              </p>
+              <ol>
+                <li>
+                  Enter your OpenAI API key in the input field and click the
+                  checkmark button. This will enable the chat interface.
+                </li>
+                <li>
+                  In the chat, give your drone an objective or task to perform
+                  within the simulated environment.
+                </li>
+                <li>
+                  Watch as the drone autonomously navigates the environment
+                  based on your instructions! The drone's AI will analyze its
+                  surroundings using the video feed and make decisions on how to
+                  best complete its objective.
+                </li>
+                <li>
+                  You can continue to chat with the drone, giving it new
+                  commands or refining its goals. The drone will use the
+                  conversation history to inform its actions.
+                </li>
+                <li>
+                  Use the WASD keys to attach and detach the camera from the
+                  drone. While detached, you can freely move and look around the
+                  environment using the WASD keys and mouse.
+                </li>
+              </ol>
+              <p>
+                This simulator provides a glimpse into the incredible
+                capabilities of our autonomous drones. Imagine the possibilities
+                when these intelligent machines are deployed in the real world
+                to inspect infrastructure, monitor crops, or locate survivors in
+                disaster zones. At Ratisbon Robotics, we're making this exciting
+                future a reality.
+              </p>
+            </div>
+          </div>
+        </section>
+      </article>
+    </div>
+    <div id="footer"></div>
+  </body>
+</html>
