@@ -42,15 +42,36 @@ init3D(gl);
 let scene_vertexbuffer = [];
 let scene_texcoordbuffer = [];
 let scene_texture = [];
+
 async function loadScene() {
-    let glb_data = await parseGLB('/simulation/graphics/data/scene.glb');
-    for (let primitive = 0; primitive < glb_data.length; primitive++) {
-        scene_vertexbuffer[primitive] = [];
-        scene_vertexbuffer[primitive][0] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["vertexData"]);
-        scene_vertexbuffer[primitive][1] = Math.floor(glb_data[primitive]["vertexData"].length / 3);
-        scene_texcoordbuffer[primitive] = createBuffer(gl, gl.ARRAY_BUFFER, glb_data[primitive]["texCoordData"]);
-        scene_texture[primitive] = addTexture(gl, glb_data[primitive]["textureURL"]);
+    let [obj, mtl] = await parseOBJ('/simulation/graphics/data/scene3/scene3.obj');
+    let k = 0;
+    for (const [key, value] of Object.entries(obj)) {
+        scene_vertexbuffer[k] = [];
+        scene_vertexbuffer[k][0] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
+        scene_vertexbuffer[k][1] = Math.floor(value["v"].length / 3);
+        scene_texcoordbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vt"]);
+
+        if (value["m"][0]["map_Kd"] && value["m"][0]["map_Kd"].src) {
+            scene_texture[k] = addTexture(gl, value["m"][0]["map_Kd"].src);
+        } else {
+            // Create a 1x1 image of the base color
+            const baseColor = value["m"][0]["Ka"] || [1, 1, 1]; // Use Ka color or default to white
+            const colorImageURL = createColorImageURL(baseColor);
+            scene_texture[k] = addTexture(gl, colorImageURL);
+        }
+        k = k + 1;
     }
+}
+
+function createColorImageURL(color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255})`;
+    ctx.fillRect(0, 0, 1, 1);
+    return canvas.toDataURL();
 }
 
 let drone_vertexbuffer;
