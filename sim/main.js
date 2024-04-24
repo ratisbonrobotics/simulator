@@ -14,7 +14,7 @@ const vertexshadersource = `
     
     void main() {
         o_texturecoordinate = texturecoordinate;
-        o_vertexnormal = vertexnormal;
+        o_vertexnormal = normalize((modelmatrix * vec4(vertexnormal, 0.0)).xyz);
         gl_Position = projectionmatrix * viewmatrix * modelmatrix * vertexposition;
     }
 `;
