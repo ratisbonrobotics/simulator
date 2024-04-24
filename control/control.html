@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Geometric Control of Co-axial Rotored Drones</title>
+    <link rel="stylesheet" href="/lib/pubcss-ieee.css" />
+    <style>
+      .katex-display {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      @media screen and (max-width: 767px) {
+        body {
+          column-count: 1;
+        }
+
+        .col-span {
+          column-span: none;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+      integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+      integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+      integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+      crossorigin="anonymous"
+      onload="renderMathInElement(document.body);"
+    ></script>
+  </head>
+
+  <body>
+    <header class="col-span">
+      <h1 class="title counter-skip">
+        Geometric Control of Co-axial Rotored Drones
+      </h1>
+      <div class="authors">
+        <div class="author">
+          <div>Markus Heimerl</div>
+          <div>Ratisbon Robotics</div>
+          <div>Regensburg, Germany</div>
+          <div>markusheimerl@ratisbonrobotics.com</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="abstract">
+      <p>
+        <em>Abstract</em> — The control of co-axial rotored drones presents
+        unique challenges due to their complex dynamics and nonlinear nature. In
+        this paper, we present a geometric control approach for co-axial drones,
+        leveraging the drone's spatial dynamics and state representation
+        introduced in our previous work. The proposed controller design aims to
+        achieve precise trajectory tracking and robust performance in the
+        presence of disturbances. We formulate the control problem in the
+        geometric framework, utilizing the drone's configuration manifold and
+        associated tangent spaces. The control law is derived using Lyapunov
+        stability analysis, ensuring asymptotic convergence of the tracking
+        errors. The controller structure is composed of a cascaded architecture,
+        with an outer loop for position control and an inner loop for attitude
+        control. The control inputs are mapped to the rotor speeds using the
+        drone's actuation matrix, taking into account the thrust and moment
+        generation of the co-axial rotors. Simulation results demonstrate the
+        effectiveness of the proposed geometric controller in tracking desired
+        trajectories and rejecting disturbances. The controller exhibits
+        excellent tracking performance and robustness, even in the presence of
+        model uncertainties and external perturbations. The geometric control
+        approach provides a principled and intuitive framework for the control
+        of co-axial drones, enabling agile and precise maneuvering in complex
+        environments. This work contributes to the advancement of autonomous
+        aerial robotics and opens up new possibilities for the deployment of
+        co-axial drones in various applications, such as inspection,
+        surveillance, and transportation.
+      </p>
+      <p>
+        <em>Keywords</em> — Co-axial drones, geometric control, nonlinear
+        control, Lyapunov stability, trajectory tracking, robust control
+      </p>
+    </div>
+
+    <h1>Introduction</h1>
+    <section>
+      <p>
+        The control of co-axial rotored drones is a challenging problem due to
+        their inherent nonlinearities and underactuation. Traditional control
+        approaches often struggle to achieve precise trajectory tracking and
+        robust performance in the presence of disturbances. In this paper, we
+        propose a geometric control approach that leverages the drone's spatial
+        dynamics and state representation to design a controller that achieves
+        excellent tracking performance and robustness. The geometric control
+        framework provides a principled and intuitive way to handle the
+        nonlinearities and coupling in the drone's dynamics, enabling agile and
+        precise maneuvering in complex environments.
+      </p>
+    </section>
+
+    <h1>Control Design</h1>
+    <section>
+      <h2>Problem Formulation</h2>
+      <p>
+        The control objective is to design a feedback control law that enables
+        the co-axial drone to track a desired trajectory while rejecting
+        disturbances. Let \(\mathbf{p}^d_W(t)\), \(\mathbf{v}^d_W(t)\),
+        \(\mathbf{a}^d_W(t)\) denote the desired position, velocity, and
+        acceleration in the world frame, and \(\boldsymbol{\omega}^d_B(t)\),
+        \(\dot{\boldsymbol{\omega}}^d_B(t)\) denote the desired angular velocity
+        and acceleration in the body frame. The control problem is formulated as
+        the minimization of the tracking errors:
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \mathbf{e}_p(t) = \mathbf{p}_W(t) - \mathbf{p}^d_W(t)
+        \]
+        \[  
+          \mathbf{e}_v(t) = \mathbf{v}_W(t) - \mathbf{v}^d_W(t)
+        \]
+        \[
+          \mathbf{e}_R(t) = \frac{1}{2}\left(\mathbf{R}^{dT}_W(t)\mathbf{R}^B_W(t) - \mathbf{R}^{BT}_W(t)\mathbf{R}^d_W(t)\right)^\vee
+        \]
+        \[
+          \mathbf{e}_\omega(t) = \boldsymbol{\omega}_B(t) - \mathbf{R}^{BT}_W(t)\mathbf{R}^d_W(t)\boldsymbol{\omega}^d_B(t)
+        \]
+      </div>
+
+      <h2>Control Law</h2>
+      <p>
+        The proposed geometric controller consists of an outer loop for position
+        control and an inner loop for attitude control. The control law is
+        derived using Lyapunov stability analysis, ensuring asymptotic
+        convergence of the tracking errors.
+      </p>
+
+      <h3>Position Control</h3>
+      <p>
+        The desired force in the world frame, \(\mathbf{f}^d_W\), is computed
+        based on the position and velocity errors:
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \mathbf{f}^d_W = -k_p\mathbf{e}_p - k_v\mathbf{e}_v + m\mathbf{g} + m\mathbf{a}^d_W
+        \]
+      </div>
+      <p>
+        where \(k_p\) and \(k_v\) are positive gains, \(m\) is the drone's mass,
+        and \(\mathbf{g}\) is the gravitational acceleration vector.
+      </p>
+
+      <h3>Attitude Control</h3>
+      <p>
+        The desired orientation, \(\mathbf{R}^d_W\), is computed based on the
+        desired force and a desired yaw angle, \(\psi^d\):
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \mathbf{x}^d_W = \begin{bmatrix} \cos\psi^d & 0 & \sin\psi^d \end{bmatrix}^T
+        \]
+        \[
+          \mathbf{y}^d_W = \frac{\mathbf{f}^d_W \times \mathbf{x}^d_W}{\|\mathbf{f}^d_W \times \mathbf{x}^d_W\|}
+        \]
+        \[  
+          \mathbf{z}^d_W = \frac{\mathbf{f}^d_W}{\|\mathbf{f}^d_W\|}
+        \]
+        \[
+          \mathbf{R}^d_W = \begin{bmatrix} \mathbf{y}^d_W & \mathbf{z}^d_W & \mathbf{x}^d_W \end{bmatrix}
+        \]
+      </div>
+      <p>
+        The desired control torque in the body frame, \(\boldsymbol{\tau}^d_B\),
+        is computed based on the attitude and angular velocity errors:
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \boldsymbol{\tau}^d_B = -k_R\mathbf{e}_R - k_\omega\mathbf{e}_\omega + \boldsymbol{\omega}_B \times \mathbf{I}\boldsymbol{\omega}_B - \mathbf{I}\left(\mathbf{R}^{BT}_W\mathbf{R}^d_W\dot{\boldsymbol{\omega}}^d_B - \boldsymbol{\omega}_B \times \mathbf{R}^{BT}_W\mathbf{R}^d_W\boldsymbol{\omega}^d_B\right)
+        \]
+      </div>
+      <p>
+        where \(k_R\) and \(k_\omega\) are positive gains, and \(\mathbf{I}\) is
+        the drone's inertia matrix.
+      </p>
+
+      <h2>Rotor Speed Mapping</h2>
+      <p>
+        The control inputs, \(f^d_B\) and \(\boldsymbol{\tau}^d_B\), are mapped
+        to the rotor speeds, \(\omega_i\), using the drone's actuation matrix,
+        \(\mathbf{F}\):
+      </p>
+      <!-- prettier-ignore -->
+      <div class="equation">
+        \[
+          \begin{bmatrix} f^d_B \\ \boldsymbol{\tau}^d_B \end{bmatrix} = \mathbf{F} \begin{bmatrix} \omega^2_1 \\ \omega^2_2 \\ \omega^2_3 \\ \omega^2_4 \end{bmatrix}
+        \]
+      </div>
+      <p>
+        The actuation matrix, \(\mathbf{F}\), is derived based on the thrust and
+        moment generation of the co-axial rotors, considering the rotor
+        configuration and aerodynamic coefficients.
+      </p>
+    </section>
+
+    <h1>Simulation Results</h1>
+    <section>
+      <p>
+        The proposed geometric controller is implemented and tested in
+        simulation using the co-axial drone model developed in our previous
+        work. The simulation results demonstrate the effectiveness of the
+        controller in tracking desired trajectories and rejecting disturbances.
+      </p>
+      <!--
+      <figure>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="trajectory_tracking.png"
+            alt="Trajectory tracking performance of the geometric controller"
+            style="
+              max-width: 100%;
+              max-height: 100%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+        <figcaption>
+          Trajectory tracking performance of the geometric controller
+        </figcaption>
+      </figure>
+-->
+      <p>
+        The controller exhibits excellent tracking performance, closely
+        following the desired position and orientation trajectories. The
+        tracking errors converge to zero asymptotically, indicating the
+        stability and convergence properties of the control law.
+      </p>
+      <!--
+      <figure>
+        <div style="border: 1px solid #000; margin-top: 6px; overflow: hidden">
+          <img
+            src="disturbance_rejection.png"
+            alt="Disturbance rejection performance of the geometric controller"
+            style="
+              max-width: 100%;
+              max-height: 100%;
+              display: block;
+              margin: auto;
+            "
+          />
+        </div>
+        <figcaption>
+          Disturbance rejection performance of the geometric controller
+        </figcaption>
+      </figure>
+-->
+      <p>
+        The controller also demonstrates robust performance in the presence of
+        disturbances. When subjected to external perturbations, the controller
+        effectively rejects the disturbances and maintains stable tracking of
+        the desired trajectory.
+      </p>
+    </section>
+
+    <h1>Conclusion</h1>
+    <section>
+      <p>
+        In this paper, we presented a geometric control approach for co-axial
+        rotored drones. The proposed controller leverages the drone's spatial
+        dynamics and state representation to achieve precise trajectory tracking
+        and robust performance. The control law is derived using Lyapunov
+        stability analysis, ensuring asymptotic convergence of the tracking
+        errors. Simulation results demonstrate the effectiveness of the
+        geometric controller in tracking desired trajectories and rejecting
+        disturbances. The controller exhibits excellent tracking performance and
+        robustness, even in the presence of model uncertainties and external
+        perturbations. This work contributes to the advancement of autonomous
+        aerial robotics and opens up new possibilities for the deployment of
+        co-axial drones in various applications.
+      </p>
+    </section>
+
+    <h5 class="references">References</h5>
+    <div class="references">
+      <cite id="lee2010">
+        <a href="https://ieeexplore.ieee.org/document/5717652">
+          Lee, T., Leok, M., & McClamroch, N. H. (2010). Geometric tracking
+          control of a quadrotor UAV on SE(3). In 49th IEEE conference on
+          decision and control (CDC) (pp. 5420-5425). IEEE.
+        </a>
+      </cite>
+      <cite id="mellinger2011">
+        <a href="https://ieeexplore.ieee.org/document/5980409">
+          Mellinger, D., & Kumar, V. (2011). Minimum snap trajectory generation
+          and control for quadrotors. In 2011 IEEE international conference on
+          robotics and automation (pp. 2520-2525). IEEE.
+        </a>
+      </cite>
+      <cite id="heimerl2023">
+        <a>
+          Heimerl, M. (2023). A formalization of co-axial rotored aerodynamics.
+          Ratisbon Robotics.
+        </a>
+      </cite>
+    </div>
+  </body>
+</html>

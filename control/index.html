@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="Description" content="Ratisbon Robotics Web Simulator" />
+    <link
+      rel="icon"
+      href="https://avatars.githubusercontent.com/u/151067388"
+      type="image/png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"
+    />
+    <title>Ratisbon Robotics</title>
+    <script src="/lib/util.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadExternalHTML("/lib/navbar.html", "navbar");
+        loadExternalHTML("/lib/footer.html", "footer");
+      });
+
+      ["load", "resize"].forEach(function (event) {
+        window.addEventListener(event, function () {
+          let iframe = document.querySelector("iframe");
+          try {
+            const iframeDocument = iframe.contentWindow.document;
+            const height = iframeDocument.body.scrollHeight + 50;
+            console.log(height);
+            iframe.style.height = height + "px";
+          } catch (e) {
+            console.error("Error resizing iframe:", e);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <nav id="navbar"></nav>
+    <article class="box m-3 has-background-light">
+      <article class="box has-background-white">
+        <iframe
+          src="control.html"
+          style="width: 100%; height: 500px"
+          scrolling="no"
+        ></iframe>
+      </article>
+    </article>
+    <footer id="footer"></footer>
+  </body>
+</html>
