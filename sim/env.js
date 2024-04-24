@@ -6,6 +6,7 @@ let mouse = {
 };
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
+gl.getExtension('WEBGL_depth_texture');
 resizeCanvas();
 
 // --- ADD EVENT LISTENERS ---
