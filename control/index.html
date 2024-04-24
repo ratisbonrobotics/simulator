@@ -27,7 +27,6 @@
           try {
             const iframeDocument = iframe.contentWindow.document;
             const height = iframeDocument.body.scrollHeight + 50;
-            console.log(height);
             iframe.style.height = height + "px";
           } catch (e) {
             console.error("Error resizing iframe:", e);
