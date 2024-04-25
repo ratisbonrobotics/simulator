@@ -90,11 +90,8 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 const shadowTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, shadowTexture);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, shadowMapResolution, shadowMapResolution, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
-//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -151,7 +148,7 @@ const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
 let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
-const lightProjectionMatrix = orthoMat4f(-5, 5, 5, -5, 0.01, 10000);//perspecMat4f(degToRad(46.0), 1.0, 0.01, 100000);//orthoMat4f(-1000, 1000, 1000, -1000, 0.1, 10000);
+const lightProjectionMatrix = orthoMat4f(-5, 5, 5, -5, 0.01, 10000);
 
 // --- DRAW ---
 function drawScene() {
