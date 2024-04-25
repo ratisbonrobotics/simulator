@@ -27,12 +27,11 @@ const fragmentshadersource = `
     varying vec3 o_vertexnormal;
 
     void main() {
-        vec3 normalizedNormal = normalize(o_vertexnormal);
         vec3 lightDirection = normalize(vec3(1.0, 1.0, 1.0));
-        float lightIntensity = max(dot(normalizedNormal, lightDirection), 0.0);
+        float lightIntensity = max(dot(o_vertexnormal, lightDirection), 0.0);
         vec4 textureColor = texture2D(texture, o_texturecoordinate);
         
-        gl_FragColor = vec4(textureColor.rgb * lightIntensity, textureColor.a);
+        gl_FragColor = vec4(textureColor.rgb * lightIntensity, 1.0);
     }
 `;
 
