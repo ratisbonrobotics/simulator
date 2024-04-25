@@ -142,7 +142,7 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-const lightPosition = [1000, 1000, 1000];
+const lightPosition = [10, 10, 10];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
@@ -153,6 +153,7 @@ const lightProjectionMatrix = orthoMat4f(-1000, 1000, -1000, 1000, 0.1, 10000);
 function drawScene() {
     // --- RENDER DEPTH MAP ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
+    gl.viewport(0, 0, 1024, 1024);
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
 
@@ -173,6 +174,7 @@ function drawScene() {
 
     // --- RENDER SCENE WITH SHADOWS ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
 
