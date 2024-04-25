@@ -44,16 +44,19 @@ const fragmentshadersource = `
         // Calculate shadow bias
         float bias = 0.000005;
 
-        // Perform PCF with shadow bias
+        // Apply PCF with more samples and Gaussian weighting
         float shadow = 0.0;
         vec2 texelSize = 1.0 / vec2(8192.0, 8192.0);
-        for (int x = -1; x <= 1; ++x) {
-            for (int y = -1; y <= 1; ++y) {
+        float totalWeight = 0.0;
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
                 float pcfDepth = texture2D(shadowTexture, projCoords.xy + vec2(x, y) * texelSize).r;
-                shadow += currentDepth - bias > pcfDepth ? 0.0 : 1.0;
+                float weight = max(1.0 - length(vec2(x, y) * texelSize), 0.0);
+                shadow += (currentDepth - bias > pcfDepth ? 0.0 : 1.0) * weight;
+                totalWeight += weight;
             }
         }
-        shadow /= 9.0;
+        shadow /= totalWeight;
         
         gl_FragColor = vec4(textureColor.rgb * shadow, 1.0);
     }
