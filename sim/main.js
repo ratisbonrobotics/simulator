@@ -34,8 +34,6 @@ const fragmentshadersource = `
     varying vec4 o_shadowCoord;
 
     void main() {
-        vec3 lightDirection = normalize(vec3(10.0, 10.0, 0.0));
-        float lightIntensity = 1.0;//max(dot(o_vertexnormal, lightDirection), 0.0);
         vec4 textureColor = texture2D(texture, o_texturecoordinate);
         
         vec3 projCoords = o_shadowCoord.xyz / o_shadowCoord.w;
@@ -44,7 +42,7 @@ const fragmentshadersource = `
         float currentDepth = projCoords.z;
         float shadow = currentDepth > closestDepth ? 0.0 : 1.0;
         
-        gl_FragColor = vec4(textureColor.rgb * lightIntensity * shadow, 1.0);
+        gl_FragColor = vec4(textureColor.rgb * shadow, 1.0);
     }
 `;
 
@@ -83,7 +81,7 @@ const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmat
 init3D(gl);
 
 // --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
-const shadowMapResolution = 1024;
+const shadowMapResolution = 2048;
 const shadowFramebuffer = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 
@@ -143,7 +141,7 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-let lightPosition = [100, 100, 0];
+let lightPosition = [50, 50, 0];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
