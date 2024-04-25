@@ -16,7 +16,7 @@ function getMouseInput(s) {
 let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 
-let attachedToDrone = true;
+let attachedToDrone = false;
 setInterval(function () {
     if (keys["1"]) {
         attachedToDrone = true;
@@ -25,6 +25,19 @@ setInterval(function () {
         attachedToDrone = false;
     }
     if (!attachedToDrone) {
+        if (keys["ArrowUp"]) {
+            lightPosition[2] += 0.1;
+        }
+        if (keys["ArrowDown"]) {
+            lightPosition[2] -= 0.1;
+        }
+        if (keys["ArrowLeft"]) {
+            lightPosition[0] += 0.1;
+        }
+        if (keys["ArrowRight"]) {
+            lightPosition[0] -= 0.1;
+        }
+        console.log(lightPosition);
         let movementVector = getKeyboardInput(0.01);
         let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);

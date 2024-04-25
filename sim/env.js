@@ -23,6 +23,6 @@ canvas.addEventListener("keydown", function (event) { keys[event.key] = true; })
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
 // --- OBJECT MODEL MATRICIES ---
-let cameraModelMatrix = modelMat4f(0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+let cameraModelMatrix = modelMat4f(0.0, 5.0, 5.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 let droneModelMatrix = modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01);
 let sceneModelMatrix = modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);

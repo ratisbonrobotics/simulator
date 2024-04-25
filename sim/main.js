@@ -35,7 +35,7 @@ const fragmentshadersource = `
 
     void main() {
         vec3 lightDirection = normalize(vec3(10.0, 10.0, 0.0));
-        float lightIntensity = max(dot(o_vertexnormal, lightDirection), 0.0);
+        float lightIntensity = 1.0;//max(dot(o_vertexnormal, lightDirection), 0.0);
         vec4 textureColor = texture2D(texture, o_texturecoordinate);
         
         vec3 projCoords = o_shadowCoord.xyz / o_shadowCoord.w;
@@ -89,8 +89,11 @@ gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 const shadowTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, shadowTexture);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, 1024, 1024, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -142,12 +145,12 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-const lightPosition = [10, 10, 0];
+let lightPosition = [10, 10, 0];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
-const lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
-const lightProjectionMatrix = orthoMat4f(-1000, 1000, -1000, 1000, 0.1, 10000);
+let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
+const lightProjectionMatrix = perspecMat4f(degToRad(46.0), 1024 / 1024, 0.01, 1000);//orthoMat4f(-1000, 1000, 1000, -1000, 0.1, 10000);
 
 // --- DRAW ---
 function drawScene() {
@@ -156,6 +159,7 @@ function drawScene() {
     gl.viewport(0, 0, 1024, 1024);
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
+    lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
 
     // Draw scene and drone for depth map
     for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
