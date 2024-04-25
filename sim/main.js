@@ -49,7 +49,7 @@ const fragmentshadersource = `
         float shadow = 0.0;
         vec2 texelSize = 1.0 / vec2(8192.0, 8192.0);
         float totalWeight = 0.0;
-        const int neighborhoodsize = 2;
+        const int neighborhoodsize = 8;
         for (int x = -neighborhoodsize; x <= neighborhoodsize; x++) {
             for (int y = -neighborhoodsize; y <= neighborhoodsize; y++) {
                 float pcfDepth = texture2D(shadowTexture, projCoords.xy + vec2(x, y) * texelSize).r;
@@ -171,6 +171,8 @@ function drawScene() {
     // --- RENDER DEPTH MAP ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
     gl.viewport(0, 0, shadowMapResolution, shadowMapResolution);
+    gl.enable(gl.POLYGON_OFFSET_FILL);
+    gl.polygonOffset(4.0, 1.0);
     gl.cullFace(gl.FRONT);
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
@@ -195,6 +197,7 @@ function drawScene() {
     // --- RENDER SCENE WITH SHADOWS ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.disable(gl.POLYGON_OFFSET_FILL);
     gl.cullFace(gl.BACK);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
