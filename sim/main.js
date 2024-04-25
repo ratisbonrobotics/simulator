@@ -40,7 +40,20 @@ const fragmentshadersource = `
         projCoords = projCoords * 0.5 + 0.5;
         float closestDepth = texture2D(shadowTexture, projCoords.xy).r;
         float currentDepth = projCoords.z;
-        float shadow = currentDepth > closestDepth ? 0.0 : 1.0;
+
+        // Calculate shadow bias
+        float bias = 0.0000001;
+
+        // Perform PCF with shadow bias
+        float shadow = 0.0;
+        vec2 texelSize = 1.0 / vec2(8192.0, 8192.0);
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                float pcfDepth = texture2D(shadowTexture, projCoords.xy + vec2(x, y) * texelSize).r;
+                shadow += currentDepth - bias > pcfDepth ? 0.0 : 1.0;
+            }
+        }
+        shadow /= 9.0;
         
         gl_FragColor = vec4(textureColor.rgb * shadow, 1.0);
     }
@@ -81,7 +94,7 @@ const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmat
 init3D(gl);
 
 // --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
-const shadowMapResolution = 2048;
+const shadowMapResolution = 2 ** 12;
 const shadowFramebuffer = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 
@@ -146,7 +159,7 @@ const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
 let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
-const lightProjectionMatrix = orthoMat4f(-5, 5, 5, -5, 0.01, 10000);
+const lightProjectionMatrix = perspecMat4f(degToRad(46.0), 1.0, 0.01, 10000);//orthoMat4f(-5, 5, 5, -5, 0.01, 10000);
 
 // --- DRAW ---
 function drawScene() {
