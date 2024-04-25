@@ -29,6 +29,7 @@ const fragmentshadersource = `
 
     uniform sampler2D texture;
     uniform sampler2D shadowTexture;
+    uniform vec3 lightPosition;
     varying vec2 o_texturecoordinate;
     varying vec3 o_vertexnormal;
     varying vec4 o_shadowCoord;
@@ -42,14 +43,15 @@ const fragmentshadersource = `
         float currentDepth = projCoords.z;
 
         // Calculate shadow bias
-        float bias = 0.000005;
+        float bias = max(0.9 * (1.0 - dot(o_vertexnormal, normalize(lightPosition))), 0.000001);
 
         // Apply PCF with more samples and Gaussian weighting
         float shadow = 0.0;
         vec2 texelSize = 1.0 / vec2(8192.0, 8192.0);
         float totalWeight = 0.0;
-        for (int x = -2; x <= 2; x++) {
-            for (int y = -2; y <= 2; y++) {
+        const int neighborhoodsize = 2;
+        for (int x = -neighborhoodsize; x <= neighborhoodsize; x++) {
+            for (int y = -neighborhoodsize; y <= neighborhoodsize; y++) {
                 float pcfDepth = texture2D(shadowTexture, projCoords.xy + vec2(x, y) * texelSize).r;
                 float weight = max(1.0 - length(vec2(x, y) * texelSize), 0.0);
                 shadow += (currentDepth - bias > pcfDepth ? 0.0 : 1.0) * weight;
@@ -91,7 +93,7 @@ const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "vertexnormal"]);
 const attribLocationsShadow = getAttribLocations(gl, shadowProgram, ["vertexposition"]);
 const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "shadowTexture", "lightViewMatrix", "lightProjectionMatrix"]);
-const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmatrix", "lightViewMatrix", "lightProjectionMatrix"]);
+const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmatrix", "lightViewMatrix", "lightProjectionMatrix", "lightPosition"]);
 
 // --- INIT 3D ---
 init3D(gl);
@@ -173,6 +175,7 @@ function drawScene() {
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
     lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
+    gl.uniform3fv(uniformLocationsShadow["lightPosition"], lightPosition);
 
     // Draw scene and drone for depth map
     for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
