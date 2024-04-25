@@ -34,7 +34,7 @@ const fragmentshadersource = `
     varying vec4 o_shadowCoord;
 
     void main() {
-        vec3 lightDirection = normalize(vec3(1.0, 1.0, 1.0));
+        vec3 lightDirection = normalize(vec3(10.0, 10.0, 0.0));
         float lightIntensity = max(dot(o_vertexnormal, lightDirection), 0.0);
         vec4 textureColor = texture2D(texture, o_texturecoordinate);
         
@@ -142,7 +142,7 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-const lightPosition = [10, 10, 10];
+const lightPosition = [10, 10, 0];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
