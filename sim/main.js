@@ -42,7 +42,7 @@ const fragmentshadersource = `
         float currentDepth = projCoords.z;
 
         // Calculate shadow bias
-        float bias = 0.0000001;
+        float bias = 0.000005;
 
         // Perform PCF with shadow bias
         float shadow = 0.0;
@@ -94,7 +94,7 @@ const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmat
 init3D(gl);
 
 // --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
-const shadowMapResolution = 2 ** 12;
+const shadowMapResolution = 8192;
 const shadowFramebuffer = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 
@@ -154,18 +154,19 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-let lightPosition = [50, 50, 0];
+let lightPosition = [25, 25, 5];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
 let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
-const lightProjectionMatrix = perspecMat4f(degToRad(46.0), 1.0, 0.01, 10000);//orthoMat4f(-5, 5, 5, -5, 0.01, 10000);
+const lightProjectionMatrix = orthoMat4f(-20, 20, 20, -20, 0.01, 10000);
 
 // --- DRAW ---
 function drawScene() {
     // --- RENDER DEPTH MAP ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
     gl.viewport(0, 0, shadowMapResolution, shadowMapResolution);
+    gl.cullFace(gl.FRONT);
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
     lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
@@ -188,6 +189,7 @@ function drawScene() {
     // --- RENDER SCENE WITH SHADOWS ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.cullFace(gl.BACK);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.useProgram(program);
 
