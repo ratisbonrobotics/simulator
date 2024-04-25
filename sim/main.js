@@ -8,14 +8,19 @@ const vertexshadersource = `
     uniform mat4 modelmatrix;
     uniform mat4 viewmatrix;
     uniform mat4 projectionmatrix;
+    uniform mat4 lightViewMatrix;
+    uniform mat4 lightProjectionMatrix;
 
     varying vec2 o_texturecoordinate;
     varying vec3 o_vertexnormal;
+    varying vec4 o_shadowCoord;
     
     void main() {
         o_texturecoordinate = texturecoordinate;
         o_vertexnormal = normalize((modelmatrix * vec4(vertexnormal, 0.0)).xyz);
-        gl_Position = projectionmatrix * viewmatrix * modelmatrix * vertexposition;
+        vec4 worldPosition = modelmatrix * vertexposition;
+        o_shadowCoord = lightProjectionMatrix * lightViewMatrix * worldPosition;
+        gl_Position = projectionmatrix * viewmatrix * worldPosition;
     }
 `;
 
@@ -23,28 +28,73 @@ const fragmentshadersource = `
     precision highp float;
 
     uniform sampler2D texture;
+    uniform sampler2D shadowTexture;
     varying vec2 o_texturecoordinate;
     varying vec3 o_vertexnormal;
+    varying vec4 o_shadowCoord;
 
     void main() {
         vec3 lightDirection = normalize(vec3(1.0, 1.0, 1.0));
         float lightIntensity = max(dot(o_vertexnormal, lightDirection), 0.0);
         vec4 textureColor = texture2D(texture, o_texturecoordinate);
         
-        gl_FragColor = vec4(textureColor.rgb * lightIntensity, 1.0);
+        vec3 projCoords = o_shadowCoord.xyz / o_shadowCoord.w;
+        projCoords = projCoords * 0.5 + 0.5;
+        float closestDepth = texture2D(shadowTexture, projCoords.xy).r;
+        float currentDepth = projCoords.z;
+        float shadow = currentDepth > closestDepth ? 0.0 : 1.0;
+        
+        gl_FragColor = vec4(textureColor.rgb * lightIntensity * shadow, 1.0);
     }
 `;
 
+const shadowVertexShaderSource = `
+    precision highp float;
+
+    attribute vec4 vertexposition;
+    uniform mat4 modelmatrix;
+    uniform mat4 lightViewMatrix;
+    uniform mat4 lightProjectionMatrix;
+
+    void main() {
+        gl_Position = lightProjectionMatrix * lightViewMatrix * modelmatrix * vertexposition;
+    }
+`;
+
+const shadowFragmentShaderSource = `
+    precision highp float;
+
+    void main() {
+        // Empty fragment shader
+    }
+`;
 
 // --- MAKE SHADERS AND PROGRAM ---
+const shadowProgram = createAndUseProgram(gl, shadowVertexShaderSource, shadowFragmentShaderSource);
 const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource);
 
 // --- GET ATTRIBUTE AND UNIFORM LOCATIONS ---
 const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "vertexnormal"]);
-const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture"]);
+const attribLocationsShadow = getAttribLocations(gl, shadowProgram, ["vertexposition"]);
+const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "shadowTexture", "lightViewMatrix", "lightProjectionMatrix"]);
+const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmatrix", "lightViewMatrix", "lightProjectionMatrix"]);
 
 // --- INIT 3D ---
 init3D(gl);
+
+// --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
+const shadowFramebuffer = gl.createFramebuffer();
+gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
+
+const shadowTexture = gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D, shadowTexture);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, 1024, 1024, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, shadowTexture, 0);
 
 // --- GET DATA FROM 3D FILES ---
 let scene_vertexbuffer = [];
@@ -92,18 +142,58 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
+const lightPosition = [1000, 1000, 1000];
+const lookAtPoint = [0, 0, 0];
+const upDirection = [0, 1, 0];
+
+const lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
+const lightProjectionMatrix = orthoMat4f(-1000, 1000, -1000, 1000, 0.1, 10000);
+
 // --- DRAW ---
 function drawScene() {
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // --- RENDER DEPTH MAP ---
+    gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
+    gl.clear(gl.DEPTH_BUFFER_BIT);
+    gl.useProgram(shadowProgram);
 
-    // --- SETUP VIEWMATRIX ---
+    // Draw scene and drone for depth map
+    for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocationsShadow.vertexposition, 3);
+        gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, sceneModelMatrix);
+        gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
+        gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
+        gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
+    }
+
+    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocationsShadow.vertexposition, 3);
+    gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneModelMatrix);
+    gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
+    gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
+    gl.drawArrays(gl.TRIANGLES, 0, 924);
+
+    // --- RENDER SCENE WITH SHADOWS ---
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.useProgram(program);
+
+    // Set up view and projection matrices
     if (attachedToDrone) {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneModelMatrix)));
     } else {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
     }
+    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-    // --- DRAW SCENE ---
+    // Set up light view and projection matrices
+    gl.uniformMatrix4fv(uniformLocations["lightViewMatrix"], false, lightViewMatrix);
+    gl.uniformMatrix4fv(uniformLocations["lightProjectionMatrix"], false, lightProjectionMatrix);
+
+    // Set up shadow texture
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, shadowTexture);
+    gl.uniform1i(uniformLocations["shadowTexture"], 1);
+
+    // Draw scene with shadows
     for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocations.vertexposition, 3);
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
@@ -113,7 +203,7 @@ function drawScene() {
         gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
     }
 
-    // --- DRAW DRONE ---
+    // Draw drone with shadows
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2);
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.vertexnormal, 3);
