@@ -83,12 +83,13 @@ const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmat
 init3D(gl);
 
 // --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
+const shadowMapResolution = 1024;
 const shadowFramebuffer = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
 
 const shadowTexture = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, shadowTexture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, 1024, 1024, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, shadowMapResolution, shadowMapResolution, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
 //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -145,18 +146,18 @@ async function loadDrone() {
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
-let lightPosition = [10, 10, 0];
+let lightPosition = [100, 100, 0];
 const lookAtPoint = [0, 0, 0];
 const upDirection = [0, 1, 0];
 
 let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
-const lightProjectionMatrix = perspecMat4f(degToRad(46.0), 1024 / 1024, 0.01, 1000);//orthoMat4f(-1000, 1000, 1000, -1000, 0.1, 10000);
+const lightProjectionMatrix = orthoMat4f(-5, 5, 5, -5, 0.01, 10000);//perspecMat4f(degToRad(46.0), 1.0, 0.01, 100000);//orthoMat4f(-1000, 1000, 1000, -1000, 0.1, 10000);
 
 // --- DRAW ---
 function drawScene() {
     // --- RENDER DEPTH MAP ---
     gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
-    gl.viewport(0, 0, 1024, 1024);
+    gl.viewport(0, 0, shadowMapResolution, shadowMapResolution);
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
     lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);

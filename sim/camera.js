@@ -26,18 +26,18 @@ setInterval(function () {
     }
     if (!attachedToDrone) {
         if (keys["ArrowUp"]) {
-            lightPosition[2] += 0.1;
+            lightPosition[2] += 1.0;
         }
         if (keys["ArrowDown"]) {
-            lightPosition[2] -= 0.1;
+            lightPosition[2] -= 1.0;
         }
         if (keys["ArrowLeft"]) {
-            lightPosition[0] += 0.1;
+            lightPosition[0] -= 1.0;
         }
         if (keys["ArrowRight"]) {
-            lightPosition[0] -= 0.1;
+            lightPosition[0] += 1.0;
         }
-        console.log(lightPosition);
+        //console.log(lightPosition);
         let movementVector = getKeyboardInput(0.01);
         let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
