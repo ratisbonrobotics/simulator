@@ -72,7 +72,7 @@ async function loadDrone() {
 // --- MAIN LOOP ---
 function startMainLoop() {
     init3D(gl);
-    requestAnimationFrame(drawScene);
+    drawScene();
 }
 
 function drawScene() {
