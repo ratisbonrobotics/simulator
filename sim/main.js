@@ -120,9 +120,9 @@ let scene_texcoordbuffer = [];
 let scene_texture = [];
 
 async function loadScene() {
-    let [obj, mtl] = await parseOBJ('/sim/data/scene.obj');
+    let obj = await parseOBJ('/sim/data/scene.obj');
     let k = 0;
-    for (const [key, value] of Object.entries(obj)) {
+    for (const [_, value] of Object.entries(obj)) {
         scene_vertexbuffer[k] = [];
         scene_vertexbuffer[k][0] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
         scene_vertexbuffer[k][1] = Math.floor(value["v"].length / 3);
@@ -146,11 +146,11 @@ let drone_normalbuffer;
 let drone_texture;
 loadDrone();
 async function loadDrone() {
-    let [obj, mtl] = await parseOBJ('/sim/data/drone.obj');
+    let obj = await parseOBJ('/sim/data/drone.obj');
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
-    drone_texture = addTexture(gl, mtl["Material"]["map_Kd"].src);
+    drone_texture = addTexture(gl, obj["drone"]["m"][0]["map_Kd"].src);
     await loadScene();
     requestAnimationFrame(drawScene);
 }
