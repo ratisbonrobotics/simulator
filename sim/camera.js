@@ -27,16 +27,16 @@ setInterval(function () {
     }
     if (!attachedToDrone) {
         if (keys["ArrowUp"]) {
-            lightPosition1[2] += 1.0;
+            lightPositions[0][2] += 1.0;
         }
         if (keys["ArrowDown"]) {
-            lightPosition1[2] -= 1.0;
+            lightPositions[0][2] -= 1.0;
         }
         if (keys["ArrowLeft"]) {
-            lightPosition1[0] -= 1.0;
+            lightPositions[0][0] -= 1.0;
         }
         if (keys["ArrowRight"]) {
-            lightPosition1[0] += 1.0;
+            lightPositions[0][0] += 1.0;
         }
 
         let movementVector = getKeyboardInput(0.01);
