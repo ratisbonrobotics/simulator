@@ -177,21 +177,19 @@ function drawScene() {
     gl.clear(gl.DEPTH_BUFFER_BIT);
     gl.useProgram(shadowProgram);
     lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
+    gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
+    gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
     gl.uniform3fv(uniformLocationsShadow["lightPosition"], lightPosition);
 
     // Draw scene and drone for depth map
     for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocationsShadow.vertexposition, 3);
         gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, sceneModelMatrix);
-        gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
-        gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
         gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
     }
 
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocationsShadow.vertexposition, 3);
     gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneModelMatrix);
-    gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
-    gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 924);
 
     // --- RENDER SCENE WITH SHADOWS ---
