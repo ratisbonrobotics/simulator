@@ -13,10 +13,11 @@ function getMouseInput(s) {
     return inp;
 }
 
+let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
-
 let attachedToDrone = false;
+
 setInterval(function () {
     if (keys["1"]) {
         attachedToDrone = true;
@@ -37,7 +38,7 @@ setInterval(function () {
         if (keys["ArrowRight"]) {
             lightPosition[0] += 1.0;
         }
-        //console.log(lightPosition);
+        
         let movementVector = getKeyboardInput(0.01);
         let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);

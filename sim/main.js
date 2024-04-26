@@ -95,10 +95,7 @@ const attribLocationsShadow = getAttribLocations(gl, shadowProgram, ["vertexposi
 const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture", "shadowTexture", "lightViewMatrix", "lightProjectionMatrix"]);
 const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmatrix", "lightViewMatrix", "lightProjectionMatrix", "lightPosition"]);
 
-// --- INIT 3D ---
-init3D(gl);
-
-// --- CREATE SHADOW FRAMEBUFFER AND TEXTURE ---
+// --- CREATE SHADOW FRAMEBUFFER, TEXTURE AND LIGHT PROJECTION MATRIX ---
 const shadowMapResolution = 8192;
 const shadowFramebuffer = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
@@ -113,70 +110,15 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
 gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, shadowTexture, 0);
 
-// --- GET DATA FROM 3D FILES ---
-let scene_vertexbuffer = [];
-let scene_normalbuffer = [];
-let scene_texcoordbuffer = [];
-let scene_texture = [];
-
-async function loadScene() {
-    let obj = await parseOBJ('/sim/data/scene.obj');
-    let k = 0;
-    for (const [_, value] of Object.entries(obj)) {
-        scene_vertexbuffer[k] = [];
-        scene_vertexbuffer[k][0] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
-        scene_vertexbuffer[k][1] = Math.floor(value["v"].length / 3);
-        scene_texcoordbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vt"]);
-        scene_normalbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vn"]);
-
-        if (value["m"][0]["map_Kd"] && value["m"][0]["map_Kd"].src) {
-            scene_texture[k] = addTexture(gl, value["m"][0]["map_Kd"].src);
-        } else {
-            const baseColor = value["m"][0]["Ka"] || [1, 1, 1];
-            const colorImageURL = createColorImageURL(baseColor);
-            scene_texture[k] = addTexture(gl, colorImageURL);
-        }
-        k = k + 1;
-    }
-}
-
-let drone_vertexbuffer;
-let drone_texcoordbuffer;
-let drone_normalbuffer;
-let drone_texture;
-loadDrone();
-async function loadDrone() {
-    let obj = await parseOBJ('/sim/data/drone.obj');
-    drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
-    drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
-    drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
-    drone_texture = addTexture(gl, obj["drone"]["m"][0]["map_Kd"].src);
-    await loadScene();
-    requestAnimationFrame(drawScene);
-}
-
-// --- SETUP PROJECTION MATRIX ---
-let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
-gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
-
-let lightPosition = [25, 25, 5];
-const lookAtPoint = [0, 0, 0];
-const upDirection = [0, 1, 0];
-
-let lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
 const lightProjectionMatrix = orthoMat4f(-20, 20, 20, -20, 0.01, 10000);
+let lightPosition = [25, 25, 5];
+let lightViewMatrix;
 
-// --- DRAW ---
-function drawScene() {
-    // --- RENDER DEPTH MAP ---
-    gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffer);
-    gl.viewport(0, 0, shadowMapResolution, shadowMapResolution);
-    gl.enable(gl.POLYGON_OFFSET_FILL);
-    gl.polygonOffset(4.0, 1.0);
-    gl.cullFace(gl.FRONT);
-    gl.clear(gl.DEPTH_BUFFER_BIT);
-    gl.useProgram(shadowProgram);
-    lightViewMatrix = lookAtMat4f(lightPosition, lookAtPoint, upDirection);
+// --- RENDER DEPTH MAP ---
+function renderDepthMap() {
+    prepareGLState(gl, shadowMapResolution, shadowMapResolution, shadowProgram, shadowFramebuffer, gl.FRONT);
+
+    lightViewMatrix = lookAtMat4f(lightPosition, [0, 0, 0], [0, 1, 0]);
     gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrix);
     gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrix);
     gl.uniform3fv(uniformLocationsShadow["lightPosition"], lightPosition);
@@ -191,14 +133,11 @@ function drawScene() {
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocationsShadow.vertexposition, 3);
     gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 924);
+}
 
-    // --- RENDER SCENE WITH SHADOWS ---
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.disable(gl.POLYGON_OFFSET_FILL);
-    gl.cullFace(gl.BACK);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.useProgram(program);
+// --- RENDER SCENE WITH SHADOWS ---
+function renderScene() {
+    prepareGLState(gl, canvas.width, canvas.height, program, null, gl.BACK);
 
     // Set up view and projection matrices
     if (attachedToDrone) {
@@ -234,6 +173,4 @@ function drawScene() {
     gl.uniform1i(uniformLocations["texture"], drone_texture);
     gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, droneModelMatrix);
     gl.drawArrays(gl.TRIANGLES, 0, 924);
-
-    requestAnimationFrame(drawScene);
 }
