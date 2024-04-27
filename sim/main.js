@@ -34,7 +34,7 @@ for (let i = 0; i < numLights; i++) {
 
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, shadowTextures[i], 0);
 
-    lightProjectionMatrices[i] = perspecMat4f(degToRad(120.0), 1.0, 0.0001, 1000);//orthoMat4f(-20, 20, 20, -20, 0.01, 10000);
+    lightProjectionMatrices[i] = perspecMat4f(degToRad(120.0), 1.0, 0.0001, 1000);
 }
 
 // --- SHADER CODE ---
@@ -152,33 +152,15 @@ const shadowProgram = createAndUseProgram(gl, shadowVertexShaderSource, shadowFr
 const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource);
 
 // --- GET ATTRIBUTE AND UNIFORM LOCATIONS ---
-/*
-TODO:
-function getAllUniformLocations(gl, program) {
-    var uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    var uniforms = {};
-    for (var i = 0; i < uniformCount; i++) {
-        var uniformInfo = gl.getActiveUniform(program, i);
-        if (uniformInfo) {
-            var name = uniformInfo.name;
-            // Remove any array suffix to get the base name
-            var uniformName = name.replace(/\[.*?\]/, "");
-            var location = gl.getUniformLocation(program, uniformName);
-            uniforms[uniformName] = location;
-        }
-    }
-    return uniforms;
-}
-*/
-const attribLocations = getAttribLocations(gl, program, ["vertexposition", "texturecoordinate", "vertexnormal"]);
-const attribLocationsShadow = getAttribLocations(gl, shadowProgram, ["vertexposition"]);
-const uniformLocations = getUniformLocations(gl, program, ["modelmatrix", "viewmatrix", "projectionmatrix", "texture"]);
+const attribLocations = getAllAttribLocations(gl, program);
+const attribLocationsShadow = getAllAttribLocations(gl, shadowProgram);
+const uniformLocations = getAllUniformLocations(gl, program);
 for (let i = 0; i < numLights; i++) {
     uniformLocations["shadowTextures[" + i + "]"] = gl.getUniformLocation(program, "shadowTextures[" + i + "]");
     uniformLocations["lightViewMatrices[" + i + "]"] = gl.getUniformLocation(program, "lightViewMatrices[" + i + "]");
     uniformLocations["lightProjectionMatrices[" + i + "]"] = gl.getUniformLocation(program, "lightProjectionMatrices[" + i + "]");
 }
-const uniformLocationsShadow = getUniformLocations(gl, shadowProgram, ["modelmatrix", "lightViewMatrix", "lightProjectionMatrix", "lightPosition"]);
+const uniformLocationsShadow = getAllUniformLocations(gl, shadowProgram);
 
 // --- RENDER DEPTH MAPS ---
 function renderDepthMap() {
