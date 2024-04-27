@@ -44,11 +44,11 @@ async function loadScene() {
         scene_normalbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vn"]);
 
         if (value["m"][0]["map_Kd"] && value["m"][0]["map_Kd"].src) {
-            scene_texture[k] = addTexture(gl, value["m"][0]["map_Kd"].src);
+            scene_texture[k] = await addTextureGL(gl, value["m"][0]["map_Kd"].src);
         } else {
             const baseColor = value["m"][0]["Ka"] || [1, 1, 1];
             const colorImageURL = createColorImageURL(baseColor);
-            scene_texture[k] = addTexture(gl, colorImageURL);
+            scene_texture[k] = await addTextureGL(gl, colorImageURL);
         }
         k = k + 1;
     }
@@ -64,7 +64,7 @@ async function loadDrone() {
     drone_vertexbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["v"]);
     drone_texcoordbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vt"]);
     drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
-    drone_texture = addTexture(gl, obj["drone"]["m"][0]["map_Kd"].src);
+    drone_texture = await addTextureGL(gl, obj["drone"]["m"][0]["map_Kd"].src);
     await loadScene();
     startMainLoop();
 }
