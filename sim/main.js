@@ -1,22 +1,11 @@
 // --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
 const shadowMapResolution = 2048;
 const numLights = 4;
-const shadowFramebuffers = new Array(numLights);
-const shadowTextures = new Array(numLights);
-const lightProjectionMatrices = new Array(numLights);
-const lightPositions = [
-    [-1, 2.9, -5.3],
-    [0, 2.9, 0],
-    [-3, 2.9, -3],
-    [-5, 2.9, 0],
-];
-const lookAt = [
-    [-1, 0, -5],
-    [0, 0, 0.3],
-    [-3, 0, -3.3],
-    [-5.3, 0, 0],
-];
-const lightViewMatrices = new Array(numLights);
+const shadowFramebuffers = [];
+const shadowTextures = [];
+const lightProjectionMatrices = [];
+const lightPositions = [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0],];
+const lookAt = [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0],];
 
 for (let i = 0; i < numLights; i++) {
     shadowFramebuffers[i] = gl.createFramebuffer();
@@ -161,21 +150,13 @@ function renderDepthMap() {
     for (let i = 0; i < numLights; i++) {
         prepareGLState(gl, shadowMapResolution, shadowMapResolution, shadowProgram, shadowFramebuffers[i], gl.BACK);
 
-        lightViewMatrices[i] = lookAtMat4f(lightPositions[i], lookAt[i], [0, 1, 0]);
-        gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lightViewMatrices[i]);
+        gl.uniformMatrix4fv(uniformLocationsShadow["lightViewMatrix"], false, lookAtMat4f(lightPositions[i], lookAt[i], [0, 1, 0]));
         gl.uniformMatrix4fv(uniformLocationsShadow["lightProjectionMatrix"], false, lightProjectionMatrices[i]);
         gl.uniform3fv(uniformLocationsShadow["lightPosition"], lightPositions[i]);
 
         // Draw scene and drone for depth map
-        for (let primitive = 0; primitive < sceneDrawable["vertexbuffer"].length; primitive++) {
-            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sceneDrawable["vertexbuffer"][primitive]["verticies"], attribLocationsShadow.vertexposition, 3);
-            gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, sceneDrawable["modelmatrix"]);
-            gl.drawArrays(gl.TRIANGLES, 0, sceneDrawable["vertexbuffer"][primitive]["n_verticies"]);
-        }
-
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, droneDrawable["vertexbuffer"][0]["verticies"], attribLocationsShadow.vertexposition, 3);
-        gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneDrawable["modelmatrix"]);
-        gl.drawArrays(gl.TRIANGLES, 0, droneDrawable["vertexbuffer"][0]["n_verticies"]);
+        drawDrawable(gl, sceneDrawable, attribLocationsShadow, uniformLocationsShadow, false);
+        drawDrawable(gl, droneDrawable, attribLocationsShadow, uniformLocationsShadow, false);
     }
 }
 
@@ -185,15 +166,11 @@ function renderScene() {
 
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
-    if (attachedToDrone) {
-        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])));
-    } else {
-        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
-    }
+    gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(cameraModelMatrix));
 
     // Set up light view and projection matrices and shadow textures
     for (let i = 0; i < numLights; i++) {
-        gl.uniformMatrix4fv(uniformLocations["lightViewMatrices"][i], false, lightViewMatrices[i]);
+        gl.uniformMatrix4fv(uniformLocations["lightViewMatrices"][i], false, lookAtMat4f(lightPositions[i], lookAt[i], [0, 1, 0]));
         gl.uniformMatrix4fv(uniformLocations["lightProjectionMatrices"][i], false, lightProjectionMatrices[i]);
 
         gl.activeTexture(gl.TEXTURE0 + i);
@@ -201,6 +178,6 @@ function renderScene() {
         gl.uniform1i(uniformLocations["shadowTextures"][i], i);
     }
 
-    drawDrawable(gl, sceneDrawable, attribLocations, uniformLocations);
-    drawDrawable(gl, droneDrawable, attribLocations, uniformLocations);
+    drawDrawable(gl, sceneDrawable, attribLocations, uniformLocations, true);
+    drawDrawable(gl, droneDrawable, attribLocations, uniformLocations, true);
 }
