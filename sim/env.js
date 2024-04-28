@@ -37,6 +37,7 @@ async function loadScene() {
     let obj = await parseOBJ('/sim/data/scene.obj');
     let k = 0;
     for (const [_, value] of Object.entries(obj)) {
+        console.log("Loading...")
         scene_vertexbuffer[k] = [];
         scene_vertexbuffer[k][0] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
         scene_vertexbuffer[k][1] = Math.floor(value["v"].length / 3);

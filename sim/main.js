@@ -1,20 +1,20 @@
 // --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
-const shadowMapResolution = 4096;
-const numLights = 2;
+const shadowMapResolution = 2048;
+const numLights = 4;
 const shadowFramebuffers = new Array(numLights);
 const shadowTextures = new Array(numLights);
 const lightProjectionMatrices = new Array(numLights);
 const lightPositions = [
-    [0.5, 1, 0],
-    [-0.5, 1, 0],
-    [0, 1, 0.5],
-    [0, 1, -0.5],
+    [-1, 2.9, -5.3],
+    [0, 2.9, 0],
+    [-3, 2.9, -3],
+    [-5, 2.9, 0],
 ];
 const lookAt = [
-    [-1, 1, 0],
-    [1, 1, 0],
-    [0, 1, -1],
-    [0, 1, 1],
+    [-1, 0, -5],
+    [0, 0, 0.3],
+    [-3, 0, -3.3],
+    [-5.3, 0, 0],
 ];
 const lightViewMatrices = new Array(numLights);
 
@@ -34,7 +34,7 @@ for (let i = 0; i < numLights; i++) {
 
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, shadowTextures[i], 0);
 
-    lightProjectionMatrices[i] = perspecMat4f(degToRad(120.0), 1.0, 0.0001, 1000);
+    lightProjectionMatrices[i] = perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000);
 }
 
 // --- SHADER CODE ---
