@@ -154,11 +154,6 @@ const program = createAndUseProgram(gl, vertexshadersource, fragmentshadersource
 const attribLocations = getAllAttribLocations(gl, program);
 const attribLocationsShadow = getAllAttribLocations(gl, shadowProgram);
 const uniformLocations = getAllUniformLocations(gl, program);
-for (let i = 0; i < numLights; i++) {
-    uniformLocations["shadowTextures[" + i + "]"] = gl.getUniformLocation(program, "shadowTextures[" + i + "]");
-    uniformLocations["lightViewMatrices[" + i + "]"] = gl.getUniformLocation(program, "lightViewMatrices[" + i + "]");
-    uniformLocations["lightProjectionMatrices[" + i + "]"] = gl.getUniformLocation(program, "lightProjectionMatrices[" + i + "]");
-}
 const uniformLocationsShadow = getAllUniformLocations(gl, shadowProgram);
 
 // --- RENDER DEPTH MAPS ---
@@ -198,12 +193,12 @@ function renderScene() {
 
     // Set up light view and projection matrices and shadow textures
     for (let i = 0; i < numLights; i++) {
-        gl.uniformMatrix4fv(uniformLocations["lightViewMatrices[" + i + "]"], false, lightViewMatrices[i]);
-        gl.uniformMatrix4fv(uniformLocations["lightProjectionMatrices[" + i + "]"], false, lightProjectionMatrices[i]);
+        gl.uniformMatrix4fv(uniformLocations["lightViewMatrices"][i], false, lightViewMatrices[i]);
+        gl.uniformMatrix4fv(uniformLocations["lightProjectionMatrices"][i], false, lightProjectionMatrices[i]);
 
         gl.activeTexture(gl.TEXTURE0 + i);
         gl.bindTexture(gl.TEXTURE_2D, shadowTextures[i]);
-        gl.uniform1i(uniformLocations["shadowTextures[" + i + "]"], i);
+        gl.uniform1i(uniformLocations["shadowTextures"][i], i);
     }
 
     gl.activeTexture(gl.TEXTURE16);
