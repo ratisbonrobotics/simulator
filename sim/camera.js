@@ -54,10 +54,9 @@ setInterval(function () {
         cameraModelMatrixOld = cameraModelMatrix;
         cameraModelMatrix = multMat4f(xRotMat4f(rotx), cameraModelMatrix);
 
-        // Update the position of light[1] with the camera's position
-        console.log("camera", cameraModelMatrix[12], cameraModelMatrix[13], cameraModelMatrix[14]);
+        /*console.log("camera", cameraModelMatrix[12], cameraModelMatrix[13], cameraModelMatrix[14]);
         console.log("light0", lightPositions[0]);
-        console.log("");
+        console.log("");*/
 
     }
 }, 10);

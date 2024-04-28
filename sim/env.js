@@ -34,7 +34,7 @@ let scene_texcoordbuffer = [];
 let scene_texture = [];
 
 async function loadScene() {
-    let obj = await parseOBJ('/sim/data/scene.obj');
+    let obj = await parseOBJ('/sim/data/scene.obj.gz');
     let k = 0;
     for (const [_, value] of Object.entries(obj)) {
         console.log("Loading...")
@@ -51,7 +51,7 @@ async function loadScene() {
             const colorImageURL = createColorImageURL(baseColor);
             scene_texture[k] = await addTextureGL(gl, colorImageURL);
         }
-        k = k + 1;
+        k++;
     }
 }
 
