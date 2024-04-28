@@ -19,12 +19,12 @@ let rotx = 0.0;
 let attachedToDrone = false;
 
 setInterval(function () {
-    if (keys["1"]) {
+    if (keys["1"])
         attachedToDrone = true;
-    }
-    if (keys["2"]) {
+
+    if (keys["2"])
         attachedToDrone = false;
-    }
+
     if (!attachedToDrone) {
         let movementVector = getKeyboardInput(0.01);
         let rotationVector = getMouseInput(0.01);
