@@ -18,11 +18,6 @@ let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;
 let attachedToDrone = false;
 
-function getCameraForwardVector(cameraMatrix) {
-    let forwardVector = [cameraMatrix[8], cameraMatrix[9], cameraMatrix[10]];
-    return forwardVector;
-}
-
 setInterval(function () {
     if (keys["1"]) {
         attachedToDrone = true;
@@ -31,19 +26,6 @@ setInterval(function () {
         attachedToDrone = false;
     }
     if (!attachedToDrone) {
-        if (keys["ArrowUp"]) {
-            lightPositions[1][2] += 0.1;
-        }
-        if (keys["ArrowDown"]) {
-            lightPositions[1][2] -= 0.1;
-        }
-        if (keys["ArrowLeft"]) {
-            lightPositions[1][0] -= 0.1;
-        }
-        if (keys["ArrowRight"]) {
-            lightPositions[1][0] += 0.1;
-        }
-
         let movementVector = getKeyboardInput(0.01);
         let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
@@ -53,10 +35,5 @@ setInterval(function () {
         cameraModelMatrix = multMat4f(translMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
         cameraModelMatrixOld = cameraModelMatrix;
         cameraModelMatrix = multMat4f(xRotMat4f(rotx), cameraModelMatrix);
-
-        /*console.log("camera", cameraModelMatrix[12], cameraModelMatrix[13], cameraModelMatrix[14]);
-        console.log("light0", lightPositions[0]);
-        console.log("");*/
-
     }
 }, 10);
