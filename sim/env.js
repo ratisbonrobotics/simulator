@@ -7,11 +7,12 @@ let mouse = {
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
 gl.getExtension('WEBGL_depth_texture');
-resizeCanvas();
+init3D(gl);
+resizeCanvas(canvas);
 
 // --- ADD EVENT LISTENERS ---
-window.addEventListener("orientationchange", resizeCanvas);
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("orientationchange", function () { resizeCanvas(canvas); });
+window.addEventListener("resize", function () { resizeCanvas(canvas); });
 canvas.addEventListener("mousemove", function (event) {
     if (document.pointerLockElement === canvas) {
         mouse["horizontal"] = event.movementX;
@@ -67,15 +68,10 @@ async function loadDrone() {
     drone_normalbuffer = createBuffer(gl, gl.ARRAY_BUFFER, obj["drone"]["vn"]);
     drone_texture = await createTexture(gl, obj["drone"]["m"][0]["map_Kd"].src);
     await loadScene();
-    startMainLoop();
-}
-
-// --- MAIN LOOP ---
-function startMainLoop() {
-    init3D(gl);
     drawScene();
 }
 
+// --- MAIN LOOP ---
 function drawScene() {
     renderDepthMap();
     renderScene();
