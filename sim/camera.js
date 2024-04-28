@@ -13,6 +13,7 @@ function getMouseInput(s) {
     return inp;
 }
 
+let cameraModelMatrix = modelMat4f(0.0, 5.0, 5.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
 let cameraModelMatrixOld = cameraModelMatrix;
 let rotx = 0.0;

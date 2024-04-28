@@ -14,38 +14,31 @@ canvas.addEventListener("click", canvas.requestPointerLock);
 canvas.addEventListener("keydown", function (event) { keys[event.key] = true; });
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
-// --- OBJECT MODEL MATRICIES ---
-let cameraModelMatrix = modelMat4f(0.0, 5.0, 5.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-let droneModelMatrix = modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01);
-let sceneModelMatrix = modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
-
 // --- GET DATA FROM 3D FILES ---
-let scene_vertexbuffer = [];
-let scene_normalbuffer = [];
-let scene_texcoordbuffer = [];
-let scene_texture = [];
+let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0) };
 async function loadScene() {
     let obj = await parseOBJ('/sim/data/scene.obj.gz');
     let k = 0;
     for (const [_, value] of Object.entries(obj)) {
         console.log("Loading...")
-        scene_vertexbuffer[k] = [];
-        scene_vertexbuffer[k][0] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
-        scene_vertexbuffer[k][1] = Math.floor(value["v"].length / 3);
-        scene_texcoordbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vt"]);
-        scene_normalbuffer[k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vn"]);
+        sceneDrawable["vertexbuffer"][k] = {};
+        sceneDrawable["vertexbuffer"][k]["verticies"] = createBuffer(gl, gl.ARRAY_BUFFER, value["v"]);
+        sceneDrawable["vertexbuffer"][k]["n_verticies"] = Math.floor(value["v"].length / 3);
+        sceneDrawable["texcoordbuffer"][k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vt"]);
+        sceneDrawable["normalbuffer"][k] = createBuffer(gl, gl.ARRAY_BUFFER, value["vn"]);
 
         if (value["m"][0]["map_Kd"] && value["m"][0]["map_Kd"].src) {
-            scene_texture[k] = await createTexture(gl, value["m"][0]["map_Kd"].src);
+            sceneDrawable["texture"][k] = await createTexture(gl, value["m"][0]["map_Kd"].src);
         } else {
             const baseColor = value["m"][0]["Ka"] || [1, 1, 1];
             const colorImageURL = createColorImageURL(baseColor);
-            scene_texture[k] = await createTexture(gl, colorImageURL);
+            sceneDrawable["texture"][k] = await createTexture(gl, colorImageURL);
         }
         k++;
     }
 }
 
+let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 let drone_vertexbuffer;
 let drone_texcoordbuffer;
 let drone_normalbuffer;

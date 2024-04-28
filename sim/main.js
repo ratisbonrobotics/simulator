@@ -167,10 +167,10 @@ function renderDepthMap() {
         gl.uniform3fv(uniformLocationsShadow["lightPosition"], lightPositions[i]);
 
         // Draw scene and drone for depth map
-        for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
-            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocationsShadow.vertexposition, 3);
-            gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, sceneModelMatrix);
-            gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
+        for (let primitive = 0; primitive < sceneDrawable["vertexbuffer"].length; primitive++) {
+            connectBufferToAttribute(gl, gl.ARRAY_BUFFER, sceneDrawable["vertexbuffer"][primitive]["verticies"], attribLocationsShadow.vertexposition, 3);
+            gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, sceneDrawable["modelmatrix"]);
+            gl.drawArrays(gl.TRIANGLES, 0, sceneDrawable["vertexbuffer"][primitive]["n_verticies"]);
         }
 
         connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocationsShadow.vertexposition, 3);
@@ -184,12 +184,12 @@ function renderScene() {
     prepareGLState(gl, canvas.width, canvas.height, program, null, gl.BACK);
 
     // Set up view and projection matrices
+    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
     if (attachedToDrone) {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneModelMatrix)));
     } else {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
     }
-    gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
 
     // Set up light view and projection matrices and shadow textures
     for (let i = 0; i < numLights; i++) {
@@ -201,18 +201,7 @@ function renderScene() {
         gl.uniform1i(uniformLocations["shadowTextures"][i], i);
     }
 
-    gl.activeTexture(gl.TEXTURE16);
-    gl.uniform1i(uniformLocations["texture"], 16);
-
-    // Draw scene with shadows
-    for (let primitive = 0; primitive < scene_vertexbuffer.length; primitive++) {
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_vertexbuffer[primitive][0], attribLocations.vertexposition, 3);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_texcoordbuffer[primitive], attribLocations.texturecoordinate, 2);
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, scene_normalbuffer[primitive], attribLocations.vertexnormal, 3);
-        gl.bindTexture(gl.TEXTURE_2D, scene_texture[primitive]);
-        gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, sceneModelMatrix);
-        gl.drawArrays(gl.TRIANGLES, 0, scene_vertexbuffer[primitive][1]);
-    }
+    drawDrawable(gl, sceneDrawable, attribLocations, uniformLocations);
 
     // Draw drone with shadows
     connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
