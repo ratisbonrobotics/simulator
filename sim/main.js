@@ -23,8 +23,7 @@ for (let i = 0; i < numLights; i++) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, shadowFramebuffers[i]);
 
     shadowTextures[i] = gl.createTexture();
-    gl.activeTexture(gl.TEXTURE0 + textures);
-    textures = textures + 1;
+    gl.activeTexture(gl.TEXTURE0 + i);
     gl.bindTexture(gl.TEXTURE_2D, shadowTextures[i]);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, shadowMapResolution, shadowMapResolution, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_INT, null);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
