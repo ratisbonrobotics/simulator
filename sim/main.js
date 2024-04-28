@@ -173,9 +173,9 @@ function renderDepthMap() {
             gl.drawArrays(gl.TRIANGLES, 0, sceneDrawable["vertexbuffer"][primitive]["n_verticies"]);
         }
 
-        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocationsShadow.vertexposition, 3);
-        gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneModelMatrix);
-        gl.drawArrays(gl.TRIANGLES, 0, 924);
+        connectBufferToAttribute(gl, gl.ARRAY_BUFFER, droneDrawable["vertexbuffer"][0]["verticies"], attribLocationsShadow.vertexposition, 3);
+        gl.uniformMatrix4fv(uniformLocationsShadow["modelmatrix"], false, droneDrawable["modelmatrix"]);
+        gl.drawArrays(gl.TRIANGLES, 0, droneDrawable["vertexbuffer"][0]["n_verticies"]);
     }
 }
 
@@ -186,7 +186,7 @@ function renderScene() {
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniformLocations["projectionmatrix"], false, projectionmatrix);
     if (attachedToDrone) {
-        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneModelMatrix)));
+        gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])));
     } else {
         gl.uniformMatrix4fv(uniformLocations["viewmatrix"], false, inv4Mat4f(cameraModelMatrix));
     }
@@ -202,12 +202,5 @@ function renderScene() {
     }
 
     drawDrawable(gl, sceneDrawable, attribLocations, uniformLocations);
-
-    // Draw drone with shadows
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_vertexbuffer, attribLocations.vertexposition, 3);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_texcoordbuffer, attribLocations.texturecoordinate, 2);
-    connectBufferToAttribute(gl, gl.ARRAY_BUFFER, drone_normalbuffer, attribLocations.vertexnormal, 3);
-    gl.bindTexture(gl.TEXTURE_2D, drone_texture);
-    gl.uniformMatrix4fv(uniformLocations["modelmatrix"], false, droneModelMatrix);
-    gl.drawArrays(gl.TRIANGLES, 0, 924);
+    drawDrawable(gl, droneDrawable, attribLocations, uniformLocations);
 }

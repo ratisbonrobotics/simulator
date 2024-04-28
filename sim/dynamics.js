@@ -72,9 +72,9 @@ setInterval(function () {
 	R_W_B = addMat3f(R_W_B, multScalMat3f(dt, multMat3f(R_W_B, so3hat(angular_velocity_B))));
 
 	// --- SET MODEL MATRIX ---
-	droneModelMatrix = identMat4f();
-	droneModelMatrix = multMat4f(translMat4f(linear_position_W[0], linear_position_W[1], linear_position_W[2]), droneModelMatrix);
-	setRot3Mat4f(droneModelMatrix, invMat3f(R_W_B));
-	droneModelMatrix = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneModelMatrix);
+	droneDrawable["modelmatrix"] = identMat4f();
+	droneDrawable["modelmatrix"] = multMat4f(translMat4f(linear_position_W[0], linear_position_W[1], linear_position_W[2]), droneDrawable["modelmatrix"]);
+	setRot3Mat4f(droneDrawable["modelmatrix"], invMat3f(R_W_B));
+	droneDrawable["modelmatrix"] = multMat4f(scaleMat4f(0.01, 0.01, 0.01), droneDrawable["modelmatrix"]);
 
 }, dt);
