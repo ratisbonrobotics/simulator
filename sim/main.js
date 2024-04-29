@@ -53,7 +53,7 @@ function renderScene() {
 
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniformLocations["projmat"], false, projectionmatrix);
-    gl.uniformMatrix4fv(uniformLocations["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(cameraModelMatrix));
+    gl.uniformMatrix4fv(uniformLocations["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
 
     // Set up light view and projection matrices and shadow textures
     for (let i = 0; i < lights["num"]; i++) {
@@ -73,12 +73,12 @@ function renderScene() {
 let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0) };
 let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 
-loadData();
 async function loadData() {
     await loadDrawable('/sim/data/drone.obj', droneDrawable);
     await loadDrawable('/sim/data/scene.obj.gz', sceneDrawable);
     drawScene();
 }
+loadData();
 
 // --- MAIN LOOP ---
 function drawScene() {

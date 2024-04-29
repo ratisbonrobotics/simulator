@@ -13,9 +13,9 @@ function getMouseInput(s) {
     return inp;
 }
 
-let cameraModelMatrix = modelMat4f(0.0, 5.0, 5.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
+let viewmatrix = modelMat4f(0.0, 5.0, 5.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
 let projectionmatrix = perspecMat4f(degToRad(46.0), canvas.clientWidth / canvas.clientHeight, 0.01, 1000);
-let cameraModelMatrixOld = cameraModelMatrix;
+let viewmatrix_prev = viewmatrix;
 let rotx = 0.0;
 let attachedToDrone = false;
 
@@ -31,10 +31,10 @@ setInterval(function () {
         let rotationVector = getMouseInput(0.01);
         rotx = Math.min(Math.max((rotx + rotationVector[1]), -0.75), 0.75);
 
-        cameraModelMatrix = cameraModelMatrixOld;
-        cameraModelMatrix = multMat4f(yRotMat4f(rotationVector[0]), cameraModelMatrix);
-        cameraModelMatrix = multMat4f(translMat4f(movementVector[0], movementVector[1], movementVector[2]), cameraModelMatrix);
-        cameraModelMatrixOld = cameraModelMatrix;
-        cameraModelMatrix = multMat4f(xRotMat4f(rotx), cameraModelMatrix);
+        viewmatrix = viewmatrix_prev;
+        viewmatrix = multMat4f(yRotMat4f(rotationVector[0]), viewmatrix);
+        viewmatrix = multMat4f(translMat4f(movementVector[0], movementVector[1], movementVector[2]), viewmatrix);
+        viewmatrix_prev = viewmatrix;
+        viewmatrix = multMat4f(xRotMat4f(rotx), viewmatrix);
     }
 }, 10);
