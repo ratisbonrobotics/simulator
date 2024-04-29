@@ -18,7 +18,7 @@ canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 const lights = { "res": 2048, "num": 4, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0]], "look": [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0]] }
 
 for (let i = 0; i < lights["num"]; i++) {
-    let lightData = createLight(gl, lights["framebuf"], lights["res"], 160.0);
+    let lightData = createLight(gl, lights["res"], 160.0);
     lights["tex"][i] = lightData[0];
     lights["proj"][i] = lightData[1];
 }
