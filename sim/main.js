@@ -15,13 +15,12 @@ canvas.addEventListener("keydown", function (event) { keys[event.key] = true; })
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
 // --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
-const lights = { "res": 2048, "num": 4, "framebuf": [], "tex": [], "proj": [], "pos": [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0]], "look": [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0]] }
+const lights = { "res": 2048, "num": 4, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0]], "look": [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0]] }
 
 for (let i = 0; i < lights["num"]; i++) {
-    let lightData = createLight(gl, lights["res"], 160.0);
-    lights["framebuf"][i] = lightData[0];
-    lights["tex"][i] = lightData[1];
-    lights["proj"][i] = lightData[2];
+    let lightData = createLight(gl, lights["framebuf"], lights["res"], 160.0);
+    lights["tex"][i] = lightData[0];
+    lights["proj"][i] = lightData[1];
 }
 
 // --- MAKE SHADERS AND PROGRAM ---
@@ -37,8 +36,7 @@ const uniformLocationsShadow = getAllUniformLocations(gl, shadowProgram);
 // --- RENDER DEPTH MAPS ---
 function renderDepthMap() {
     for (let i = 0; i < lights["num"]; i++) {
-        prepareGLState(gl, lights["res"], lights["res"], shadowProgram, lights["framebuf"][i], gl.BACK);
-
+        prepareGLState(gl, lights["res"], lights["res"], shadowProgram, lights["framebuf"], lights["tex"][i]);
         gl.uniformMatrix4fv(uniformLocationsShadow["l_viewmat"], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
         gl.uniformMatrix4fv(uniformLocationsShadow["l_projmat"], false, lights["proj"][i]);
         gl.uniform3fv(uniformLocationsShadow["l_pos"], lights["pos"][i]);
@@ -51,7 +49,7 @@ function renderDepthMap() {
 
 // --- RENDER SCENE WITH SHADOWS ---
 function renderScene() {
-    prepareGLState(gl, canvas.width, canvas.height, program, null, gl.BACK);
+    prepareGLState(gl, canvas.width, canvas.height, program, null, null);
 
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniformLocations["projmat"], false, projectionmatrix);
