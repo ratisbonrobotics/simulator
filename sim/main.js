@@ -70,12 +70,11 @@ function renderScene() {
 let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0) };
 let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 
-async function loadData() {
+(async function loadData() {
     await loadDrawable('/sim/data/drone.obj', droneDrawable);
     await loadDrawable('/sim/data/scene.obj.gz', sceneDrawable);
     drawScene();
-}
-loadData();
+})();
 
 // --- MAIN LOOP ---
 function drawScene() {
