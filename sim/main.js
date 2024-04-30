@@ -17,11 +17,8 @@ canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 // --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
 const lights = { "res": 2048, "num": 4, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0]], "look": [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0]] }
 
-for (let i = 0; i < lights["num"]; i++) {
-    let lightData = createLight(gl, lights["res"], 160.0);
-    lights["tex"][i] = lightData[0];
-    lights["proj"][i] = lightData[1];
-}
+lights["tex"] = Array.from({ length: lights["num"] }, () => createDepthMap(gl, lights["res"]));
+lights["proj"] = Array.from({ length: lights["num"] }, () => perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000));
 
 // --- MAKE SHADERS AND PROGRAM ---
 const program = createAndUseProgram(gl, getVertexShaderSource(lights["num"]), getFragmentShaderSource(lights["num"], lights["res"]));
