@@ -71,8 +71,10 @@ let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": 
 let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 
 (async function loadData() {
+    document.getElementById('loadingOverlay').style.display = 'flex'; // Show overlay
     await loadDrawable('/sim/data/drone.obj', droneDrawable);
     await loadDrawable('/sim/data/scene.obj.gz', sceneDrawable);
+    document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay
     drawScene();
 })();
 
