@@ -57,8 +57,8 @@ function getFragmentShaderSource(num, res) {
             float shadow = 0.0;
             vec2 texelSize = 1.0 / vec2(` + res + `.0, ` + res + `.0);
             float totalWeight = 0.0;
-            for (int x = -4; x <= 4; x++) {
-                for (int y = -4; y <= 4; y++) {
+            for (int x = -5; x <= 5; x++) {
+                for (int y = -5; y <= 5; y++) {
                     float pcfDepth = texture2D(l_tex, projcoord.xy + vec2(x, y) * texelSize).r;
                     float weight = max(1.0 - length(vec2(x, y) * texelSize), 0.0);
                     shadow += (projcoord.z - bias > pcfDepth ? 0.0 : 1.0) * weight;

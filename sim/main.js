@@ -15,7 +15,7 @@ canvas.addEventListener("keydown", function (event) { keys[event.key] = true; })
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
 // --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
-const lights = { "res": 2048, "num": 4, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-1, 2.9, -5.3], [0, 2.9, 0], [-3, 2.9, -3], [-5, 2.9, 0]], "look": [[-1, 0, -5], [0, 0, 0.3], [-3, 0, -3.3], [-5.3, 0, 0]] }
+const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-5, 2.9, -4.3], [1, 2.9, 0.5], [-4, 2.9, 2]], "look": [[-5, 0, -4], [1, 0, 0.8], [-4.3, 0, 2.3]] }
 
 lights["tex"] = Array.from({ length: lights["num"] }, () => createDepthMap(gl, lights["res"]));
 lights["proj"] = Array.from({ length: lights["num"] }, () => perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000));
