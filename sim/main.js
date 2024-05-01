@@ -39,8 +39,8 @@ function renderDepthMap() {
         gl.uniform3fv(uniform_locs_depth["l_pos"], lights["pos"][i]);
 
         // Draw scene and drone for depth map
-        drawDrawable(gl, sceneDrawable, attrib_locs_depth, uniform_locs_depth, false);
-        drawDrawable(gl, droneDrawable, attrib_locs_depth, uniform_locs_depth, false);
+        drawDrawable(gl, scene_drawable, attrib_locs_depth, uniform_locs_depth, false);
+        drawDrawable(gl, drone_drawable, attrib_locs_depth, uniform_locs_depth, false);
     }
 }
 
@@ -50,7 +50,7 @@ function renderScene() {
 
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniform_locs["projmat"], false, projectionmatrix);
-    gl.uniformMatrix4fv(uniform_locs["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
+    gl.uniformMatrix4fv(uniform_locs["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), drone_drawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
 
     // Set up light view and projection matrices and depth textures
     for (let i = 0; i < lights["num"]; i++) {
@@ -62,18 +62,18 @@ function renderScene() {
         gl.uniform1i(uniform_locs["l_tex"][i], i);
     }
 
-    drawDrawable(gl, sceneDrawable, attrib_locs, uniform_locs, true);
-    drawDrawable(gl, droneDrawable, attrib_locs, uniform_locs, true);
+    drawDrawable(gl, scene_drawable, attrib_locs, uniform_locs, true);
+    drawDrawable(gl, drone_drawable, attrib_locs, uniform_locs, true);
 }
 
 // --- GET DATA FROM 3D FILES ---
-let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0) };
-let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
+let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0) };
+let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
-    await loadDrawable('/sim/data/drone.obj', droneDrawable);
-    await loadDrawable('/sim/data/scene.obj.gz', sceneDrawable);
+    await loadDrawable('/sim/data/drone.obj', drone_drawable);
+    await loadDrawable('/sim/data/scene.obj.gz', scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
 })();
