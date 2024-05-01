@@ -14,7 +14,7 @@ canvas.addEventListener("click", canvas.requestPointerLock);
 canvas.addEventListener("keydown", function (event) { keys[event.key] = true; });
 canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
 
-// --- CREATE SHADOW FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
+// --- CREATE DEPTH FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
 const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-5, 2.9, -4.3], [1, 2.9, 0.5], [-4, 2.9, 2]], "look": [[-5, 0, -4], [1, 0, 0.8], [-4.3, 0, 2.3]] }
 
 lights["tex"] = Array.from({ length: lights["num"] }, () => createDepthMap(gl, lights["res"]));
@@ -22,48 +22,48 @@ lights["proj"] = Array.from({ length: lights["num"] }, () => perspecMat4f(degToR
 
 // --- MAKE SHADERS AND PROGRAM ---
 const program = createAndUseProgram(gl, getVertexShaderSource(lights["num"]), getFragmentShaderSource(lights["num"], lights["res"]));
-const shadowProgram = createAndUseProgram(gl, getShadowVertexShaderSource(), getShadowFragmentShaderSource());
+const depth_program = createAndUseProgram(gl, getDepthVertexShaderSource(), getDepthFragmentShaderSource());
 
 // --- GET ATTRIBUTE AND UNIFORM LOCATIONS ---
-const attribLocations = getAllAttribLocations(gl, program);
-const attribLocationsShadow = getAllAttribLocations(gl, shadowProgram);
-const uniformLocations = getAllUniformLocations(gl, program);
-const uniformLocationsShadow = getAllUniformLocations(gl, shadowProgram);
+const attrib_locs = getAllAttribLocations(gl, program);
+const attrib_locs_depth = getAllAttribLocations(gl, depth_program);
+const uniform_locs = getAllUniformLocations(gl, program);
+const uniform_locs_depth = getAllUniformLocations(gl, depth_program);
 
 // --- RENDER DEPTH MAPS ---
 function renderDepthMap() {
     for (let i = 0; i < lights["num"]; i++) {
-        prepareGLState(gl, lights["res"], lights["res"], shadowProgram, lights["framebuf"], lights["tex"][i]);
-        gl.uniformMatrix4fv(uniformLocationsShadow["l_viewmat"], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
-        gl.uniformMatrix4fv(uniformLocationsShadow["l_projmat"], false, lights["proj"][i]);
-        gl.uniform3fv(uniformLocationsShadow["l_pos"], lights["pos"][i]);
+        prepareGLState(gl, lights["res"], lights["res"], depth_program, lights["framebuf"], lights["tex"][i]);
+        gl.uniformMatrix4fv(uniform_locs_depth["l_viewmat"], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
+        gl.uniformMatrix4fv(uniform_locs_depth["l_projmat"], false, lights["proj"][i]);
+        gl.uniform3fv(uniform_locs_depth["l_pos"], lights["pos"][i]);
 
         // Draw scene and drone for depth map
-        drawDrawable(gl, sceneDrawable, attribLocationsShadow, uniformLocationsShadow, false);
-        drawDrawable(gl, droneDrawable, attribLocationsShadow, uniformLocationsShadow, false);
+        drawDrawable(gl, sceneDrawable, attrib_locs_depth, uniform_locs_depth, false);
+        drawDrawable(gl, droneDrawable, attrib_locs_depth, uniform_locs_depth, false);
     }
 }
 
-// --- RENDER SCENE WITH SHADOWS ---
+// --- RENDER SCENE ---
 function renderScene() {
     prepareGLState(gl, canvas.width, canvas.height, program, null, null);
 
     // Set up view and projection matrices
-    gl.uniformMatrix4fv(uniformLocations["projmat"], false, projectionmatrix);
-    gl.uniformMatrix4fv(uniformLocations["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
+    gl.uniformMatrix4fv(uniform_locs["projmat"], false, projectionmatrix);
+    gl.uniformMatrix4fv(uniform_locs["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), droneDrawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
 
-    // Set up light view and projection matrices and shadow textures
+    // Set up light view and projection matrices and depth textures
     for (let i = 0; i < lights["num"]; i++) {
-        gl.uniformMatrix4fv(uniformLocations["l_viewmat"][i], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
-        gl.uniformMatrix4fv(uniformLocations["l_projmat"][i], false, lights["proj"][i]);
+        gl.uniformMatrix4fv(uniform_locs["l_viewmat"][i], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
+        gl.uniformMatrix4fv(uniform_locs["l_projmat"][i], false, lights["proj"][i]);
 
         gl.activeTexture(gl.TEXTURE0 + i);
         gl.bindTexture(gl.TEXTURE_2D, lights["tex"][i]);
-        gl.uniform1i(uniformLocations["l_tex"][i], i);
+        gl.uniform1i(uniform_locs["l_tex"][i], i);
     }
 
-    drawDrawable(gl, sceneDrawable, attribLocations, uniformLocations, true);
-    drawDrawable(gl, droneDrawable, attribLocations, uniformLocations, true);
+    drawDrawable(gl, sceneDrawable, attrib_locs, uniform_locs, true);
+    drawDrawable(gl, droneDrawable, attrib_locs, uniform_locs, true);
 }
 
 // --- GET DATA FROM 3D FILES ---
@@ -71,10 +71,10 @@ let sceneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": 
 let droneDrawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01) };
 
 (async function loadData() {
-    document.getElementById('loadingOverlay').style.display = 'flex'; // Show overlay
+    document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', droneDrawable);
     await loadDrawable('/sim/data/scene.obj.gz', sceneDrawable);
-    document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay
+    document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
 })();
 

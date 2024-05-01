@@ -39,48 +39,48 @@ function getFragmentShaderSource(num, res) {
         varying vec3 o_vertexnorm;
         varying vec4 ol_coord[` + num + `];
         
-        float calculateShadow(vec4 l_coord, sampler2D l_tex, vec3 l_pos) {
-            vec3 projcoord = l_coord.xyz / l_coord.w;
+        float calculateLight(vec4 l_coord, sampler2D l_tex, vec3 l_pos) {
+            vec3 proj_coord = l_coord.xyz / l_coord.w;
         
-            if(projcoord.z < -1.0 || projcoord.z > 1.0)
+            if(proj_coord.z < -1.0 || proj_coord.z > 1.0)
                 return 0.0;
             
             // Calculate the distance from the center of the frustum
-            float distanceFromCenter = length(projcoord.xy);
+            float distance_from_center = length(proj_coord.xy);
 
-            // Calculate the shadow reduction factor based on the distance
-            float shadowReduction = 1.0 - smoothstep(0.0, 1.0, distanceFromCenter);
+            // Calculate the light reduction factor based on the distance
+            float light_reduction = 1.0 - smoothstep(0.0, 1.0, distance_from_center);
 
-            projcoord = projcoord * 0.5 + 0.5;
+            proj_coord = proj_coord * 0.5 + 0.5;
             float bias = max(0.9 * (1.0 - dot(o_vertexnorm, normalize(l_pos))), 0.000001);
         
-            float shadow = 0.0;
-            vec2 texelSize = 1.0 / vec2(` + res + `.0, ` + res + `.0);
-            float totalWeight = 0.0;
+            float light = 0.0;
+            vec2 texel_size = 1.0 / vec2(` + res + `.0, ` + res + `.0);
+            float total_weight = 0.0;
             for (int x = -5; x <= 5; x++) {
                 for (int y = -5; y <= 5; y++) {
-                    float pcfDepth = texture2D(l_tex, projcoord.xy + vec2(x, y) * texelSize).r;
-                    float weight = max(1.0 - length(vec2(x, y) * texelSize), 0.0);
-                    shadow += (projcoord.z - bias > pcfDepth ? 0.0 : 1.0) * weight;
-                    totalWeight += weight;
+                    float pcf_depth = texture2D(l_tex, proj_coord.xy + vec2(x, y) * texel_size).r;
+                    float weight = max(1.0 - length(vec2(x, y) * texel_size), 0.0);
+                    light += (proj_coord.z - bias > pcf_depth ? 0.0 : 1.0) * weight;
+                    total_weight += weight;
                 }
             }
-            shadow /= totalWeight;
-            shadow *= shadowReduction;
-            return shadow;
+            light /= total_weight;
+            light *= light_reduction;
+            return light;
         }
         
         void main() {
-            float shadow = 0.0;
+            float light = 0.0;
             for (int i = 0; i < ` + num + `; i++) 
-                shadow = max(shadow, calculateShadow(ol_coord[i], l_tex[i], l_pos[i]));
+                light = max(light, calculateLight(ol_coord[i], l_tex[i], l_pos[i]));
             
-            gl_FragColor = vec4(texture2D(tex, o_texcoord).rgb * shadow, 1.0);
+            gl_FragColor = vec4(texture2D(tex, o_texcoord).rgb * light, 1.0);
         }
     `;
 }
 
-function getShadowVertexShaderSource() {
+function getDepthVertexShaderSource() {
     return `
         precision highp float;
 
@@ -96,6 +96,6 @@ function getShadowVertexShaderSource() {
     `;
 }
 
-function getShadowFragmentShaderSource() {
+function getDepthFragmentShaderSource() {
     return `precision highp float; void main() {}`;
 }
