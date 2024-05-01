@@ -1,19 +1,3 @@
-// --- SETUP ENVIRONMENT ---
-let keys = {};
-let mouse = { horizontal: 0, vertical: 0 }
-const canvas = document.getElementById("canvas");
-const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true });
-init3D(gl);
-resizeCanvas(canvas);
-
-// --- ADD EVENT LISTENERS ---
-window.addEventListener("orientationchange", function () { resizeCanvas(canvas); });
-window.addEventListener("resize", function () { resizeCanvas(canvas); });
-canvas.addEventListener("mousemove", function (event) { if (document.pointerLockElement === canvas) { mouse["horizontal"] = event.movementX; mouse["vertical"] = event.movementY; } });
-canvas.addEventListener("click", canvas.requestPointerLock);
-canvas.addEventListener("keydown", function (event) { keys[event.key] = true; });
-canvas.addEventListener("keyup", function (event) { keys[event.key] = false; });
-
 // --- CREATE DEPTH FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
 const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-5, 2.9, -4.3], [1, 2.9, 0.5], [-4, 2.9, 2]], "look": [[-5, 0, -4], [1, 0, 0.8], [-4.3, 0, 2.3]] }
 
