@@ -35,6 +35,11 @@ function getFragmentShaderSource(num, res) {
         uniform sampler2D l_tex[${num}];
         uniform vec3 l_pos[${num}];
 
+        uniform vec3 Ka;
+        uniform vec3 Kd;
+        uniform vec3 Ks;
+        uniform float Ns;
+
         varying vec2 o_texcoord;
         varying vec3 o_vertexnorm;
         varying vec4 ol_coord[${num}];
