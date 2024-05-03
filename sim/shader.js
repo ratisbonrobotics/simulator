@@ -43,6 +43,7 @@ function getFragmentShaderSource(num, res) {
         uniform float Ni;
         uniform float d;
         uniform int illum;
+        uniform vec3 camerapos;
 
         varying vec2 o_texcoord;
         varying vec3 o_vertexnorm;
