@@ -35,7 +35,7 @@ function renderScene() {
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniform_locs["projmat"], false, projectionmatrix);
     gl.uniformMatrix4fv(uniform_locs["viewmat"], false, attachedToDrone ? inv4Mat4f(multMat4f(yRotMat4f(degToRad(180)), drone_drawable["modelmatrix"])) : inv4Mat4f(viewmatrix));
-    gl.uniformMatrix4fv(uniform_locs["camerapos"], false, [viewmatrix[12], viewmatrix[13], viewmatrix[14]]);
+    gl.uniform3fv(uniform_locs["camerapos"], [viewmatrix[12], viewmatrix[13], viewmatrix[14]]);
 
     // Set up light view and projection matrices and depth textures
     for (let i = 0; i < lights["num"]; i++) {
