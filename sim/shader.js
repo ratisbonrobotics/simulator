@@ -83,10 +83,11 @@ function getFragmentShaderSource(num, res) {
             }
 
             vec3 ambient = Ka * vec3(texture2D(tex, o_texcoord).rgb) * 0.5;
-            vec3 diffuse = Kd * vec3(texture2D(tex, o_texcoord).rgb) * light * 1.5 ;
-            vec3 color = (ambient + diffuse) / 2.0;
+            vec3 diffuse = Kd * vec3(texture2D(tex, o_texcoord).rgb) * light * 1.5;
+            vec3 emissive = Ke;
+            vec3 color = (ambient + diffuse + emissive) / 2.0;
 
-            gl_FragColor = vec4(color, 1.0);
+            gl_FragColor = vec4(color, d);
         }
     `;
 }
