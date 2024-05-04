@@ -52,8 +52,32 @@ function renderScene() {
 }
 
 // --- GET DATA FROM 3D FILES ---
-let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [] };
+let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [], "aabbs": [] };
 let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01), "verticies": [], "keys": [] };
+
+function computeAABB(vertices) {
+    let minX = Infinity, minY = Infinity, minZ = Infinity;
+    let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+
+    for (let i = 0; i < vertices.length; i += 3) {
+        let x = vertices[i];
+        let y = vertices[i + 1];
+        let z = vertices[i + 2];
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (z < minZ) minZ = z;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+        if (z > maxZ) maxZ = z;
+    }
+    return { min: [minX, minY, minZ], max: [maxX, maxY, maxZ] };
+}
+
+function checkAABBCollision(a, b) {
+    return (a.min[0] <= b.max[0] && a.max[0] >= b.min[0]) &&
+        (a.min[1] <= b.max[1] && a.max[1] >= b.min[1]) &&
+        (a.min[2] <= b.max[2] && a.max[2] >= b.min[2]);
+}
 
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
@@ -61,12 +85,29 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
     await loadDrawable('/sim/data/scene.obj.gz', scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
+
+    for (let i = 0; i < scene_drawable["verticies"].length; i++) {
+        scene_drawable["aabbs"][i] = computeAABB(scene_drawable["verticies"][i]);
+    }
+
     setInterval(function () {
         // collision detection
-        for (object in drone_drawable["verticies"]) {
-
+        let droneaabb = computeAABB(drone_drawable["verticies"][0]);
+        droneaabb["min"] = multMatVec4f(drone_drawable["modelmatrix"], [droneaabb["min"][0], droneaabb["min"][1], droneaabb["min"][2], 1.0]);
+        droneaabb["max"] = multMatVec4f(drone_drawable["modelmatrix"], [droneaabb["max"][0], droneaabb["max"][1], droneaabb["max"][2], 1.0]);
+        let total_collisions = 0;
+        for (let i = 0; i < scene_drawable["aabbs"].length; i++) {
+            if (checkAABBCollision(droneaabb, scene_drawable["aabbs"][i])) {
+                console.log("Collided with ", scene_drawable["keys"][i]);
+                total_collisions++;
+            }
         }
+        if (total_collisions > 0) {
+            console.log("Total collisions:", total_collisions);
+        }
+
     }, 100);
+
 })();
 
 // --- MAIN LOOP ---
