@@ -1,5 +1,5 @@
 // --- CREATE DEPTH FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
-const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-5, 2.9, -4.3], [1, 2.9, 0.5], [-4, 2.9, 2]], "look": [[-5, 0, -4], [1, 0, 0.8], [-4.3, 0, 2.3]] }
+const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-7, 2.9, -6.3], [-1, 2.9, -1.5], [-6, 2.9, 0]], "look": [[-7, 0, -6], [-1, 0, -1.2], [-6.3, 0, 0.3]] }
 
 lights["tex"] = Array.from({ length: lights["num"] }, () => createDepthMap(gl, lights["res"]));
 lights["proj"] = Array.from({ length: lights["num"] }, () => perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000));
@@ -52,8 +52,8 @@ function renderScene() {
 }
 
 // --- GET DATA FROM 3D FILES ---
-let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(2.0, 0.0, 2.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [] };
-let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01), "verticies": [], "keys": [] };
+let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [] };
+let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01), "verticies": [], "keys": [] };
 
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
@@ -61,6 +61,12 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
     await loadDrawable('/sim/data/scene.obj.gz', scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
+    setInterval(function () {
+        // collision detection
+        for (object in drone_drawable["verticies"]) {
+
+        }
+    }, 100);
 })();
 
 // --- MAIN LOOP ---
