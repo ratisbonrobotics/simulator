@@ -61,7 +61,7 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', drone_drawable);
-    await loadDrawable(scene_configurations[sceneIndex]["path"], scene_drawable);
+    await loadDrawable(activeScene["path"], scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
 
