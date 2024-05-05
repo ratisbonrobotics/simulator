@@ -1,3 +1,5 @@
+const scene_configurations = [{ "path": '/sim/data/scene0/scene.obj.gz' }, { "path": '/sim/data/scene1/scene.obj.gz' }];
+
 // --- CREATE DEPTH FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
 const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-7, 2.9, -6.3], [-1, 2.9, -1.5], [-6, 2.9, 0]], "look": [[-7, 0, -6], [-1, 0, -1.2], [-6.3, 0, 0.3]] }
 
@@ -58,7 +60,8 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', drone_drawable);
-    await loadDrawable('/sim/data/scene.obj.gz', scene_drawable);
+    const sceneIndex = new URLSearchParams(window.location.search).get("scene");
+    await loadDrawable(scene_configurations[sceneIndex ? parseInt(sceneIndex) : 0]["path"], scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
 
