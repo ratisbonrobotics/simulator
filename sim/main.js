@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const sceneIndex = parseInt(urlParams.get("scene")) ?? 0;
+const sceneIndex = urlParams.get("scene") ? parseInt(urlParams.get("scene")) : 0;
 const scene_configurations = [
     {
         "path": '/sim/data/scene0/scene.obj.gz',
@@ -11,7 +11,8 @@ const scene_configurations = [
             "proj": [],
             "pos": [[-7, 2.9, -6.3], [-1, 2.9, -1.5], [-6, 2.9, 0]],
             "look": [[-7, 0, -6], [-1, 0, -1.2], [-6.3, 0, 0.3]]
-        }
+        },
+        "dronemodelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01)
     },
     {
         "path": '/sim/data/scene1/scene.obj.gz',
@@ -22,7 +23,8 @@ const scene_configurations = [
             "tex": [],
             "proj": [],
             "pos": [[-9, 2.9, -8.3], [-3, 2.9, -3.5], [-8, 2.9, -2]],
-            "look": [[-9, 0, -8], [-3, 0, -3.2], [-8.3, 0, 2.3]]
+            "look": [[-9, 0, -8], [-3, 0, -3.2], [-8.3, 0, 2.3]],
+            "dronemodelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01)
         }
     }
 ];
@@ -81,7 +83,7 @@ function renderScene() {
 
 // --- GET DATA FROM 3D FILES ---
 let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [], "aabbs": [] };
-let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01), "verticies": [], "keys": [] };
+let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": activeScene["dronemodelmatrix"], "verticies": [], "keys": [] };
 
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
