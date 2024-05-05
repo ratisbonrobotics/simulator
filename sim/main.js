@@ -90,6 +90,7 @@ function checkAABBCollision(a, b) {
         scene_drawable["aabbs"][i] = computeAABB(scene_drawable["verticies"][i]);
     }
 
+    let startup_collisions = { "temp": [], "final": [] }; // we assume an initially valid position and thus startup collisions to be invalid.
     setInterval(function () {
         // collision detection
         let dronePosition = linear_position_W;
@@ -99,12 +100,23 @@ function checkAABBCollision(a, b) {
             if (dronePosition[0] >= aabb["min"][0] && dronePosition[0] <= aabb["max"][0] &&
                 dronePosition[1] >= aabb["min"][1] && dronePosition[1] <= aabb["max"][1] &&
                 dronePosition[2] >= aabb["min"][2] && dronePosition[2] <= aabb["max"][2]) {
-                console.log("Collided with ", scene_drawable["keys"][i]);
-                total_collisions++;
+
+                if (startup_collisions["final"].length === 0) {
+                    startup_collisions["temp"].push(scene_drawable["keys"][i]);
+                } else {
+                    if (!startup_collisions["final"].includes(scene_drawable["keys"][i])) {
+                        console.log("Collided with ", scene_drawable["keys"][i]);
+                        total_collisions++;
+                    }
+                }
+
             }
         }
         if (total_collisions > 0) {
             console.log("Total collisions:", total_collisions);
+        }
+        if (startup_collisions["final"].length === 0) {
+            startup_collisions["final"] = startup_collisions["temp"];
         }
 
     }, 100);
