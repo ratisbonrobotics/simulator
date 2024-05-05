@@ -92,12 +92,13 @@ function checkAABBCollision(a, b) {
 
     setInterval(function () {
         // collision detection
-        let droneaabb = computeAABB(drone_drawable["verticies"][0]);
-        droneaabb["min"] = multMatVec4f(drone_drawable["modelmatrix"], [droneaabb["min"][0], droneaabb["min"][1], droneaabb["min"][2], 1.0]);
-        droneaabb["max"] = multMatVec4f(drone_drawable["modelmatrix"], [droneaabb["max"][0], droneaabb["max"][1], droneaabb["max"][2], 1.0]);
+        let dronePosition = linear_position_W;
         let total_collisions = 0;
         for (let i = 0; i < scene_drawable["aabbs"].length; i++) {
-            if (checkAABBCollision(droneaabb, scene_drawable["aabbs"][i])) {
+            let aabb = scene_drawable["aabbs"][i];
+            if (dronePosition[0] >= aabb["min"][0] && dronePosition[0] <= aabb["max"][0] &&
+                dronePosition[1] >= aabb["min"][1] && dronePosition[1] <= aabb["max"][1] &&
+                dronePosition[2] >= aabb["min"][2] && dronePosition[2] <= aabb["max"][2]) {
                 console.log("Collided with ", scene_drawable["keys"][i]);
                 total_collisions++;
             }
