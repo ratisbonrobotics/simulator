@@ -1,13 +1,14 @@
-const scene_configurations = [{ "path": '/sim/data/scene0/scene.obj.gz' }, { "path": '/sim/data/scene1/scene.obj.gz' }];
+const urlParams = new URLSearchParams(window.location.search);
+const sceneIndex = parseInt(urlParams.get("scene")) ?? 0;
+const scene_configurations = [{ "path": '/sim/data/scene0/scene.obj.gz', "lights": { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-7, 2.9, -6.3], [-1, 2.9, -1.5], [-6, 2.9, 0]], "look": [[-7, 0, -6], [-1, 0, -1.2], [-6.3, 0, 0.3]] } }, { "path": '/sim/data/scene1/scene.obj.gz' }];
+const activeScene = scene_configurations[sceneIndex];
 
 // --- CREATE DEPTH FRAMEBUFFERS, TEXTURES AND LIGHT PROJECTION MATRICES ---
-const lights = { "res": 2048, "num": 3, "framebuf": gl.createFramebuffer(), "tex": [], "proj": [], "pos": [[-7, 2.9, -6.3], [-1, 2.9, -1.5], [-6, 2.9, 0]], "look": [[-7, 0, -6], [-1, 0, -1.2], [-6.3, 0, 0.3]] }
-
-lights["tex"] = Array.from({ length: lights["num"] }, () => createDepthMap(gl, lights["res"]));
-lights["proj"] = Array.from({ length: lights["num"] }, () => perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000));
+activeScene["lights"]["tex"] = Array.from({ length: activeScene["lights"]["num"] }, () => createDepthMap(gl, activeScene["lights"]["res"]));
+activeScene["lights"]["proj"] = Array.from({ length: activeScene["lights"]["num"] }, () => perspecMat4f(degToRad(160.0), 1.0, 0.0001, 1000));
 
 // --- MAKE SHADERS AND PROGRAM ---
-const program = createAndUseProgram(gl, getVertexShaderSource(lights["num"]), getFragmentShaderSource(lights["num"], lights["res"]));
+const program = createAndUseProgram(gl, getVertexShaderSource(activeScene["lights"]["num"]), getFragmentShaderSource(activeScene["lights"]["num"], activeScene["lights"]["res"]));
 const depth_program = createAndUseProgram(gl, getDepthVertexShaderSource(), getDepthFragmentShaderSource());
 
 // --- GET ATTRIBUTE AND UNIFORM LOCATIONS ---
@@ -18,11 +19,11 @@ const uniform_locs_depth = getAllUniformLocations(gl, depth_program);
 
 // --- RENDER DEPTH MAPS ---
 function renderDepthMap() {
-    for (let i = 0; i < lights["num"]; i++) {
-        prepareGLState(gl, lights["res"], lights["res"], depth_program, lights["framebuf"], lights["tex"][i]);
-        gl.uniformMatrix4fv(uniform_locs_depth["l_viewmat"], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
-        gl.uniformMatrix4fv(uniform_locs_depth["l_projmat"], false, lights["proj"][i]);
-        gl.uniform3fv(uniform_locs_depth["l_pos"], lights["pos"][i]);
+    for (let i = 0; i < activeScene["lights"]["num"]; i++) {
+        prepareGLState(gl, activeScene["lights"]["res"], activeScene["lights"]["res"], depth_program, activeScene["lights"]["framebuf"], activeScene["lights"]["tex"][i]);
+        gl.uniformMatrix4fv(uniform_locs_depth["l_viewmat"], false, lookAtMat4f(activeScene["lights"]["pos"][i], activeScene["lights"]["look"][i], [0, 1, 0]));
+        gl.uniformMatrix4fv(uniform_locs_depth["l_projmat"], false, activeScene["lights"]["proj"][i]);
+        gl.uniform3fv(uniform_locs_depth["l_pos"], activeScene["lights"]["pos"][i]);
 
         // Draw scene and drone for depth map
         drawDrawable(gl, scene_drawable, attrib_locs_depth, uniform_locs_depth, false);
@@ -40,12 +41,12 @@ function renderScene() {
     gl.uniform3fv(uniform_locs["camerapos"], [viewmatrix[12], viewmatrix[13], viewmatrix[14]]);
 
     // Set up light view and projection matrices and depth textures
-    for (let i = 0; i < lights["num"]; i++) {
-        gl.uniformMatrix4fv(uniform_locs["l_viewmat"][i], false, lookAtMat4f(lights["pos"][i], lights["look"][i], [0, 1, 0]));
-        gl.uniformMatrix4fv(uniform_locs["l_projmat"][i], false, lights["proj"][i]);
+    for (let i = 0; i < activeScene["lights"]["num"]; i++) {
+        gl.uniformMatrix4fv(uniform_locs["l_viewmat"][i], false, lookAtMat4f(activeScene["lights"]["pos"][i], activeScene["lights"]["look"][i], [0, 1, 0]));
+        gl.uniformMatrix4fv(uniform_locs["l_projmat"][i], false, activeScene["lights"]["proj"][i]);
 
         gl.activeTexture(gl.TEXTURE0 + i);
-        gl.bindTexture(gl.TEXTURE_2D, lights["tex"][i]);
+        gl.bindTexture(gl.TEXTURE_2D, activeScene["lights"]["tex"][i]);
         gl.uniform1i(uniform_locs["l_tex"][i], i);
     }
 
@@ -60,8 +61,7 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', drone_drawable);
-    const sceneIndex = new URLSearchParams(window.location.search).get("scene");
-    await loadDrawable(scene_configurations[sceneIndex ? parseInt(sceneIndex) : 0]["path"], scene_drawable);
+    await loadDrawable(scene_configurations[sceneIndex]["path"], scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
 
@@ -69,7 +69,8 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
         scene_drawable["aabbs"][i] = computeAABB(scene_drawable["verticies"][i]);
     }
 
-    let startup_collisions = { "temp": [], "final": [] }; // we assume an initially valid position and thus startup collisions to be invalid.
+    // we assume an initially valid position and thus startup collisions to be invalid.
+    let startup_collisions = { "temp": [], "final": [] };
     setInterval(function () {
         // collision detection
         let dronePosition = linear_position_W;
