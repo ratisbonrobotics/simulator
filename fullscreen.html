@@ -51,6 +51,18 @@
           transform: rotate(360deg);
         }
       }
+      #download-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 10;
+      }
     </style>
   </head>
 
@@ -61,6 +73,7 @@
       </div>
     </div>
     <canvas id="canvas" aria-label="canvas"></canvas>
+    <button id="download-btn">Download PNG</button>
 
     <script src="/lib/util.js"></script>
     <script src="/lib/vector3f.js"></script>
@@ -100,6 +113,18 @@
       window.addEventListener("keyup", function (event) {
         keys[event.key] = false;
       });
+
+      // --- DOWNLOAD PNG FUNCTION ---
+      function downloadPNG() {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "canvas.png";
+        link.click();
+      }
+
+      document
+        .getElementById("download-btn")
+        .addEventListener("click", downloadPNG);
     </script>
     <script src="/sim/main.js"></script>
     <script src="/sim/dynamics.js"></script>
