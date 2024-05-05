@@ -55,30 +55,6 @@ function renderScene() {
 let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [], "aabbs": [] };
 let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(-2.0, 1.0, -2.0, 0.0, 0.0, 0.0, 0.01, 0.01, 0.01), "verticies": [], "keys": [] };
 
-function computeAABB(vertices) {
-    let minX = Infinity, minY = Infinity, minZ = Infinity;
-    let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
-
-    for (let i = 0; i < vertices.length; i += 3) {
-        let x = vertices[i];
-        let y = vertices[i + 1];
-        let z = vertices[i + 2];
-        if (x < minX) minX = x;
-        if (y < minY) minY = y;
-        if (z < minZ) minZ = z;
-        if (x > maxX) maxX = x;
-        if (y > maxY) maxY = y;
-        if (z > maxZ) maxZ = z;
-    }
-    return { min: [minX, minY, minZ], max: [maxX, maxY, maxZ] };
-}
-
-function checkAABBCollision(a, b) {
-    return (a.min[0] <= b.max[0] && a.max[0] >= b.min[0]) &&
-        (a.min[1] <= b.max[1] && a.max[1] >= b.min[1]) &&
-        (a.min[2] <= b.max[2] && a.max[2] >= b.min[2]);
-}
-
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', drone_drawable);
@@ -119,7 +95,7 @@ function checkAABBCollision(a, b) {
             startup_collisions["final"] = startup_collisions["temp"];
         }
 
-    }, 100);
+    }, 10);
 
 })();
 
