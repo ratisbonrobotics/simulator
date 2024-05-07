@@ -85,6 +85,8 @@ function renderScene() {
 let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [], "aabbs": [] };
 let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": activeScene["dronemodelmatrix"], "verticies": [], "keys": [] };
 
+let total_collisions = 0;
+
 (async function loadData() {
     document.getElementById('loading_overlay').style.display = 'flex';
     await loadDrawable('/sim/data/drone.obj', drone_drawable);
@@ -101,7 +103,7 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
     setInterval(function () {
         // collision detection
         let dronePosition = linear_position_W;
-        let total_collisions = 0;
+        let collisions = 0;
         for (let i = 0; i < scene_drawable["aabbs"].length; i++) {
             let aabb = scene_drawable["aabbs"][i];
             if (dronePosition[0] >= aabb["min"][0] && dronePosition[0] <= aabb["max"][0] &&
@@ -113,13 +115,15 @@ let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer":
                 } else {
                     if (!startup_collisions["final"].includes(scene_drawable["keys"][i])) {
                         console.log("Collided with ", scene_drawable["keys"][i]);
-                        total_collisions++;
+                        collisions++;
                     }
                 }
 
             }
         }
-        if (total_collisions > 0) {
+        if (collisions > 0) {
+            total_collisions += collisions;
+            console.log("Collisions:", collisions);
             console.log("Total collisions:", total_collisions);
         }
         if (startup_collisions["final"].length === 0) {
