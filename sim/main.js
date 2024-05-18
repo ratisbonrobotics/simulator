@@ -15,7 +15,8 @@ const uniform_locs = getAllUniformLocations(gl, program);
 
 // --- RENDER SCENE ---
 function renderScene() {
-    prepareGLState(gl, canvas.width, canvas.height, program, null, null);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Set up view and projection matrices
     gl.uniformMatrix4fv(uniform_locs["projmat"], false, projectionmatrix);
