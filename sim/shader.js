@@ -1,4 +1,4 @@
-function getVertexShaderSource(num) {
+function getVertexShaderSource() {
     return `
         precision highp float;
 
@@ -9,108 +9,31 @@ function getVertexShaderSource(num) {
         uniform mat4 modelmat;
         uniform mat4 viewmat;
         uniform mat4 projmat;
-        uniform mat4 l_viewmat[${num}];
-        uniform mat4 l_projmat[${num}];
 
         varying vec2 o_texcoord;
         varying vec3 o_vertexnorm;
-        varying vec4 ol_coord[${num}];
         
         void main() {
             gl_Position = projmat * viewmat * modelmat * vertexpos;
-
             o_texcoord = texcoord;
             o_vertexnorm = normalize((modelmat * vec4(vertexnorm, 0.0)).xyz);
-            for (int i = 0; i < ${num}; i++) 
-                ol_coord[i] = l_projmat[i] * l_viewmat[i] * modelmat * vertexpos;
         }
     `;
 }
 
-function getFragmentShaderSource(num, res) {
+function getFragmentShaderSource() {
     return `
         precision highp float;
-
         uniform sampler2D tex;
-        uniform sampler2D l_tex[${num}];
-        uniform vec3 l_pos[${num}];
 
         uniform vec3 Ka;
-        uniform vec3 Kd;
-        uniform vec3 Ke;
-        uniform vec3 Ks;
-        uniform float Ns;
-        uniform float Ni;
-        uniform float d;
-        uniform int illum;
-        uniform vec3 camerapos;
-
+        
         varying vec2 o_texcoord;
         varying vec3 o_vertexnorm;
-        varying vec4 ol_coord[${num}];
-
-        float calculateLight(vec4 l_coord, sampler2D l_tex, vec3 l_pos) {
-            vec3 proj_coord = l_coord.xyz / l_coord.w;
-            if (proj_coord.z < -1.0 || proj_coord.z > 1.0) return 0.0;
-
-            float distance = length(proj_coord.xy);
-            float attenuation = 1.0 - smoothstep(0.0, 1.0, distance);
-
-            proj_coord = proj_coord * 0.5 + 0.5;
-            float bias = max(0.9 * (1.0 - dot(o_vertexnorm, normalize(l_pos))), 0.000001);
-
-            vec2 texel_size = 1.0 / vec2(${res}.0, ${res}.0);
-            float light = 0.0;
-            float total_weight = 0.0;
-
-            for (int x = -5; x <= 5; x++) {
-                for (int y = -5; y <= 5; y++) {
-                    vec2 offset = vec2(x, y) * texel_size;
-                    float pcf_depth = texture2D(l_tex, proj_coord.xy + offset).r;
-                    float weight = max(1.0 - length(offset), 0.0);
-                    light += (proj_coord.z - bias > pcf_depth ? 0.0 : 1.0) * weight;
-                    total_weight += weight;
-                }
-            }
-
-            light /= total_weight;
-            return light * attenuation;
-        }
 
         void main() {
-            float light = 0.0;
-            for (int i = 0; i < ${num}; i++) {
-                light = max(light, calculateLight(ol_coord[i], l_tex[i], l_pos[i]));
-            }
-
-            vec3 ambient = Ka * vec3(texture2D(tex, o_texcoord).rgb) * 0.5;
-            vec3 diffuse = Kd * vec3(texture2D(tex, o_texcoord).rgb) * light * 1.5;
-            vec3 emissive = Ke;
-            vec3 color = (ambient + diffuse + emissive) / 2.0;
-
-            gl_FragColor = vec4(color, d);
+            vec3 color = Ka * vec3(texture2D(tex, o_texcoord).rgb);
+            gl_FragColor = vec4(color, 1.0);
         }
     `;
-}
-
-
-
-function getDepthVertexShaderSource() {
-    return `
-        precision highp float;
-
-        attribute vec4 vertexpos;
-
-        uniform mat4 modelmat;
-        uniform mat4 l_viewmat;
-        uniform mat4 l_projmat;
-
-        void main() {
-            gl_Position = l_projmat * l_viewmat * modelmat * vertexpos;
-        }
-    `;
-}
-
-function getDepthFragmentShaderSource() {
-    return `precision highp float; void main() {}`;
 }
