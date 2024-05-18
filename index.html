@@ -69,6 +69,12 @@
               id="canvas"
               aria-label="canvas"
             ></canvas>
+            <canvas
+              style="border-radius: 5px; border: 2px solid black"
+              tabindex="1"
+              id="canvas2"
+              aria-label="canvas2"
+            ></canvas>
           </div>
           <div class="column">
             <div class="box">
@@ -125,12 +131,14 @@
           // --- SETUP ENVIRONMENT ---
           let keys = {};
           let mouse = { horizontal: 0, vertical: 0 };
+          const canvas2 = document.getElementById("canvas2");
           const canvas = document.getElementById("canvas");
           const gl = canvas.getContext("webgl", {
             preserveDrawingBuffer: true,
           });
           init3D(gl);
           resizeCanvas(canvas);
+          resizeCanvas(canvas2);
 
           // --- ADD EVENT LISTENERS ---
           window.addEventListener("orientationchange", function () {
