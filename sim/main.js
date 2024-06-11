@@ -82,7 +82,7 @@ function renderScene() {
 }
 
 // --- GET DATA FROM 3D FILES ---
-let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [], "aabbs": [] };
+let scene_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": modelMat4f(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0), "verticies": [], "keys": [] };
 let drone_drawable = { "vertexbuffer": [], "normalbuffer": [], "texcoordbuffer": [], "texture": [], "material": [], "modelmatrix": activeScene["dronemodelmatrix"], "verticies": [], "keys": [] };
 
 let total_collisions = 0;
@@ -93,45 +93,6 @@ let total_collisions = 0;
     await loadDrawable(activeScene["path"], scene_drawable);
     document.getElementById('loading_overlay').style.display = 'none';
     drawScene();
-
-    for (let i = 0; i < scene_drawable["verticies"].length; i++) {
-        scene_drawable["aabbs"][i] = computeAABB(scene_drawable["verticies"][i]);
-    }
-
-    // we assume an initially valid position and thus startup collisions to be invalid.
-    let startup_collisions = { "temp": [], "final": [] };
-    setInterval(function () {
-        // collision detection
-        let dronePosition = linear_position_W;
-        let collisions = 0;
-        for (let i = 0; i < scene_drawable["aabbs"].length; i++) {
-            let aabb = scene_drawable["aabbs"][i];
-            if (dronePosition[0] >= aabb["min"][0] && dronePosition[0] <= aabb["max"][0] &&
-                dronePosition[1] >= aabb["min"][1] && dronePosition[1] <= aabb["max"][1] &&
-                dronePosition[2] >= aabb["min"][2] && dronePosition[2] <= aabb["max"][2]) {
-
-                if (startup_collisions["final"].length === 0) {
-                    startup_collisions["temp"].push(scene_drawable["keys"][i]);
-                } else {
-                    if (!startup_collisions["final"].includes(scene_drawable["keys"][i])) {
-                        console.log("Collided with ", scene_drawable["keys"][i]);
-                        collisions++;
-                    }
-                }
-
-            }
-        }
-        if (collisions > 0) {
-            total_collisions += collisions;
-            console.log("Collisions:", collisions);
-            console.log("Total collisions:", total_collisions);
-        }
-        if (startup_collisions["final"].length === 0) {
-            startup_collisions["final"] = startup_collisions["temp"];
-        }
-
-    }, 10);
-
 })();
 
 // --- MAIN LOOP ---
